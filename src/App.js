@@ -33,11 +33,24 @@ class App extends React.Component {
     )
   }
 
+  generateRows = () => {
+    var rows = [];
+    Object.values(this.state.payloads).forEach(payload => {
+        var row = [];
+        Object.values(payload).forEach(entry => {
+            row.push(entry)
+        })
+        rows.push(row)
+    })
+    return (rows);
+  }
+
+
   render() {
     return (
       <div className="App">
           <SearchBar search={this.search}/>
-          <Payloads payloads={this.state.payloads}/>
+          <Payloads payloads={this.state.payloads} rows={this.generateRows()}/>
       </div>
     )
   }
