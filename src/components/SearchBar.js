@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DropdownContainer from './DropdownContainer';
-import MultiSelectDropdown from './MultiSelectDropdown';
-import FilterBubble from './FilterBubble';
+import { Chip } from '@patternfly/react-core';
 
 const FilterBubbleContainer = props => {
   return(
-    <div>
-        {props.filters.map(([id, key, value]) =>
-            <FilterBubble id={id} filter={key} value={value} closeBubble={props.closeBubble}/>
-        )}
+    <div style={{float:'right'}}>
+      {props.filters.map(chip =>
+        <React.Fragment>
+          <Chip key={chip.id} onClick={() => props.closeChip(chip.id)}>
+            {chip.key + '=' + chip.value}
+          </Chip>
+        </React.Fragment>
+      )}
     </div>
   )
 }
@@ -26,17 +29,6 @@ class SearchBar extends Component {
       payload_id: '',
       isOpen: false,
     }
-    this.onToggle = isOpen => {
-      this.setState({
-        isOpen
-      });
-    };
-    this.onSelect = event => {
-      console.log(event)
-      this.setState({
-        isOpen: !this.state.isOpen,
-      });
-    };
   }
 
   setSelected = (filterType, filterValue) => {
@@ -51,17 +43,17 @@ class SearchBar extends Component {
     }
   }
 
-  openFilterInput = (item) => {
+  openFilterInput = (type, item) => {
     this.setState({
       filterInputOpen: true,
       newFilter: item,
     })
   }
 
-  createBubble = () => {
+  createChip = () => {
     var {filterCount, newFilter, newValue} = this.state
     if (newValue !== '' && newFilter !== ''){
-      this.state.filters.push([filterCount, newFilter, newValue])
+      this.state.filters.push({id: filterCount, key: newFilter, value: newValue})
       this.setState({
         filterCount: this.state.filterCount + 1,
         filterInputOpen: false,
@@ -72,12 +64,12 @@ class SearchBar extends Component {
     }
   }
 
-  closeBubble = (id) => {
+  closeChip = (id) => {
     for(var i = 0; i < this.state.filters.length; i++) {
-        if(this.state.filters[i][0] == id){
-            this.state.filters.splice(i,1)
-        }
-    }
+      if(this.state.filters[i].id === id){
+          this.state.filters.splice(i,1)
+      }
+  }
     this.forceUpdate();
 }
 
@@ -104,7 +96,7 @@ class SearchBar extends Component {
       }
       if ('filters' in this.state) {
         for(var i = 0; i < this.state.filters.length; i++) {
-          query += `${this.state.filters[i][1]}=${this.state.filters[i][2]}&`;
+          query += `${this.state.filters[i].key}=${this.state.filters[i].value}&`;
         }
       }
     }
@@ -142,12 +134,15 @@ class SearchBar extends Component {
         setSelected={this.setSelected}
       />
 
-      <MultiSelectDropdown header={"Filter By"} items={[
-        'service', 'source', 'account', 'inventory_id', 
-        'system_id', 'status', 'status_msg', 'date_lt', 
-        'date_gt', 'date_lte', 'date_gte', 'created_at_lt',
-        'created_at_gt', 'created_at_lte', 'created_at_gte'
-      ]} createBubble={this.openFilterInput}/>
+      <DropdownContainer
+        items={[
+          'service', 'source', 'account', 'inventory_id', 
+          'system_id', 'status', 'status_msg', 'date_lt', 
+          'date_gt', 'date_lte', 'date_gte', 'created_at_lt',
+          'created_at_gt', 'created_at_lte', 'created_at_gte']}
+        type="Filter By"
+        setSelected={this.openFilterInput}
+      />
 
       <input
         type='text'
@@ -157,16 +152,17 @@ class SearchBar extends Component {
         placeholder='Enter...'
         value={this.state.newValue}
       />
+      
       <button 
         type="button" 
         style={this.state.filterInputOpen ? {} : { display: 'none' }} 
-        onClick={(e) => {this.createBubble()}}>
+        onClick={(e) => {this.createChip()}}>
         Enter
       </button>
 
       <FilterBubbleContainer 
         filters={this.state.filters}
-        closeBubble={this.closeBubble}
+        closeChip={this.closeChip}
       />
 
     </div>
