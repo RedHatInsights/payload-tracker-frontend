@@ -7,7 +7,11 @@ import {
     TableBody,
     SortByDirection,
     textCenter,
-  } from '@patternfly/react-table';
+} from '@patternfly/react-table';
+import {
+    Pagination,
+    PaginationVariant
+} from '@patternfly/react-core';
   
 
 class Payloads extends Component{
@@ -17,6 +21,8 @@ class Payloads extends Component{
         this.state = {
             cells:cells,
             sortBy:{},
+            page: 1,
+            perPage: 20
         }
         this.onSort = this.onSort.bind(this);
     }
@@ -30,19 +36,39 @@ class Payloads extends Component{
           },
           rows: direction === SortByDirection.asc ? sortedRows : sortedRows.reverse()
         });
+        this.onSetPage = (_event, pageNumber) => {
+            this.setState({
+              page: pageNumber
+            });
+        };
+      
+        this.onPerPageSelect = (_event, perPage) => {
+            this.setState({
+                perPage
+            });
+        };
       }
 
     render() {
         return (
-            <Table 
-                caption='Payloads'
-                cells={this.state.cells} 
-                rows={this.props.rows}
-                sortBy={this.state.sortBy}
-            >
-                <TableHeader/>
-                <TableBody/>
-            </Table>
+            <div> 
+                <Pagination 
+                        itemCount={this.props.rows.length}
+                        perPage={this.state.perPage}
+                        page={this.state.page}
+                        onSetPage={this.onSetPage}
+                        widgetId="pagination-options-menu-top"
+                        onPerPageSelect={this.onPerPageSelect}
+                />
+                <Table 
+                    cells={this.state.cells} 
+                    rows={this.props.rows}
+                    sortBy={this.state.sortBy}
+                >
+                    <TableHeader/>
+                    <TableBody/>
+                </Table>
+            </div>
         )
     }
 }
