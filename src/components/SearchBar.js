@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Dropdown from './Dropdown';
+import DropdownContainer from './DropdownContainer';
 import MultiSelectDropdown from './MultiSelectDropdown';
 import FilterBubble from './FilterBubble';
 
@@ -16,12 +16,27 @@ const FilterBubbleContainer = props => {
 
 class SearchBar extends Component {
 
-  state = {
-    filterCount: 0,
-    filters: [],
-    filterInputOpen: false,
-    newValue: '',
-    payload_id: '',
+  constructor(){
+    super()
+    this.state = {
+      filterCount: 0,
+      filters: [],
+      filterInputOpen: false,
+      newValue: '',
+      payload_id: '',
+      isOpen: false,
+    }
+    this.onToggle = isOpen => {
+      this.setState({
+        isOpen
+      });
+    };
+    this.onSelect = event => {
+      console.log(event)
+      this.setState({
+        isOpen: !this.state.isOpen,
+      });
+    };
   }
 
   setSelected = (filterType, filterValue) => {
@@ -112,15 +127,20 @@ class SearchBar extends Component {
       <button type="button" onClick={(e) => {this.submitQuery()}} style={buttonStyle}> 
             Submit
       </button>
-      <Dropdown header={"Sort By"} items={[
-        'service', 'source', 'account', 'payload_id',
-        'inventory_id', 'system_id', 'status',
-        'status_msg', 'date', 'created_at'
-        ]} setSelected={this.setSelected}/>
 
-      <Dropdown header={"Sort Direction"} items={[
-        'asc', 'desc'
-        ]} setSelected={this.setSelected}/>
+      <DropdownContainer 
+        items={['service', 'source', 'account', 'payload_id',
+        'inventory_id', 'system_id', 'status',
+        'status_msg', 'date', 'created_at']}
+        type="Sort By"
+        setSelected={this.setSelected}
+      />
+
+      <DropdownContainer 
+        items={['asc', 'desc']}
+        type="Sort Dir"
+        setSelected={this.setSelected}
+      />
 
       <MultiSelectDropdown header={"Filter By"} items={[
         'service', 'source', 'account', 'inventory_id', 
