@@ -5,8 +5,11 @@ import {
   Page,
   PageHeader, 
   PageSection,
-  PageSectionVariants
+  PageSectionVariants,
+  Brand,
+  Button
 } from '@patternfly/react-core';
+import whLogo from './static/images/rh-logo-white.svg';
 
 class App extends React.Component {
 
@@ -16,7 +19,20 @@ class App extends React.Component {
       payloads: [],
     }
     this.header = (
-      <PageHeader logo="Logo" logoProps={logoProps} />
+      <PageHeader 
+        logo={<Brand src={whLogo} alt= "Red Hat Logo White"/>}
+        logoProps={logoProps} 
+        toolbar={
+          <Button 
+            component='a' 
+            variant='tertiary'
+            href='https://github.com/RedHatInsights/payload-tracker#rest-api-endpoints'
+            target="_blank"
+          >
+              API Endpoints
+          </Button>
+        }
+      />
     )
   }
 
