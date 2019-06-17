@@ -6,12 +6,7 @@ import {
     Table,
     TableHeader,
     TableBody,
-    sortable,
     SortByDirection,
-    headerCol,
-    TableVariant,
-    expandable,
-    cellWidth,
     textCenter,
   } from '@patternfly/react-table';
   

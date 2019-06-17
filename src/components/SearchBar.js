@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DropdownContainer from './DropdownContainer';
-import { Chip } from '@patternfly/react-core';
+import { Chip, Button, TextInput } from '@patternfly/react-core';
 
 const FilterBubbleContainer = props => {
   return(
@@ -73,10 +73,16 @@ class SearchBar extends Component {
     this.forceUpdate();
 }
 
-  onChange = (e) => {
+  handlePayloadIDInputChange = payload_id => {
       this.setState({
-          [ e.target.name ] : [ e.target.value ]
+          payload_id
       })
+  }
+
+  handleNewValueInputChange = newValue =>{
+    this.setState({
+        newValue
+    })
   }
 
   submitQuery = (query = 'http://localhost:8080/v1/payloads') => {
@@ -107,18 +113,20 @@ class SearchBar extends Component {
 
   render() {
   return (
-    <div>
-      <input 
-            type='text'
-            name='payload_id'
-            onChange={this.onChange}
-            style={inputStyle}
-            placeholder='Enter Payload ID...'
-            value={this.state.payload_id}
+    <div style={{margin: '10px'}}>
+
+      <TextInput
+        isRequired
+        type="text"
+        name="payload_id"
+        value={this.state.payload_id}
+        onChange={this.handlePayloadIDInputChange}
+        style={inputStyle}
+        placeholder='Enter Payload ID...'
       />
-      <button type="button" onClick={(e) => {this.submitQuery()}} style={buttonStyle}> 
+      <Button variant='primary' onClick={(e) => {this.submitQuery()}}> 
             Submit
-      </button>
+      </Button>
 
       <DropdownContainer 
         items={['service', 'source', 'account', 'payload_id',
@@ -144,21 +152,26 @@ class SearchBar extends Component {
         setSelected={this.openFilterInput}
       />
 
-      <input
+      <TextInput
+        isRequired
         type='text'
         name='newValue'
-        onChange={this.onChange}
-        style={this.state.filterInputOpen ? {} : { display: 'none' }}
-        placeholder='Enter...'
+        onChange={this.handleNewValueInputChange}
+        style={this.state.filterInputOpen ? {
+          width: '150px',
+          marginLeft: '10px',
+          marginRight: '10px'
+        } : { display: 'none' }}
+        placeholder={this.state.newFilter + '...'}
         value={this.state.newValue}
       />
       
-      <button 
-        type="button" 
+      <Button
+        variant='secondary'
         style={this.state.filterInputOpen ? {} : { display: 'none' }} 
         onClick={(e) => {this.createChip()}}>
         Enter
-      </button>
+      </Button>
 
       <FilterBubbleContainer 
         filters={this.state.filters}
@@ -171,21 +184,10 @@ class SearchBar extends Component {
 
 }
 
-const buttonStyle = {
-  width: '10%',
-  padding: '12px 20px',
-  height: '38px',
-  background: '#008000',
-  boxSizing: 'border-box',
-  borderRadius: 10,
-  borderWidth: 1,
-  borderColor: '#fff',
-}
-
 const inputStyle = {
   width: '90%',
-  padding: '12px 20px',
-  margin: '8px 0',
+  marginBottom: '10px',
+  marginRight: '10px',
   boxSizing: 'border-box',
 }
 

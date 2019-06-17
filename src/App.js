@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import Payloads from './components/Payloads'
-import SearchBar from './components/SearchBar'
+import Payloads from './components/Payloads';
+import SearchBar from './components/SearchBar';
+import {
+  Page,
+  PageHeader, 
+  PageSection,
+  PageSectionVariants
+} from '@patternfly/react-core';
 
 class App extends React.Component {
 
@@ -9,6 +15,9 @@ class App extends React.Component {
     this.state = {
       payloads: [],
     }
+    this.header = (
+      <PageHeader logo="Logo" logoProps={logoProps} />
+    )
   }
 
   componentDidMount() {
@@ -49,24 +58,23 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-          <SearchBar search={this.search}/>
-          <Payloads payloads={this.state.payloads} rows={this.generateRows()}/>
+        <Page header={this.header}>
+          <PageSection variant={PageSectionVariants.dark}>
+            <SearchBar search={this.search}/>
+          </PageSection>
+          <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
+            <Payloads payloads={this.state.payloads} rows={this.generateRows()}/>
+          </PageSection>
+        </Page>
       </div>
     )
   }
 }
 
-const inputStyle = {
-  width: '90%',
-  padding: '12px 20px',
-  margin: '8px 0',
-  boxSizing: 'border-box',
-}
-
-const buttonStyle = {
-  width: '10%',
-  padding: '12px 20px',
-  height: '40px',
-}
+const logoProps = {
+  href: 'http://localhost:3001',
+  onClick: () => console.log('clicked logo'),
+  target: '_blank'
+};
 
 export default App;
