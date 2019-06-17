@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '@patternfly/react-core/dist/styles/base.css';
-import Payload from './Payload.js';
 import {
     Table,
     TableHeader,
