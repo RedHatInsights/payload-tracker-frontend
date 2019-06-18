@@ -19,23 +19,14 @@ class Payloads extends Component{
     constructor(){
         super();
         this.state = {
-            cells:cells,
+            cells: cells,
+            rows: [],
             sortBy:{},
             page: 1,
-            perPage: 20
+            perPage: 20,
+            isLoaded: false,
         }
         this.onSort = this.onSort.bind(this);
-    }
-    
-    onSort(_event, index, direction) {
-        const sortedRows = this.state.rows.sort((a, b) => (a[index] < b[index] ? -1 : a[index] > b[index] ? 1 : 0));
-        this.setState({
-          sortBy: {
-            index,
-            direction
-          },
-          rows: direction === SortByDirection.asc ? sortedRows : sortedRows.reverse()
-        });
         this.onSetPage = (_event, pageNumber) => {
             this.setState({
               page: pageNumber
@@ -47,13 +38,43 @@ class Payloads extends Component{
                 perPage
             });
         };
-      }
+    }
+    
+    onSort(_event, index, direction) {
+        const sortedRows = this.state.rows.sort((a, b) => (a[index] < b[index] ? -1 : a[index] > b[index] ? 1 : 0));
+        this.setState({
+          sortBy: {
+            index,
+            direction
+          },
+          rows: direction === SortByDirection.asc ? sortedRows : sortedRows.reverse()
+        });
+    }
+
+    generateRows = () => {
+        var rows = [];
+        console.log(this.props.payloads)
+        Object.values(this.props.payloads).forEach(payload => {
+            var row = [];
+            var index = 0;
+            Object.entries(payload).forEach(([key, value]) => {
+                while((key !== cells[index].title)){
+                    row.push("");
+                    index += 1;
+                }
+                row.push(value);
+                index += 1;
+            }) 
+            rows.push(row)
+        });
+        return (rows)
+    }
 
     render() {
         return (
             <div> 
                 <Pagination 
-                        itemCount={this.props.rows.length}
+                        itemCount={this.state.rows.length}
                         perPage={this.state.perPage}
                         page={this.state.page}
                         onSetPage={this.onSetPage}
@@ -62,7 +83,7 @@ class Payloads extends Component{
                 />
                 <Table 
                     cells={this.state.cells} 
-                    rows={this.props.rows}
+                    rows={this.generateRows()}
                     sortBy={this.state.sortBy}
                 >
                     <TableHeader/>
@@ -75,7 +96,6 @@ class Payloads extends Component{
 
 Payloads.propTypes = {
     payloads: PropTypes.array.isRequired,
-    rows: PropTypes.array,
 }
 
 const cells = [
@@ -112,7 +132,7 @@ const cells = [
         transforms: [textCenter],
         cellTransforms: [textCenter],
     },{
-        title: 'status message',
+        title: 'status_msg',
         transforms: [textCenter],
         cellTransforms: [textCenter],
     },{
@@ -120,7 +140,7 @@ const cells = [
         transforms: [textCenter],
         cellTransforms: [textCenter],
     },{
-        title: 'created at',
+        title: 'created_at',
         transforms: [textCenter],
         cellTransforms: [textCenter],
     }

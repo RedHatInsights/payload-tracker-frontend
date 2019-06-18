@@ -56,20 +56,8 @@ class App extends React.Component {
         });
       }
     )
+    .then(this.forceUpdate())
   }
-
-  generateRows = () => {
-    var rows = [];
-    Object.values(this.state.payloads).forEach(payload => {
-        var row = [];
-        Object.values(payload).forEach(entry => {
-            row.push(entry)
-        })
-        rows.push(row)
-    })
-    return (rows);
-  }
-
 
   render() {
     return (
@@ -79,7 +67,7 @@ class App extends React.Component {
             <SearchBar search={this.search}/>
           </PageSection>
           <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
-            <Payloads payloads={this.state.payloads} rows={this.generateRows()}/>
+            <Payloads payloads={this.state.payloads}/>
           </PageSection>
         </Page>
       </div>
