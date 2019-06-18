@@ -23,7 +23,6 @@ class SearchBar extends Component {
     super()
     this.state = {
       filterCount: 0,
-      filters: [],
       filterInputOpen: false,
       newValue: '',
       payload_id: '',
@@ -32,15 +31,7 @@ class SearchBar extends Component {
   }
 
   setSelected = (filterType, filterValue) => {
-    if(filterType == 'Sort Direction'){
-      this.setState({
-        sort_dir: filterValue
-      })
-    } if (filterType == 'Sort By') {
-      this.setState({
-        sort_by: filterValue
-      })
-    }
+    this.props.updateParameters({name: filterType, value: filterValue})
   }
 
   openFilterInput = (type, item) => {
@@ -53,25 +44,25 @@ class SearchBar extends Component {
   createChip = () => {
     var {filterCount, newFilter, newValue} = this.state
     if (newValue !== '' && newFilter !== ''){
-      this.state.filters.push({id: filterCount, key: newFilter, value: newValue})
+      this.props.filters.push({id: filterCount, key: newFilter, value: newValue})
       this.setState({
         filterCount: this.state.filterCount + 1,
         filterInputOpen: false,
         newFilter: '',
         newValue: '',
       })
-      this.forceUpdate()
+      this.props.buildQuery()
     }
   }
 
   closeChip = (id) => {
-    for(var i = 0; i < this.state.filters.length; i++) {
-      if(this.state.filters[i].id === id){
-          this.state.filters.splice(i,1)
+    for(var i = 0; i < this.props.filters.length; i++) {
+      if(this.props.filters[i].id === id){
+          this.props.filters.splice(i,1)
       }
+    }
+    this.props.buildQuery()
   }
-    this.forceUpdate();
-}
 
   handlePayloadIDInputChange = payload_id => {
       this.setState({
@@ -85,30 +76,10 @@ class SearchBar extends Component {
     })
   }
 
-  submitQuery = (query = 'http://localhost:8080/v1/payloads') => {
-    if (this.state.payload_id !== '') {
-      query += `/${this.state.payload_id}`;
-      this.setState({
-        payload_id: ''
-      })
-    } else {
-      query += '?';
-      if ('sort_by' in this.state){
-        console.log(this.state.sort_by)
-        query += `sort_by=${this.state.sort_by}&`;
-      }
-      if ('sort_dir' in this.state) {
-        query += `sort_dir=${this.state.sort_dir}&`;
-      }
-      if ('filters' in this.state) {
-        for(var i = 0; i < this.state.filters.length; i++) {
-          query += `${this.state.filters[i].key}=${this.state.filters[i].value}&`;
-        }
-      }
+  submitQuery = () => {
+    if (this.state.payload_id !== ''){
+      this.props.buildQuery(this.state.payload_id)
     }
-    this.props.search(
-      query
-    );
   }
 
   render() {
@@ -174,7 +145,7 @@ class SearchBar extends Component {
       </Button>
 
       <ChipContainer 
-        filters={this.state.filters}
+        filters={this.props.filters}
         closeChip={this.closeChip}
       />
 
@@ -192,7 +163,9 @@ const inputStyle = {
 }
 
 SearchBar.propTypes = {
-  search: PropTypes.func.isRequired,
+  buildQuery: PropTypes.func.isRequired,
+  filters: PropTypes.array.isRequired,
+  updateParameters: PropTypes.func.isRequired,
 }
 
 export default SearchBar;

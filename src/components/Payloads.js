@@ -9,8 +9,7 @@ import {
     textCenter,
 } from '@patternfly/react-table';
 import {
-    Pagination,
-    PaginationVariant
+    Pagination
 } from '@patternfly/react-core';
   
 
@@ -21,21 +20,17 @@ class Payloads extends Component{
         this.state = {
             cells: cells,
             sortBy:{},
-            page: 1,
-            perPage: 20,
             isLoaded: false,
         }
         this.onSort = this.onSort.bind(this);
         this.onSetPage = (_event, pageNumber) => {
-            this.setState({
-              page: pageNumber
-            });
+            this.props.updateParameters({name: 'page', value: pageNumber})
+            this.props.buildQuery();
         };
       
         this.onPerPageSelect = (_event, perPage) => {
-            this.setState({
-                perPage
-            });
+            this.props.updateParameters({name: 'page_size', value: perPage})
+            this.props.buildQuery();
         };
     }
     
@@ -52,7 +47,6 @@ class Payloads extends Component{
 
     generateRows = () => {
         var rows = [];
-        console.log(this.props.payloads)
         Object.values(this.props.payloads).forEach(payload => {
             var row = [];
             var index = 0;
@@ -73,9 +67,9 @@ class Payloads extends Component{
         return (
             <div> 
                 <Pagination 
-                        itemCount={this.props.payloads.length}
-                        perPage={this.state.perPage}
-                        page={this.state.page}
+                        itemCount={this.props.count}
+                        perPage={this.props.page_size}
+                        page={this.props.page}
                         onSetPage={this.onSetPage}
                         widgetId="pagination-options-menu-top"
                         onPerPageSelect={this.onPerPageSelect}
@@ -95,6 +89,9 @@ class Payloads extends Component{
 
 Payloads.propTypes = {
     payloads: PropTypes.array.isRequired,
+    count: PropTypes.number.isRequired,
+    buildQuery: PropTypes.func.isRequired,
+    updateParameters: PropTypes.func.isRequired,
 }
 
 const cells = [
