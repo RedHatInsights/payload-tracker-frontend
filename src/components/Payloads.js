@@ -20,7 +20,6 @@ class Payloads extends Component{
         super();
         this.state = {
             cells: cells,
-            rows: [],
             sortBy:{},
             page: 1,
             perPage: 20,
@@ -74,7 +73,7 @@ class Payloads extends Component{
         return (
             <div> 
                 <Pagination 
-                        itemCount={this.state.rows.length}
+                        itemCount={this.props.payloads.length}
                         perPage={this.state.perPage}
                         page={this.state.page}
                         onSetPage={this.onSetPage}
