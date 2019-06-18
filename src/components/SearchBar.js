@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import DropdownContainer from './DropdownContainer';
 import { Chip, Button, TextInput } from '@patternfly/react-core';
 
-const FilterBubbleContainer = props => {
+const ChipContainer = props => {
   return(
     <div style={{float:'right'}}>
       {props.filters.map(chip =>
@@ -173,7 +173,7 @@ class SearchBar extends Component {
         Enter
       </Button>
 
-      <FilterBubbleContainer 
+      <ChipContainer 
         filters={this.state.filters}
         closeChip={this.closeChip}
       />
