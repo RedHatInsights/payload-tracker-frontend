@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
-import Payloads from './components/Payloads';
-import SearchBar from './components/SearchBar';
-import {
-  Page,
-  PageHeader, 
-  PageSection,
-  PageSectionVariants,
-  Brand,
-  Button
-} from '@patternfly/react-core';
-import whLogo from './static/images/rh-logo-white.svg';
+import '@patternfly/react-core/dist/styles/base.css';
+import MainPage from './components/MainPage';
 
 class App extends Component {
 
@@ -26,26 +17,10 @@ class App extends Component {
       sort_dir: 'asc',
       sort_by: 'payload_id'
     };
-    this.header = (
-      <PageHeader 
-        logo={<Brand src={whLogo} alt= "Red Hat Logo White"/>}
-        logoProps={logoProps} 
-        toolbar={
-          <Button 
-            component='a' 
-            variant='tertiary'
-            href='https://github.com/RedHatInsights/payload-tracker#rest-api-endpoints'
-            target="_blank"
-          >
-              API Endpoints
-          </Button>
-        }
-      />
-    );
   }
 
   componentDidMount() {
-    this.search()
+    this.search(queryBase)
   }
 
   updateParameters = (newParam) => {
@@ -112,37 +87,20 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Page header={this.header}>
-          <PageSection variant={PageSectionVariants.dark}>
-            <SearchBar 
-              search={this.search} 
-              filters={this.queryParameters.filters} 
-              buildQuery={this.buildQuery}
-              updateParameters={this.updateParameters}
-            />
-          </PageSection>
-          <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
-            <Payloads 
-              payloads={this.state.payloads} 
-              count={this.state.count}
-              page={this.queryParameters.page}
-              page_size={this.queryParameters.page_size}
-              buildQuery={this.buildQuery}
-              updateParameters={this.updateParameters}
-            />
-          </PageSection>
-        </Page>
+        <MainPage 
+          updateParameters={this.updateParameters}
+          buildQuery={this.buildQuery}
+          filters={this.queryParameters.filters}
+          page={this.queryParameters.page}
+          page_size={this.queryParameters.page_size}
+          payloads={this.state.payloads}
+          count={this.state.count}
+        />
       </div>
     )
   }
 }
 
 const queryBase = 'http://localhost:8080/v1/payloads?'
-
-const logoProps = {
-  href: 'http://localhost:3001',
-  onClick: () => console.log('clicked logo'),
-  target: '_blank'
-};
 
 export default App;
