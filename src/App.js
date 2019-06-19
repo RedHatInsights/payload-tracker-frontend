@@ -11,7 +11,7 @@ import {
 } from '@patternfly/react-core';
 import whLogo from './static/images/rh-logo-white.svg';
 
-class App extends React.Component {
+class App extends Component {
 
   constructor(props) {
     super(props)
@@ -55,10 +55,10 @@ class App extends React.Component {
     if (newParam.name === 'page_size') {
       this.queryParameters.page_size = newParam.value
     }
-    if (newParam.name === 'sort_dir') {
+    if (newParam.name === 'Sort Dir') {
       this.queryParameters.sort_dir = newParam.value
     }
-    if (newParam.name === 'sort_by') {
+    if (newParam.name === 'Sort By') {
       this.queryParameters.sort_by = newParam.value
     }
   }

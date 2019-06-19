@@ -32,6 +32,7 @@ class SearchBar extends Component {
 
   setSelected = (filterType, filterValue) => {
     this.props.updateParameters({name: filterType, value: filterValue})
+    this.props.buildQuery()
   }
 
   openFilterInput = (type, item) => {
