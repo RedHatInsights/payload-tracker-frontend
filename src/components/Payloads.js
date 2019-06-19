@@ -5,7 +5,6 @@ import {
     Table,
     TableHeader,
     TableBody,
-    SortByDirection,
     textCenter,
 } from '@patternfly/react-table';
 import {
@@ -19,10 +18,8 @@ class Payloads extends Component{
         super();
         this.state = {
             cells: cells,
-            sortBy:{},
             isLoaded: false,
         }
-        this.onSort = this.onSort.bind(this);
         this.onSetPage = (_event, pageNumber) => {
             this.props.updateParameters({name: 'page', value: pageNumber})
             this.props.buildQuery();
@@ -32,17 +29,6 @@ class Payloads extends Component{
             this.props.updateParameters({name: 'page_size', value: perPage})
             this.props.buildQuery();
         };
-    }
-    
-    onSort(_event, index, direction) {
-        const sortedRows = this.state.rows.sort((a, b) => (a[index] < b[index] ? -1 : a[index] > b[index] ? 1 : 0));
-        this.setState({
-          sortBy: {
-            index,
-            direction
-          },
-          rows: direction === SortByDirection.asc ? sortedRows : sortedRows.reverse()
-        });
     }
 
     generateRows = () => {
@@ -77,7 +63,6 @@ class Payloads extends Component{
                 <Table 
                     cells={this.state.cells} 
                     rows={this.generateRows()}
-                    sortBy={this.state.sortBy}
                 >
                     <TableHeader/>
                     <TableBody/>
