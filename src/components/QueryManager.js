@@ -17,12 +17,15 @@ class QueryManager extends Component {
         }
         if (newParam.name === 'page_size') {
             this.queryParameters.page_size = newParam.value
+            this.queryParameters.page = 1;
         }
         if (newParam.name === 'Sort Dir') {
             this.queryParameters.sort_dir = newParam.value
+            this.queryParameters.page = 1;
         }
         if (newParam.name === 'Sort By') {
             this.queryParameters.sort_by = newParam.value
+            this.queryParameters.page = 1;
         }
     };
     
@@ -62,6 +65,6 @@ class QueryManager extends Component {
     }
 }
 
-const queryBase = 'http://localhost:8080/v1/payloads?'
+const queryBase = 'http://localhost:8080/v1/payloads?';
 
 export default QueryManager;

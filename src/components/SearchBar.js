@@ -52,6 +52,7 @@ class SearchBar extends Component {
         newFilter: '',
         newValue: '',
       })
+      this.props.updateParameters({name: 'page', value: 1})
       this.props.buildQuery()
     }
   }
