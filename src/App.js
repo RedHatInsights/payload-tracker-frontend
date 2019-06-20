@@ -14,10 +14,24 @@ class App extends Component {
 
   componentDidMount() {
     this.search(queryBase)
+    this.props.socket.on('connect', () => {
+      console.log('connected to sockets')
+    });
+  
+    this.props.socket.on('payload', (data) => {
+      console.log('received socket data')
+      this.state.payloads.push(data);
+      this.setState({
+        count: this.state.count + 1
+      })
+    });
+    
+    this.props.socket.on('disconnect', () => {
+      console.log('disconnected from sockets')
+    });
   }
 
   search = (query) => {
-    console.log(query)
     fetch(query)
     .then(res => res.json())
     .then(

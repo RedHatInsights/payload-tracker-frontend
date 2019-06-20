@@ -35,18 +35,21 @@ class Payloads extends Component{
         var rows = [];
         Object.values(this.props.payloads).forEach(payload => {
             var row = [];
-            var index = 0;
-            Object.entries(payload).forEach(([key, value]) => {
-                while((key !== cells[index].title)){
-                    row.push("");
-                    index += 1;
+            Object.entries(cells).forEach(([cellKey, cellValue]) => {
+                var valueWasFound = false;
+                Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
+                    if (cellValue.title === payloadKey) {
+                        row.push(payloadValue)
+                        valueWasFound = true;
+                    }
+                })
+                if(!valueWasFound){
+                    row.push("")
                 }
-                row.push(value);
-                index += 1;
-            }) 
+            })
             rows.push(row)
-        });
-        return (rows)
+        })
+        return (rows);
     }
 
     render() {
