@@ -7,7 +7,7 @@ COPY public ./public
 RUN yarn build
 RUN ["rm", "-rfv", "/usr/share/nginx/html"]
 RUN ["cp", "-rfv", "/usr/src/app/build", "/usr/share/nginx/html"]
-chown nginx:nginx -R /usr/share/nginx/html
+RUN chown nginx:nginx -R /usr/share/nginx/html
 RUN chmod 777 -R /var/log/nginx && chmod 777 -R /var/cache/nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 8080
