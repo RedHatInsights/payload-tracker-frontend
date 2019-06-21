@@ -32,7 +32,7 @@ class QueryManager extends Component {
       buildQuery = (payload_id) => {
         var query = queryBase;
         if(payload_id) {
-          query = `http://localhost:8080/v1/payloads/${payload_id}?`
+          query = `/v1/payloads/${payload_id}?`
         } else {
           Object.entries(this.queryParameters).forEach(([param, value]) => {
             if (param === 'filters'){
@@ -65,6 +65,6 @@ class QueryManager extends Component {
     }
 }
 
-const queryBase = 'http://localhost:8080/v1/payloads?';
+const queryBase = '/v1/payloads?';
 
 export default QueryManager;

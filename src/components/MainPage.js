@@ -12,7 +12,7 @@ import Payloads from './Payloads';
 import whLogo from './static/images/rh-logo-white.svg';
 
 const logoProps = {
-    href: 'http://localhost:3001',
+    href: '/',
     onClick: () => console.log('clicked logo'),
     target: '_blank'
 };
