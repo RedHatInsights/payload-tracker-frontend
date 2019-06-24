@@ -9,9 +9,13 @@ class QueryManager extends Component {
         page_size: 10,
         sort_dir: 'asc',
         sort_by: 'payload_id',
+        payload_id: '',
     }
 
     updateParameters = (newParam) => {
+        if (newParam.name === 'payload_id') {
+          this.queryParameters.payload_id = newParam.value
+        }
         if (newParam.name === 'page') {
             this.queryParameters.page = newParam.value
         }
@@ -65,6 +69,6 @@ class QueryManager extends Component {
     }
 }
 
-const queryBase = '/v1/payloads?';
+const queryBase = 'http://localhost:8080/v1/payloads?';
 
 export default QueryManager;

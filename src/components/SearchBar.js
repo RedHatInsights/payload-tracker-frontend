@@ -25,7 +25,6 @@ class SearchBar extends Component {
       filterCount: 0,
       filterInputOpen: false,
       newValue: '',
-      payload_id: '',
       isOpen: false,
     }
   }
@@ -66,41 +65,15 @@ class SearchBar extends Component {
     this.props.buildQuery()
   }
 
-  handlePayloadIDInputChange = payload_id => {
-      this.setState({
-          payload_id
-      })
-  }
-
   handleNewValueInputChange = newValue =>{
     this.setState({
         newValue
     })
   }
 
-  submitQuery = () => {
-    if (this.state.payload_id !== ''){
-      this.props.buildQuery(this.state.payload_id)
-    }
-  }
-
   render() {
   return (
     <div style={{margin: '10px'}}>
-
-      <TextInput
-        isRequired
-        type="text"
-        name="payload_id"
-        value={this.state.payload_id}
-        onChange={this.handlePayloadIDInputChange}
-        style={inputStyle}
-        placeholder='Enter Payload ID...'
-      />
-      <Button variant='primary' onClick={(e) => {this.submitQuery()}}> 
-            Submit
-      </Button>
-
       <DropdownContainer 
         items={['service', 'source', 'account', 'payload_id',
         'inventory_id', 'system_id', 'status',
@@ -155,13 +128,6 @@ class SearchBar extends Component {
   );
   }
 
-}
-
-const inputStyle = {
-  width: '90%',
-  marginBottom: '10px',
-  marginRight: '10px',
-  boxSizing: 'border-box',
 }
 
 SearchBar.propTypes = {
