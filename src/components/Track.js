@@ -24,6 +24,7 @@ class Track extends Component {
     componentDidMount() {
         socket.on('payload', (data) => {
           this.state.payloads.push(data);
+          this.forceUpdate()
         });
     }
 
