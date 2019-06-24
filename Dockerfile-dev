@@ -1,0 +1,8 @@
+FROM exiasr/alpine-yarn-nginx
+WORKDIR /usr/src/app
+ADD build ./build
+RUN ["rm", "-rfv", "/usr/share/nginx/html"]
+RUN ["cp", "-rfv", "/usr/src/app/build", "/usr/share/nginx/html"]
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]

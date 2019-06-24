@@ -9,9 +9,13 @@ class QueryManager extends Component {
         page_size: 10,
         sort_dir: 'asc',
         sort_by: 'payload_id',
+        payload_id: '',
     }
 
     updateParameters = (newParam) => {
+        if (newParam.name === 'payload_id') {
+          this.queryParameters.payload_id = newParam.value
+        }
         if (newParam.name === 'page') {
             this.queryParameters.page = newParam.value
         }
@@ -32,7 +36,7 @@ class QueryManager extends Component {
       buildQuery = (payload_id) => {
         var query = queryBase;
         if(payload_id) {
-          query = `http://localhost:8080/v1/payloads/${payload_id}?`
+          query = `/v1/payloads/${payload_id}?`
         } else {
           Object.entries(this.queryParameters).forEach(([param, value]) => {
             if (param === 'filters'){

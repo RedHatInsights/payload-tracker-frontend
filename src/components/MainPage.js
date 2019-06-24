@@ -1,63 +1,87 @@
 import React, { Component } from 'react';
 import {
     Page,
-    PageHeader, 
-    PageSection,
-    PageSectionVariants,
+    PageHeader,
     Brand,
-    Button
+    Button,
+    Nav,
+    NavVariants,
+    NavList,
+    NavItem
   } from '@patternfly/react-core';
-import SearchBar from './SearchBar';
-import Payloads from './Payloads';
+import Track from './Track';
+import Inventory from './Inventory';
 import whLogo from './static/images/rh-logo-white.svg';
 
 const logoProps = {
-    href: 'http://localhost:3001',
+    href: '/',
     onClick: () => console.log('clicked logo'),
     target: '_blank'
 };
 
-const header = (
-    <PageHeader 
-      logo={<Brand src={whLogo} alt= "Red Hat Logo White"/>}
-      logoProps={logoProps} 
-      toolbar={
-        <Button 
-          component='a' 
-          variant='tertiary'
-          href='https://github.com/RedHatInsights/payload-tracker#rest-api-endpoints'
-          target="_blank"
-        >
-            API Endpoints
-        </Button>
-      }
-    />
-);
-
 class MainPage extends Component {
+
+    state = {
+        activeItem: 0,
+    };
+
+    onSelect = result => {
+        this.setState({
+            activeItem: result.itemId
+        });
+        this.forceUpdate();
+    };
+
+    header = (
+        <PageHeader 
+          logo={<Brand src={whLogo} alt= "Red Hat Logo White"/>}
+          logoProps={logoProps} 
+          toolbar={
+            <Button 
+              component='a' 
+              variant='tertiary'
+              href='https://github.com/RedHatInsights/payload-tracker#rest-api-endpoints'
+              target="_blank"
+            >
+                API Endpoints
+            </Button>
+          }
+          topNav={
+            <Nav onSelect={this.onSelect}>
+                <NavList variant={NavVariants.horizontal}>
+                    <NavItem preventDefault itemId={0}>
+                        Inventory
+                    </NavItem>
+                    <NavItem preventDefault itemId={1}>
+                        Track
+                    </NavItem>
+                </NavList>
+            </Nav>
+          }
+        />
+    );
+
     render() {
-        return(
-            <Page header={header}>
-                <PageSection variant={PageSectionVariants.dark}>
-                    <SearchBar 
-                    search={this.props.search} 
-                    filters={this.props.filters} 
-                    buildQuery={this.props.buildQuery}
-                    updateParameters={this.props.updateParameters}
+        if (this.state.activeItem === 0) {
+            return(
+                <Page header={this.header}>
+                    <Inventory 
+                        payloads={this.props.payloads}
+                        search={this.props.search}
                     />
-                </PageSection>
-                <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
-                    <Payloads 
-                    payloads={this.props.payloads} 
-                    count={this.props.count}
-                    page={this.props.page}
-                    page_size={this.props.page_size}
-                    buildQuery={this.props.buildQuery}
-                    updateParameters={this.props.updateParameters}
+                </Page>
+            )
+        } else {
+            return(
+                <Page header={this.header}>
+                    <Track 
+                        payloads={this.props.payloads}
+                        count={this.props.count}
+                        search={this.props.search}
                     />
-                </PageSection>
-            </Page>
-        )
+                </Page>
+            )
+        }
     }
 }
 
