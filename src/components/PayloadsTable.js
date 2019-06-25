@@ -5,6 +5,7 @@ import {
     TableHeader,
     TableBody,
     textCenter,
+    TableVariant
 } from '@patternfly/react-table';
   
 
@@ -43,6 +44,7 @@ class Payloads extends Component{
             <Table 
                 cells={this.state.cells} 
                 rows={this.generateRows()}
+                variant={TableVariant.compact}
             >
                 <TableHeader/>
                 <TableBody/>
