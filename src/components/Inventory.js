@@ -6,7 +6,7 @@ import {
 import SearchBar from './SearchBar';
 import Payloads from './Payloads';
 
-const queryBase = '/v1/payloads?';
+const queryBase = 'http://localhost:8080/v1/payloads?';
 
 class Track extends Component {
 

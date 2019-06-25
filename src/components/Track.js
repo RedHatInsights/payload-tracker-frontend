@@ -8,7 +8,7 @@ import PayloadsTable from './PayloadsTable';
 import openSocket from 'socket.io-client';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
-const queryBase = '/v1/payloads/';
+const queryBase = 'http://localhost:8080/v1/payloads/';
 
 class Track extends Component {
 
@@ -23,10 +23,7 @@ class Track extends Component {
 
     componentDidMount() {
         socket.on('payload', (data) => {
-            if(data.payload_id === this.queryParameters.payload_id){
-                this.state.payloads.unshift(data)
-                this.forceUpdate()
-            }
+          this.state.payloads.push(data);
         });
     }
 
@@ -59,6 +56,7 @@ class Track extends Component {
         .then(res => res.json())
         .then(
           (result) => {
+            console.log(result)
             this.setState({
                 payloads: result,
             });

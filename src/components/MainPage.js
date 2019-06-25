@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import {
     Page,
     PageHeader,
-    PageSidebar,
     Brand,
     Button,
     Nav,
+    NavVariants,
     NavList,
-    NavItem,
-    NavExpandable,
-    NavItemSeparator
+    NavItem
   } from '@patternfly/react-core';
 import Track from './Track';
 import Inventory from './Inventory';
@@ -24,15 +22,7 @@ const logoProps = {
 class MainPage extends Component {
 
     state = {
-        activeItem: 'grp1_itm1',
-        activeGroup: 'grp1',
-        isNavOpen: true,
-    };
-
-    onNavToggle = () => {
-        this.setState({
-          isNavOpen: !this.state.isNavOpen
-        });
+        activeItem: 0,
     };
 
     onSelect = result => {
@@ -56,50 +46,25 @@ class MainPage extends Component {
                 API Endpoints
             </Button>
           }
-          onNavToggle={this.onNavToggle}
-          showNavToggle
-        />
-    );
-
-    sidebar = (
-        <PageSidebar
-            nav={
-                <Nav onSelect={this.onSelect}>
-                    <NavList>
-                        <NavExpandable title="Payloads" groupId="grp1" isActive={this.activeGroup === 'grp1'} isCollapsed>
-                            <NavItem
-                                preventDefault 
-                                to="#expandable-1"
-                                groupId="grp1"
-                                itemId="grp1_itm1"
-                                isActive={this.activeItem === 'grp1_itm1'}
-                            >
-                                Inventory
-                            </NavItem>
-                            <NavItemSeparator/>
-                            <NavItem
-                                preventDefault 
-                                to="#expandable-1"
-                                groupId="grp1"
-                                itemId="grp1_itm2"
-                                isActive={this.activeItem === 'grp1_itm2'}
-                            >
-                                Track
-                            </NavItem>
-                        </NavExpandable>
-                        <NavExpandable title="Stats" groupId="grp2" isActive={this.activeGroup === 'grp2'} isCollapsed>
-                        </NavExpandable>
-                    </NavList>
-                </Nav>
-            }
-            isNavOpen={this.state.isNavOpen}
+          topNav={
+            <Nav onSelect={this.onSelect}>
+                <NavList variant={NavVariants.horizontal}>
+                    <NavItem preventDefault itemId={0}>
+                        Inventory
+                    </NavItem>
+                    <NavItem preventDefault itemId={1}>
+                        Track
+                    </NavItem>
+                </NavList>
+            </Nav>
+          }
         />
     );
 
     render() {
-        if (this.state.activeItem === 'grp1_itm1') {
+        if (this.state.activeItem === 0) {
             return(
-                <Page header={this.header} sidebar={this.sidebar} isManagedSidebar>
+                <Page header={this.header}>
                     <Inventory 
                         payloads={this.props.payloads}
                         search={this.props.search}
@@ -108,7 +73,7 @@ class MainPage extends Component {
             )
         } else {
             return(
-                <Page header={this.header} sidebar={this.sidebar} isManagedSidebar>
+                <Page header={this.header}>
                     <Track 
                         payloads={this.props.payloads}
                         count={this.props.count}
