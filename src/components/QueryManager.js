@@ -69,6 +69,6 @@ class QueryManager extends Component {
     }
 }
 
-const queryBase = 'http://localhost:8080/v1/payloads?';
+const queryBase = '/v1/payloads?';
 
 export default QueryManager;
