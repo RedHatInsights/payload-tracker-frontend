@@ -5,6 +5,7 @@ import {
 } from '@patternfly/react-core';
 import SearchBar from './SearchBar';
 import Payloads from './Payloads';
+import { SphereSpinner } from 'react-spinners-kit';
 
 const queryBase = '/v1/payloads?';
 
@@ -13,6 +14,7 @@ class Track extends Component {
     state = {
         payloads: [],
         count: 0,
+        loading: false,
     }
     queryParameters = {
         filters: [],
@@ -62,16 +64,19 @@ class Track extends Component {
     }
 
     search = (query) => {
+        this.setState({loading: true});
         fetch(query)
         .then(res => res.json())
         .then(
           (result) => {
+            this.setState({loading: false});
             this.setState({
                 payloads: result.data,
                 count: result.count,
             });
           },
           (error) => {
+            this.setState({loading: false});
             this.setState({
               error
             });
@@ -81,6 +86,7 @@ class Track extends Component {
     }
 
     render() {
+        const { loading } = this.state;
         return(
             <div>
                 <PageSection variant={PageSectionVariants.dark}>
@@ -99,6 +105,9 @@ class Track extends Component {
                         buildQuery={this.buildQuery}
                         updateParameters={this.updateParameters}
                     />
+                    <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
+                        <SphereSpinner loading={loading} color='#000000' size={70}/>
+                    </div>
                 </PageSection>
             </div>
         )

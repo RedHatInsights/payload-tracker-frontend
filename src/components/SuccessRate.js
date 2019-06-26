@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
 import { PageSection, Gallery, GalleryItem, PageSectionVariants, Card, CardBody } from '@patternfly/react-core';
 import { ChartPie, ChartThemeColor, ChartLegend } from '@patternfly/react-charts';
+import { SphereSpinner } from 'react-spinners-kit';
+
+const query = '/v1/stats?stat=SuccessRate'
 
 class SuccessRate extends Component {
     state = {
         result: [],
+        loading: false,
     }
 
     componentDidMount() {
         this.search()
     }
 
-    search = (query=`/v1/stats?stat=SuccessRate`) => {
+    search = () => {
+        this.setState({loading: true});
         fetch(query)
         .then(res => res.json())
         .then(
           (result) => {
+            this.setState({loading: false});
             this.setState({
                 result: result,
             });
           },
           (error) => {
+            this.setState({loading: false});
             this.setState({
               error
             });
@@ -41,6 +48,7 @@ class SuccessRate extends Component {
 
     render() {
         var data = this.createDataList()
+        const { loading } = this.state;
         return(
             <PageSection variant={PageSectionVariants.light}>
                 <Gallery gutter='md'>
@@ -68,6 +76,9 @@ class SuccessRate extends Component {
                         </GalleryItem>
                     )}
                 </Gallery>
+                <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
+                    <SphereSpinner loading={loading} color='#000000' size={70}/>
+                </div>
             </PageSection>
         );
     };

@@ -6,6 +6,7 @@ import {
 import TrackSearchBar from './TrackSearchBar';
 import PayloadsTable from './PayloadsTable';
 import openSocket from 'socket.io-client';
+import { SphereSpinner } from 'react-spinners-kit';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -19,9 +20,11 @@ class Track extends Component {
         sort_dir: 'asc',
         sort_by: 'date',
         payload_id: '',
+        loading: false,
     }
 
     componentDidMount() {
+        this.setState({loading: false});
         socket.on('payload', (data) => {
             if(data.payload_id === this.queryParameters.payload_id){
                 this.state.payloads.unshift(data)
@@ -55,24 +58,28 @@ class Track extends Component {
     }
 
     search = (query) => {
+        this.setState({loading: true});
         fetch(query)
         .then(res => res.json())
         .then(
           (result) => {
+            this.setState({loading: false});
             this.setState({
                 payloads: result,
             });
           },
           (error) => {
+            this.setState({loading: false});
             this.setState({
               error
             });
           }
         )
         .then(this.forceUpdate())
-      }
+    }
 
     render() {
+        const { loading } = this.state;
         return(
             <div>
                 <PageSection variant={PageSectionVariants.dark}>
@@ -85,6 +92,9 @@ class Track extends Component {
                     <PayloadsTable
                         payloads={this.state.payloads}
                     />
+                    <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
+                        <SphereSpinner loading={loading} color='#000000' size={70}/>
+                    </div>
                 </PageSection>
             </div>
         )

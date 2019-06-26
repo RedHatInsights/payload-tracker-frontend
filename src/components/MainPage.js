@@ -68,7 +68,7 @@ class MainPage extends Component {
             nav={
                 <Nav onSelect={this.onSelect}>
                     <NavList>
-                        <NavExpandable title="Payloads" groupId="grp1" isActive={this.activeGroup === 'grp1'} isCollapsed>
+                        <NavExpandable title="Payloads" groupId="grp1" isActive={this.activeGroup === 'grp1'}>
                             <NavItem
                                 preventDefault 
                                 to="#expandable-1"
@@ -89,7 +89,7 @@ class MainPage extends Component {
                                 Track
                             </NavItem>
                         </NavExpandable>
-                        <NavExpandable title="Stats" groupId="grp2" isActive={this.activeGroup === 'grp2'} isCollapsed>
+                        <NavExpandable title="Stats" groupId="grp2" isActive={this.activeGroup === 'grp2'}>
                             <NavItem 
                                 preventDefault
                                 groupId='grp2'
