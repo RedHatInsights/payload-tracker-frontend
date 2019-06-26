@@ -13,6 +13,7 @@ import {
   } from '@patternfly/react-core';
 import Track from './Track';
 import Inventory from './Inventory';
+import SuccessRate from './SuccessRate';
 import whLogo from './static/images/rh-logo-white.svg';
 
 const logoProps = {
@@ -37,7 +38,8 @@ class MainPage extends Component {
 
     onSelect = result => {
         this.setState({
-            activeItem: result.itemId
+            activeItem: result.itemId,
+            activeGroup: result.groupId,
         });
         this.forceUpdate();
     };
@@ -88,6 +90,14 @@ class MainPage extends Component {
                             </NavItem>
                         </NavExpandable>
                         <NavExpandable title="Stats" groupId="grp2" isActive={this.activeGroup === 'grp2'} isCollapsed>
+                            <NavItem 
+                                preventDefault
+                                groupId='grp2'
+                                itemId="grp2_itm1"
+                                isActive={this.activeItem === 'grp2_itm1'}
+                            > 
+                                Success Rates
+                            </NavItem>
                         </NavExpandable>
                     </NavList>
                 </Nav>
@@ -97,23 +107,24 @@ class MainPage extends Component {
     );
 
     render() {
-        if (this.state.activeItem === 'grp1_itm1') {
+        if (this.state.activeGroup === 'grp1') {
+            if (this.state.activeItem === 'grp1_itm1') {
+                return(
+                    <Page header={this.header} sidebar={this.sidebar} isManagedSidebar>
+                        <Inventory/>
+                    </Page>
+                )
+            } else if (this.state.activeItem === 'grp1_itm2') {
+                return(
+                    <Page header={this.header} sidebar={this.sidebar} isManagedSidebar>
+                        <Track/>
+                    </Page>
+                )
+            } 
+        } else if (this.state.activeGroup === 'grp2') {
             return(
                 <Page header={this.header} sidebar={this.sidebar} isManagedSidebar>
-                    <Inventory 
-                        payloads={this.props.payloads}
-                        search={this.props.search}
-                    />
-                </Page>
-            )
-        } else {
-            return(
-                <Page header={this.header} sidebar={this.sidebar} isManagedSidebar>
-                    <Track 
-                        payloads={this.props.payloads}
-                        count={this.props.count}
-                        search={this.props.search}
-                    />
+                    <SuccessRate/>
                 </Page>
             )
         }
