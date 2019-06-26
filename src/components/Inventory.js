@@ -24,12 +24,12 @@ class Track extends Component {
         filters: [],
         page: 1,
         page_size: 10,
-        sort_dir: 'asc',
-        sort_by: 'payload_id',
+        sort_dir: 'desc',
+        sort_by: 'date',
     }
 
     componentDidMount(){
-        this.search(queryBase)
+        this.buildQuery()
     }
 
     setNavStatus = () => {
