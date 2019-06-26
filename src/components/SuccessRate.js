@@ -70,6 +70,7 @@ class SuccessRate extends Component {
                                     <ChartLegend
                                         data={[{ name: `Success: ${success}` }, { name: `Failure: ${failure}` }]}
                                         height={20}
+                                        themeColor={ChartThemeColor.multi}
                                     />
                                 </CardBody>
                             </Card>
