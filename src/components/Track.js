@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Page,
     PageSection,
     PageSectionVariants,
 } from '@patternfly/react-core';
@@ -7,6 +8,8 @@ import TrackSearchBar from './TrackSearchBar';
 import PayloadsTable from './PayloadsTable';
 import openSocket from 'socket.io-client';
 import { SphereSpinner } from 'react-spinners-kit';
+import MainHeader from './MainHeader';
+import MainSidebar from './MainSidebar';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -15,6 +18,7 @@ class Track extends Component {
 
     state = {
         payloads: [],
+        isNavOpen: true,
     }
     queryParameters = {
         sort_dir: 'asc',
@@ -31,6 +35,12 @@ class Track extends Component {
                 this.forceUpdate()
             }
         });
+    }
+    
+    setNavStatus = () => {
+        this.setState({
+            isNavOpen: !this.state.isNavOpen
+        })
     }
 
     updateParameters = newParam => {
@@ -79,9 +89,10 @@ class Track extends Component {
     }
 
     render() {
-        const { loading } = this.state;
+        const { loading, isNavOpen } = this.state;
         return(
-            <div>
+            <Page header={<MainHeader setNavStatus={this.setNavStatus}/>} 
+                  sidebar={<MainSidebar isNavOpen={isNavOpen}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
                         buildQuery={this.buildQuery}
@@ -96,7 +107,7 @@ class Track extends Component {
                         <SphereSpinner loading={loading} color='#000000' size={70}/>
                     </div>
                 </PageSection>
-            </div>
+            </Page>
         )
     }
 }

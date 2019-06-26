@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { PageSection, Gallery, GalleryItem, PageSectionVariants, Card, CardBody } from '@patternfly/react-core';
+import { Page, PageSection, Gallery, GalleryItem, PageSectionVariants, Card, CardBody } from '@patternfly/react-core';
 import { ChartPie, ChartThemeColor, ChartLegend } from '@patternfly/react-charts';
 import { SphereSpinner } from 'react-spinners-kit';
+import MainHeader from './MainHeader';
+import MainSidebar from './MainSidebar';
 
 const query = '/v1/stats?stat=SuccessRate'
 
@@ -9,10 +11,17 @@ class SuccessRate extends Component {
     state = {
         result: [],
         loading: false,
+        isNavOpen: true,
     }
 
     componentDidMount() {
         this.search()
+    }
+
+    setNavStatus = () => {
+        this.setState({
+            isNavOpen: !this.state.isNavOpen
+        })
     }
 
     search = () => {
@@ -48,39 +57,42 @@ class SuccessRate extends Component {
 
     render() {
         var data = this.createDataList()
-        const { loading } = this.state;
+        const { loading, isNavOpen } = this.state;
         return(
-            <PageSection variant={PageSectionVariants.light}>
-                <Gallery gutter='md'>
-                    {data.map(([service, success, failure]) =>
-                        <GalleryItem key={service}>
-                            <Card>
-                                <CardBody>
-                                    {service}
-                                    <ChartPie
-                                        data={[{ x: 'Success', y: success }, { x: 'Failure', y: failure }]}
-                                        height={275}
-                                        labels={datum => `${datum.x}: ${datum.y}`}
-                                        legendData={[{ name: `Success: ${success}` }, { name: `Failure: ${failure}` }]}
-                                        legendPosition="bottom"
-                                        pieHeight={230}
-                                        themeColor={ChartThemeColor.multi}
-                                        width={300}
-                                    />
-                                    <ChartLegend
-                                        data={[{ name: `Success: ${success}` }, { name: `Failure: ${failure}` }]}
-                                        height={20}
-                                        themeColor={ChartThemeColor.multi}
-                                    />
-                                </CardBody>
-                            </Card>
-                        </GalleryItem>
-                    )}
-                </Gallery>
-                <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
-                    <SphereSpinner loading={loading} color='#000000' size={70}/>
-                </div>
-            </PageSection>
+            <Page header={<MainHeader setNavStatus={this.setNavStatus}/>} 
+                  sidebar={<MainSidebar isNavOpen={isNavOpen}/>} isManagedSidebar>
+                <PageSection variant={PageSectionVariants.light}>
+                    <Gallery gutter='md'>
+                        {data.map(([service, success, failure]) =>
+                            <GalleryItem key={service}>
+                                <Card>
+                                    <CardBody>
+                                        {service}
+                                        <ChartPie
+                                            data={[{ x: 'Success', y: success }, { x: 'Failure', y: failure }]}
+                                            height={275}
+                                            labels={datum => `${datum.x}: ${datum.y}`}
+                                            legendData={[{ name: `Success: ${success}` }, { name: `Failure: ${failure}` }]}
+                                            legendPosition="bottom"
+                                            pieHeight={230}
+                                            themeColor={ChartThemeColor.multi}
+                                            width={300}
+                                        />
+                                        <ChartLegend
+                                            data={[{ name: `Success: ${success}` }, { name: `Failure: ${failure}` }]}
+                                            height={20}
+                                            themeColor={ChartThemeColor.multi}
+                                        />
+                                    </CardBody>
+                                </Card>
+                            </GalleryItem>
+                        )}
+                    </Gallery>
+                    <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
+                        <SphereSpinner loading={loading} color='#000000' size={70}/>
+                    </div>
+                </PageSection>
+            </Page>
         );
     };
 };

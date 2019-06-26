@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {
+    Page,
     PageSection,
     PageSectionVariants,
 } from '@patternfly/react-core';
 import SearchBar from './SearchBar';
 import Payloads from './Payloads';
+import MainHeader from './MainHeader';
+import MainSidebar from './MainSidebar';
 import { SphereSpinner } from 'react-spinners-kit';
 
 const queryBase = '/v1/payloads?';
@@ -15,6 +18,7 @@ class Track extends Component {
         payloads: [],
         count: 0,
         loading: false,
+        isNavOpen: true,
     }
     queryParameters = {
         filters: [],
@@ -26,6 +30,12 @@ class Track extends Component {
 
     componentDidMount(){
         this.search(queryBase)
+    }
+
+    setNavStatus = () => {
+        this.setState({
+            isNavOpen: !this.state.isNavOpen
+        })
     }
 
     updateParameters = newParam => {
@@ -86,9 +96,10 @@ class Track extends Component {
     }
 
     render() {
-        const { loading } = this.state;
+        const { loading, isNavOpen } = this.state;
         return(
-            <div>
+            <Page header={<MainHeader setNavStatus={this.setNavStatus}/>} 
+                  sidebar={<MainSidebar isNavOpen={isNavOpen}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <SearchBar
                         filters={this.queryParameters.filters} 
@@ -109,7 +120,7 @@ class Track extends Component {
                         <SphereSpinner loading={loading} color='#000000' size={70}/>
                     </div>
                 </PageSection>
-            </div>
+            </Page>
         )
     }
 }
