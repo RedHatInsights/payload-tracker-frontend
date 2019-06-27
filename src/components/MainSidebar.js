@@ -8,10 +8,10 @@ import {
     NavItemSeparator
 } from '@patternfly/react-core';
 
-const MainSidebar = () => {
+const MainSidebar = props => {
     return (
         <PageSidebar
-            nav = {<Navigation/>}
+            nav = {<Navigation history={props.history}/>}
         />
     )
 }
@@ -41,6 +41,7 @@ class Navigation extends Component {
                             groupId="grp1"
                             itemId="grp1_itm1"
                             isActive={this.activeItem === 'grp1_itm1'}
+                            onClick={ () => this.props.history.push('/payloads/inventory') }
                         >
                             Inventory
                         </NavItem>
@@ -50,6 +51,7 @@ class Navigation extends Component {
                             groupId="grp1"
                             itemId="grp1_itm2"
                             isActive={this.activeItem === 'grp1_itm2'}
+                            onClick={ () => this.props.history.push('/payloads/track') }
                         >
                             Track
                         </NavItem>
@@ -60,6 +62,7 @@ class Navigation extends Component {
                             groupId="grp2"
                             itemId="grp2_itm1"
                             isActive={this.activeItem === 'grp2_itm1'}
+                            onClick={ () => this.props.history.push('/stats/successrates') }
                         > 
                             Success Rates
                         </NavItem>

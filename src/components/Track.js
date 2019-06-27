@@ -19,6 +19,7 @@ class Track extends Component {
     state = {
         payloads: [],
         loading: false,
+        payload_id: ''
     }
     queryParameters = {
         sort_dir: 'asc',
@@ -39,6 +40,7 @@ class Track extends Component {
     updateParameters = newParam => {
         if (newParam.name === 'payload_id') {
             this.queryParameters.payload_id = newParam.value
+            this.setState({ payload_id: newParam.value });
         }
         if (newParam.name === 'Sort Dir') {
             this.queryParameters.sort_dir = newParam.value
@@ -84,7 +86,7 @@ class Track extends Component {
     render() {
         const { loading } = this.state;
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar history={this.props.history}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
                         buildQuery={this.buildQuery}

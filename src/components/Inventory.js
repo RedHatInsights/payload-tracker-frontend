@@ -91,7 +91,7 @@ class Track extends Component {
     render() {
         const { loading } = this.state;
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar history={this.props.history}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <SearchBar
                         filters={this.queryParameters.filters} 

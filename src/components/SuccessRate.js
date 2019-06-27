@@ -53,7 +53,7 @@ class SuccessRate extends Component {
         var data = this.createDataList()
         const { loading } = this.state;
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar history={this.props.history}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.light}>
                     <Gallery gutter='md'>
                         {data.map(([service, success, failure]) =>
