@@ -59,6 +59,9 @@ class SuccessRate extends Component {
         return(
             <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
+                    <div style={{paddingBottom: '10px'}}>
+                        Last 24 Hours
+                    </div>
                     <Gallery gutter='md'>
                         {data.map(([service, success, failure]) =>
                             <GalleryItem key={service}>
