@@ -18,13 +18,12 @@ class Track extends Component {
 
     state = {
         payloads: [],
-        isNavOpen: true,
+        loading: false,
     }
     queryParameters = {
         sort_dir: 'asc',
         sort_by: 'date',
         payload_id: '',
-        loading: false,
     }
 
     componentDidMount() {
@@ -35,12 +34,6 @@ class Track extends Component {
                 this.forceUpdate()
             }
         });
-    }
-    
-    setNavStatus = () => {
-        this.setState({
-            isNavOpen: !this.state.isNavOpen
-        })
     }
 
     updateParameters = newParam => {
@@ -89,10 +82,9 @@ class Track extends Component {
     }
 
     render() {
-        const { loading, isNavOpen } = this.state;
+        const { loading } = this.state;
         return(
-            <Page header={<MainHeader setNavStatus={this.setNavStatus}/>} 
-                  sidebar={<MainSidebar isNavOpen={isNavOpen}/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
                         buildQuery={this.buildQuery}

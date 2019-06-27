@@ -18,12 +18,6 @@ class SuccessRate extends Component {
         this.search()
     }
 
-    setNavStatus = () => {
-        this.setState({
-            isNavOpen: !this.state.isNavOpen
-        })
-    }
-
     search = () => {
         this.setState({loading: true});
         fetch(query)
@@ -57,10 +51,9 @@ class SuccessRate extends Component {
 
     render() {
         var data = this.createDataList()
-        const { loading, isNavOpen } = this.state;
+        const { loading } = this.state;
         return(
-            <Page header={<MainHeader setNavStatus={this.setNavStatus}/>} 
-                  sidebar={<MainSidebar isNavOpen={isNavOpen}/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.light}>
                     <Gallery gutter='md'>
                         {data.map(([service, success, failure]) =>
