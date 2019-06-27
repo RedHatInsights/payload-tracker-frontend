@@ -18,10 +18,8 @@ class SuccessRate extends Component {
         this.search()
     }
 
-    setNavStatus = () => {
-        this.setState({
-            isNavOpen: !this.state.isNavOpen
-        })
+    runRedirect = path => {
+        this.props.history.push(path)
     }
 
     search = () => {
@@ -57,11 +55,13 @@ class SuccessRate extends Component {
 
     render() {
         var data = this.createDataList()
-        const { loading, isNavOpen } = this.state;
+        const { loading } = this.state;
         return(
-            <Page header={<MainHeader setNavStatus={this.setNavStatus}/>} 
-                  sidebar={<MainSidebar isNavOpen={isNavOpen}/>} isManagedSidebar>
-                <PageSection variant={PageSectionVariants.light}>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
+                <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
+                    <div style={{paddingBottom: '10px'}}>
+                        Last 24 Hours
+                    </div>
                     <Gallery gutter='md'>
                         {data.map(([service, success, failure]) =>
                             <GalleryItem key={service}>

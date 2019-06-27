@@ -23,10 +23,7 @@ class TrackSearchBar extends Component {
     }
 
     submitQuery = () => {
-        if (this.state.payload_id !== ''){
-          this.props.updateParameters({name: 'payload_id', value: this.state.payload_id})
-          this.props.buildQuery()
-        }
+        this.props.runRedirect(`/payloads/track/${this.state.payload_id}`)
     }
 
     render() {
@@ -34,6 +31,7 @@ class TrackSearchBar extends Component {
             <div>
                 <TextInput
                     isRequired
+                    id='payload_id'
                     type="text"
                     name="payload_id"
                     value={this.state.payload_id}

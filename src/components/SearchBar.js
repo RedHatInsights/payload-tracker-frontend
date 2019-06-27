@@ -100,6 +100,7 @@ class SearchBar extends Component {
 
       <TextInput
         isRequired
+        id='newValue'
         type='text'
         name='newValue'
         onChange={this.handleNewValueInputChange}

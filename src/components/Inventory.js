@@ -18,7 +18,6 @@ class Track extends Component {
         payloads: [],
         count: 0,
         loading: false,
-        isNavOpen: true,
     }
     queryParameters = {
         filters: [],
@@ -32,10 +31,8 @@ class Track extends Component {
         this.buildQuery()
     }
 
-    setNavStatus = () => {
-        this.setState({
-            isNavOpen: !this.state.isNavOpen
-        })
+    runRedirect = path => {
+        this.props.history.push(path)
     }
 
     updateParameters = newParam => {
@@ -96,10 +93,9 @@ class Track extends Component {
     }
 
     render() {
-        const { loading, isNavOpen } = this.state;
+        const { loading } = this.state;
         return(
-            <Page header={<MainHeader setNavStatus={this.setNavStatus}/>} 
-                  sidebar={<MainSidebar isNavOpen={isNavOpen}/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <SearchBar
                         filters={this.queryParameters.filters} 
