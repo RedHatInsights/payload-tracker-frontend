@@ -34,6 +34,7 @@ class TrackSearchBar extends Component {
             <div>
                 <TextInput
                     isRequired
+                    id='payload_id'
                     type="text"
                     name="payload_id"
                     value={this.state.payload_id}
