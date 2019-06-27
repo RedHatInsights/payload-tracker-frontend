@@ -54,7 +54,7 @@ class SuccessRate extends Component {
         const { loading } = this.state;
         return(
             <Page header={<MainHeader/>} sidebar={<MainSidebar history={this.props.history}/>} isManagedSidebar>
-                <PageSection variant={PageSectionVariants.light}>
+                <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
                     <Gallery gutter='md'>
                         {data.map(([service, success, failure]) =>
                             <GalleryItem key={service}>

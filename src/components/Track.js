@@ -19,7 +19,6 @@ class Track extends Component {
     state = {
         payloads: [],
         loading: false,
-        payload_id: ''
     }
     queryParameters = {
         sort_dir: 'asc',
@@ -40,7 +39,6 @@ class Track extends Component {
     updateParameters = newParam => {
         if (newParam.name === 'payload_id') {
             this.queryParameters.payload_id = newParam.value
-            this.setState({ payload_id: newParam.value });
         }
         if (newParam.name === 'Sort Dir') {
             this.queryParameters.sort_dir = newParam.value
@@ -50,6 +48,7 @@ class Track extends Component {
             this.queryParameters.sort_by = newParam.value
             this.queryParameters.page = 1;
         }
+        this.buildQuery()
     }
 
     buildQuery = () => {
@@ -60,6 +59,10 @@ class Track extends Component {
             });
             this.search(query)
         }
+    }
+
+    runRedirect = path => {
+        this.props.history.push(path)
     }
 
     search = (query) => {
@@ -85,12 +88,18 @@ class Track extends Component {
 
     render() {
         const { loading } = this.state;
+        const { payload_id } = this.props.match.params;
+        if( payload_id && payload_id !== this.queryParameters.payload_id ) {
+            this.updateParameters({name: 'payload_id', value: payload_id})
+        }
+        console.log(this.state.payloads)
         return(
             <Page header={<MainHeader/>} sidebar={<MainSidebar history={this.props.history}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
                         buildQuery={this.buildQuery}
                         updateParameters={this.updateParameters}
+                        runRedirect={this.runRedirect}
                     />
                 </PageSection>
                 <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
