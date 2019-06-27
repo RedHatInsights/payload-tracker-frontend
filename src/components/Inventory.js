@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import {
+    Page,
     PageSection,
     PageSectionVariants,
 } from '@patternfly/react-core';
 import SearchBar from './SearchBar';
 import Payloads from './Payloads';
+import MainHeader from './MainHeader';
+import MainSidebar from './MainSidebar';
+import { SphereSpinner } from 'react-spinners-kit';
 
 const queryBase = '/v1/payloads?';
 
@@ -13,17 +17,25 @@ class Track extends Component {
     state = {
         payloads: [],
         count: 0,
+        loading: false,
+        isNavOpen: true,
     }
     queryParameters = {
         filters: [],
         page: 1,
         page_size: 10,
-        sort_dir: 'asc',
-        sort_by: 'payload_id',
+        sort_dir: 'desc',
+        sort_by: 'date',
     }
 
     componentDidMount(){
-        this.search(queryBase)
+        this.buildQuery()
+    }
+
+    setNavStatus = () => {
+        this.setState({
+            isNavOpen: !this.state.isNavOpen
+        })
     }
 
     updateParameters = newParam => {
@@ -62,16 +74,19 @@ class Track extends Component {
     }
 
     search = (query) => {
+        this.setState({loading: true});
         fetch(query)
         .then(res => res.json())
         .then(
           (result) => {
+            this.setState({loading: false});
             this.setState({
                 payloads: result.data,
                 count: result.count,
             });
           },
           (error) => {
+            this.setState({loading: false});
             this.setState({
               error
             });
@@ -81,8 +96,10 @@ class Track extends Component {
     }
 
     render() {
+        const { loading, isNavOpen } = this.state;
         return(
-            <div>
+            <Page header={<MainHeader setNavStatus={this.setNavStatus}/>} 
+                  sidebar={<MainSidebar isNavOpen={isNavOpen}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <SearchBar
                         filters={this.queryParameters.filters} 
@@ -99,8 +116,11 @@ class Track extends Component {
                         buildQuery={this.buildQuery}
                         updateParameters={this.updateParameters}
                     />
+                    <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
+                        <SphereSpinner loading={loading} color='#000000' size={70}/>
+                    </div>
                 </PageSection>
-            </div>
+            </Page>
         )
     }
 }
