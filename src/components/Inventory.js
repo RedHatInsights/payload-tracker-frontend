@@ -31,6 +31,10 @@ class Track extends Component {
         this.buildQuery()
     }
 
+    runRedirect = path => {
+        this.props.history.push(path)
+    }
+
     updateParameters = newParam => {
         if (newParam.name === 'page') {
             this.queryParameters.page = newParam.value
@@ -91,7 +95,7 @@ class Track extends Component {
     render() {
         const { loading } = this.state;
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar history={this.props.history}/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <SearchBar
                         filters={this.queryParameters.filters} 

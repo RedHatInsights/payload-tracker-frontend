@@ -11,7 +11,8 @@ import {
 const MainSidebar = props => {
     return (
         <PageSidebar
-            nav = {<Navigation history={props.history}/>}
+            nav = {<Navigation runRedirect={props.runRedirect}/>}
+            style={{height: '100%'}}
         />
     )
 }
@@ -41,7 +42,7 @@ class Navigation extends Component {
                             groupId="grp1"
                             itemId="grp1_itm1"
                             isActive={this.activeItem === 'grp1_itm1'}
-                            onClick={ () => this.props.history.push('/payloads/inventory') }
+                            onClick={ () => this.runRedirect('/payloads/inventory') }
                         >
                             Inventory
                         </NavItem>
@@ -51,7 +52,7 @@ class Navigation extends Component {
                             groupId="grp1"
                             itemId="grp1_itm2"
                             isActive={this.activeItem === 'grp1_itm2'}
-                            onClick={ () => this.props.history.push('/payloads/track') }
+                            onClick={ () => this.runRedirect('/payloads/track') }
                         >
                             Track
                         </NavItem>
@@ -62,7 +63,7 @@ class Navigation extends Component {
                             groupId="grp2"
                             itemId="grp2_itm1"
                             isActive={this.activeItem === 'grp2_itm1'}
-                            onClick={ () => this.props.history.push('/stats/successrates') }
+                            onClick={ () => this.runRedirect('/stats/successrates') }
                         > 
                             Success Rates
                         </NavItem>

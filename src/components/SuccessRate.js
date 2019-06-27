@@ -18,6 +18,10 @@ class SuccessRate extends Component {
         this.search()
     }
 
+    runRedirect = path => {
+        this.props.history.push(path)
+    }
+
     search = () => {
         this.setState({loading: true});
         fetch(query)
@@ -53,7 +57,7 @@ class SuccessRate extends Component {
         var data = this.createDataList()
         const { loading } = this.state;
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar history={this.props.history}/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
                     <Gallery gutter='md'>
                         {data.map(([service, success, failure]) =>

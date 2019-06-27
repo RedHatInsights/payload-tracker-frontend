@@ -92,9 +92,8 @@ class Track extends Component {
         if( payload_id && payload_id !== this.queryParameters.payload_id ) {
             this.updateParameters({name: 'payload_id', value: payload_id})
         }
-        console.log(this.state.payloads)
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar history={this.props.history}/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
                         buildQuery={this.buildQuery}
