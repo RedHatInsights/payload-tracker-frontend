@@ -96,7 +96,6 @@ class Track extends Component {
             (sort_dir && sort_dir !== this.queryParameters.sort_dir)) {
 
             Object.entries(params).forEach(([param, given]) => {
-                console.log(param, given)
                 this.updateParameters({name: param, value: given});
             })
             this.buildQuery();
@@ -106,6 +105,7 @@ class Track extends Component {
             <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
+                        payload_id={payload_id ? payload_id : false}
                         buildQuery={this.buildQuery}
                         updateParameters={this.updateParameters}
                         runRedirect={this.runRedirect}

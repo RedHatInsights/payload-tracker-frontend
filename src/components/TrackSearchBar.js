@@ -8,6 +8,7 @@ class TrackSearchBar extends Component {
         super(props);
         this.state = {
             payload_id: '',
+            idIsGiven: true,
         }
     }
 
@@ -29,6 +30,13 @@ class TrackSearchBar extends Component {
     }
 
     render() {
+        const { payload_id } = this.props;
+        if (payload_id && this.state.isIdGiven) {
+            this.setState({
+                payload_id,
+                idIsGiven: false,
+            })
+        }
         return (
             <div>
                 <TextInput
@@ -41,7 +49,10 @@ class TrackSearchBar extends Component {
                     style={inputStyle}
                     placeholder='Enter Payload ID...'
                 />
-                <Button variant='primary' onClick={(e) => {this.submitQuery()} } isDisabled={this.state.payload_id === "" }> 
+                <Button 
+                    variant='primary' 
+                    onClick={(e) => {this.submitQuery()} } 
+                    isDisabled={this.state.payload_id === ""}> 
                         Submit
                 </Button>
                 <DropdownContainer 
