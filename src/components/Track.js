@@ -21,7 +21,7 @@ class Track extends Component {
         loading: false,
     }
     queryParameters = {
-        sort_dir: 'asc',
+        sort_dir: 'desc',
         sort_by: 'date',
         payload_id: '',
     }
@@ -40,15 +40,14 @@ class Track extends Component {
         if (newParam.name === 'payload_id') {
             this.queryParameters.payload_id = newParam.value
         }
-        if (newParam.name === 'Sort Dir') {
+        if (newParam.name === 'Sort Dir' || newParam.name == 'sort_dir') {
             this.queryParameters.sort_dir = newParam.value
             this.queryParameters.page = 1;
         }
-        if (newParam.name === 'Sort By') {
+        if (newParam.name === 'Sort By' || newParam.name == 'sort_by') {
             this.queryParameters.sort_by = newParam.value
             this.queryParameters.page = 1;
         }
-        this.buildQuery()
     }
 
     buildQuery = () => {
@@ -62,7 +61,8 @@ class Track extends Component {
     }
 
     runRedirect = path => {
-        this.props.history.push(path)
+        const { sort_by, sort_dir } = this.queryParameters
+        this.props.history.push(path + `/${sort_by}/${sort_dir}`);
     }
 
     search = (query) => {
@@ -88,9 +88,19 @@ class Track extends Component {
 
     render() {
         const { loading } = this.state;
-        const { payload_id } = this.props.match.params;
-        if( payload_id && payload_id !== this.queryParameters.payload_id ) {
-            this.updateParameters({name: 'payload_id', value: payload_id})
+        const { params } = this.props.match;
+        const { payload_id, sort_by, sort_dir } = params
+
+        if ((payload_id && payload_id !== this.queryParameters.payload_id) ||
+            (sort_by && sort_by !== this.queryParameters.sort_by) ||
+            (sort_dir && sort_dir !== this.queryParameters.sort_dir)) {
+
+            Object.entries(params).forEach(([param, given]) => {
+                console.log(param, given)
+                this.updateParameters({name: param, value: given});
+            })
+            this.buildQuery();
+
         }
         return(
             <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
