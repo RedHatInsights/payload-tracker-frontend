@@ -57,7 +57,7 @@ class Navigation extends Component {
                             Track
                         </NavItem>
                     </NavExpandable>
-                    <NavExpandable title="Stats" groupId="grp2" isActive={this.activeGroup === 'grp2'}>
+                    {/* <NavExpandable title="Stats" groupId="grp2" isActive={this.activeGroup === 'grp2'}>
                         <NavItem 
                             to='/stats/successrates'
                             groupId="grp2"
@@ -67,7 +67,7 @@ class Navigation extends Component {
                         > 
                             Success Rates
                         </NavItem>
-                    </NavExpandable>
+                    </NavExpandable> */}
                 </NavList>
             </Nav>
         )
