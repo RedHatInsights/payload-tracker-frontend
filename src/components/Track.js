@@ -73,7 +73,7 @@ class Track extends Component {
         }
     }
 
-    runRedirect = (path=`/payloads/track/`) => {
+    runRedirect = (path=`/home/track/`) => {
         const { payload_id, sort_by, sort_dir } = this.queryParameters;
         this.props.history.push(path + `${payload_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
         this.buildQuery();
@@ -104,7 +104,7 @@ class Track extends Component {
         const { loading } = this.state;
         const { payload_id } = this.queryParameters;
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
+            <Page header={<MainHeader/>} sidebar={<MainSidebar/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
                         payload_id={payload_id ? payload_id : false}
