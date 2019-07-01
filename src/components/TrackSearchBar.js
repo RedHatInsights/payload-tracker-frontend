@@ -8,14 +8,21 @@ class TrackSearchBar extends Component {
         super(props);
         this.state = {
             payload_id: '',
-            idIsGiven: true,
+        }
+    }
+
+    componentWillMount() {
+        if (this.props.payload_id) {
+            this.setState({
+                payload_id: this.props.payload_id
+            });
         }
     }
 
     setSelected = (filterType, filterValue) => {
         this.props.updateParameters({name: filterType, value: filterValue})
         if (this.state.payload_id !== ''){
-            this.props.runRedirect(`/payloads/track/${this.state.payload_id}`)
+            this.props.runRedirect()
         }
     }
 
@@ -26,17 +33,14 @@ class TrackSearchBar extends Component {
     }
 
     submitQuery = () => {
-        this.props.runRedirect(`/payloads/track/${this.state.payload_id}`)
+        this.props.updateParameters({
+            name: 'payload_id',
+            value: this.state.payload_id
+        })
+        this.props.runRedirect()
     }
 
     render() {
-        const { payload_id } = this.props;
-        if (payload_id && this.state.isIdGiven) {
-            this.setState({
-                payload_id,
-                idIsGiven: false,
-            })
-        }
         return (
             <div>
                 <TextInput
@@ -51,7 +55,7 @@ class TrackSearchBar extends Component {
                 />
                 <Button 
                     variant='primary' 
-                    onClick={(e) => {this.submitQuery()} } 
+                    onClick={(e) => this.submitQuery()} 
                     isDisabled={this.state.payload_id === ""}> 
                         Submit
                 </Button>

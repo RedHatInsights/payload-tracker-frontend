@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import '@patternfly/react-core/dist/styles/base.css';
 import PayloadsTable from './PayloadsTable'
 import {
@@ -7,45 +6,32 @@ import {
 } from '@patternfly/react-core';
   
 
-class Payloads extends Component{
-
-    constructor(){
-        super();
-        this.onSetPage = (_event, pageNumber) => {
-            this.props.updateParameters({name: 'page', value: pageNumber})
-            this.props.buildQuery();
-        };
-      
-        this.onPerPageSelect = (_event, perPage) => {
-            this.props.updateParameters({name: 'page_size', value: perPage})
-            this.props.buildQuery();
-        };
-    }
-
-    render() {
-        return (
-            <div> 
-                <Pagination 
-                        itemCount={this.props.count}
-                        perPage={this.props.page_size}
-                        page={this.props.page}
-                        onSetPage={this.onSetPage}
-                        widgetId="pagination-options-menu-top"
-                        onPerPageSelect={this.onPerPageSelect}
-                />
-                <PayloadsTable 
-                    payloads={this.props.payloads}
-                />
-            </div>
-        )
-    }
-}
-
-Payloads.propTypes = {
-    payloads: PropTypes.array.isRequired,
-    count: PropTypes.number.isRequired,
-    buildQuery: PropTypes.func.isRequired,
-    updateParameters: PropTypes.func.isRequired,
+const Payloads = props => {
+    return (
+        <div> 
+            <Pagination 
+                    itemCount={props.count}
+                    perPage={props.page_size}
+                    page={props.page}
+                    onSetPage={
+                        (_event, pageNumber) => {
+                            props.updateParameters({name: 'page', value: pageNumber});
+                            props.runRedirect();
+                        }
+                    }
+                    widgetId="pagination-options-menu-top"
+                    onPerPageSelect={
+                        (_event, perPage) => {
+                            props.updateParameters({name: 'page_size', value: perPage});
+                            props.runRedirect();
+                        }
+                    }
+            />
+            <PayloadsTable 
+                payloads={props.payloads}
+            />
+        </div>
+    )
 }
 
 export default Payloads;

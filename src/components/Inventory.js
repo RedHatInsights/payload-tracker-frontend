@@ -9,6 +9,7 @@ import Payloads from './Payloads';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import { SphereSpinner } from 'react-spinners-kit';
+import queryString from 'query-string';
 
 const queryBase = '/v1/payloads?';
 
@@ -27,30 +28,49 @@ class Track extends Component {
         sort_by: 'date',
     }
 
-    componentDidMount(){
+    componentWillMount(){
+        const params = queryString.parse(this.props.location.search);
+        Object.entries(params).forEach(([param, value]) => {
+            this.updateParameters({name: param, value: value})
+        })
+
         this.buildQuery()
     }
 
-    runRedirect = path => {
-        this.props.history.push(path)
+    runRedirect = (path='/payloads/inventory') => {
+        const { sort_by, sort_dir, page, page_size, filters } = this.queryParameters
+        path += `?sort_by=${sort_by}&sort_dir=${sort_dir}&page=${page}&page_size=${page_size}`
+
+        Object.entries(filters).forEach(([id, filter]) => {
+            path += `&${filter.key}=${filter.value}`
+        })
+        this.props.history.push(path);
+
     }
 
     updateParameters = newParam => {
-        if (newParam.name === 'page') {
-            this.queryParameters.page = newParam.value
+        if (newParam.name === "page") {
+            this.queryParameters.page = Number(newParam.value)
         }
-        if (newParam.name === 'page_size') {
-            this.queryParameters.page_size = newParam.value
+        else if (newParam.name === "page_size") {
+            this.queryParameters.page_size = Number(newParam.value)
             this.queryParameters.page = 1;
         }
-        if (newParam.name === 'Sort Dir') {
+        else if (newParam.name === "Sort Dir" || newParam.name === "sort_dir") {
             this.queryParameters.sort_dir = newParam.value
             this.queryParameters.page = 1;
         }
-        if (newParam.name === 'Sort By') {
+        else if (newParam.name === "Sort By" || newParam.name === "sort_by") {
             this.queryParameters.sort_by = newParam.value
             this.queryParameters.page = 1;
+        } else {
+            this.queryParameters.filters.push({
+                id: this.queryParameters.filters.length,
+                key: newParam.name,
+                value: newParam.value
+            })
         }
+        this.buildQuery()
     }
 
     buildQuery = () => {
@@ -101,6 +121,7 @@ class Track extends Component {
                         filters={this.queryParameters.filters} 
                         buildQuery={this.buildQuery}
                         updateParameters={this.updateParameters}
+                        runRedirect={this.runRedirect}
                     />
                 </PageSection>
                 <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
@@ -109,8 +130,8 @@ class Track extends Component {
                         count={this.state.count}
                         page={this.queryParameters.page}
                         page_size={this.queryParameters.page_size}
-                        buildQuery={this.buildQuery}
                         updateParameters={this.updateParameters}
+                        runRedirect={this.runRedirect}
                     />
                     <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
                         <SphereSpinner loading={loading} color='#000000' size={70}/>

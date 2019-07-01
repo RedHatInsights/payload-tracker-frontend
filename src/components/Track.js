@@ -10,6 +10,7 @@ import openSocket from 'socket.io-client';
 import { SphereSpinner } from 'react-spinners-kit';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
+import queryString from 'query-string';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -26,7 +27,7 @@ class Track extends Component {
         payload_id: '',
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.setState({loading: false});
         socket.on('payload', (data) => {
             if(data.payload_id === this.queryParameters.payload_id){
@@ -34,35 +35,48 @@ class Track extends Component {
                 this.forceUpdate()
             }
         });
+
+        const { payload_id } = this.props.match.params;
+        this.updateParameters({name: 'payload_id', value: payload_id});
+        
+        const params = queryString.parse(this.props.location.search);
+        Object.entries(params).forEach(([param, value]) => {
+            this.updateParameters({name: param, value: value});
+        });
+
+        this.buildQuery();
     }
 
     updateParameters = newParam => {
         if (newParam.name === 'payload_id') {
             this.queryParameters.payload_id = newParam.value
         }
-        if (newParam.name === 'Sort Dir' || newParam.name == 'sort_dir') {
+        else if (newParam.name === 'Sort Dir' || newParam.name === 'sort_dir') {
             this.queryParameters.sort_dir = newParam.value
             this.queryParameters.page = 1;
         }
-        if (newParam.name === 'Sort By' || newParam.name == 'sort_by') {
+        else if (newParam.name === 'Sort By' || newParam.name === 'sort_by') {
             this.queryParameters.sort_by = newParam.value
             this.queryParameters.page = 1;
         }
+        this.buildQuery();
     }
 
     buildQuery = () => {
-        if(this.queryParameters.payload_id !== '') {
-            var query = queryBase + `${this.queryParameters.payload_id}?`
-            Object.entries(this.queryParameters).forEach(([param, value]) => {
-                query = query + `${param}=${value}&`
-            });
+        const { payload_id, sort_by, sort_dir } = this.queryParameters
+        if(payload_id !== '') {
+            var query = queryBase + 
+                `${payload_id}` +
+                `?sort_by=${sort_by}` +
+                `&sort_dir=${sort_dir}`
             this.search(query)
         }
     }
 
-    runRedirect = path => {
-        const { sort_by, sort_dir } = this.queryParameters
-        this.props.history.push(path + `/${sort_by}/${sort_dir}`);
+    runRedirect = (path=`/payloads/track/`) => {
+        const { payload_id, sort_by, sort_dir } = this.queryParameters;
+        this.props.history.push(path + `${payload_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
+        this.buildQuery();
     }
 
     search = (query) => {
@@ -88,19 +102,7 @@ class Track extends Component {
 
     render() {
         const { loading } = this.state;
-        const { params } = this.props.match;
-        const { payload_id, sort_by, sort_dir } = params
-
-        if ((payload_id && payload_id !== this.queryParameters.payload_id) ||
-            (sort_by && sort_by !== this.queryParameters.sort_by) ||
-            (sort_dir && sort_dir !== this.queryParameters.sort_dir)) {
-
-            Object.entries(params).forEach(([param, given]) => {
-                this.updateParameters({name: param, value: given});
-            })
-            this.buildQuery();
-
-        }
+        const { payload_id } = this.queryParameters;
         return(
             <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
                 <PageSection variant={PageSectionVariants.dark}>

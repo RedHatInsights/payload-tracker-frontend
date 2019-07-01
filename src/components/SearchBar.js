@@ -22,7 +22,6 @@ class SearchBar extends Component {
   constructor(){
     super()
     this.state = {
-      filterCount: 0,
       filterInputOpen: false,
       newValue: '',
       isOpen: false,
@@ -31,7 +30,7 @@ class SearchBar extends Component {
 
   setSelected = (filterType, filterValue) => {
     this.props.updateParameters({name: filterType, value: filterValue})
-    this.props.buildQuery()
+    this.props.runRedirect()
   }
 
   openFilterInput = (type, item) => {
@@ -42,17 +41,16 @@ class SearchBar extends Component {
   }
 
   createChip = () => {
-    var {filterCount, newFilter, newValue} = this.state
+    var {newFilter, newValue} = this.state
     if (newValue !== '' && newFilter !== ''){
-      this.props.filters.push({id: filterCount, key: newFilter, value: newValue})
+      this.props.updateParameters({name: newFilter, value: newValue})
       this.setState({
-        filterCount: this.state.filterCount + 1,
         filterInputOpen: false,
         newFilter: '',
         newValue: '',
       })
       this.props.updateParameters({name: 'page', value: 1})
-      this.props.buildQuery()
+      this.props.runRedirect()
     }
   }
 
@@ -62,6 +60,7 @@ class SearchBar extends Component {
           this.props.filters.splice(i,1)
       }
     }
+    this.props.runRedirect()
     this.props.buildQuery()
   }
 

@@ -14,8 +14,7 @@ class App extends Component {
             <Route exact path='/' component={Inventory}/>
             <Route path='/payloads/inventory' component={Inventory}/>
             <Route exact path='/payloads/track' component={Track}/>
-            <Route exact path='/payloads/track/:payload_id' component={Track}/>
-            <Route path='/payloads/track/:payload_id/:sort_by/:sort_dir' component={Track}/>
+            <Route path='/payloads/track/:payload_id' component={Track}/>
             {/* <Route path='/stats/successrates' component={SuccessRate}/> */}
         </Switch>
       </Router>
