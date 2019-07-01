@@ -124,19 +124,19 @@ class Track extends Component {
                         runRedirect={this.runRedirect}
                     />
                 </PageSection>
-                <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
-                    <Payloads 
-                        payloads={this.state.payloads} 
-                        count={this.state.count}
-                        page={this.queryParameters.page}
-                        page_size={this.queryParameters.page_size}
-                        updateParameters={this.updateParameters}
-                        runRedirect={this.runRedirect}
-                    />
-                    <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
-                        <SphereSpinner loading={loading} color='#000000' size={70}/>
-                    </div>
-                </PageSection>
+                    <PageSection variant={PageSectionVariants.light}>
+                        <Payloads 
+                            payloads={this.state.payloads} 
+                            count={this.state.count}
+                            page={this.queryParameters.page}
+                            page_size={this.queryParameters.page_size}
+                            updateParameters={this.updateParameters}
+                            runRedirect={this.runRedirect}
+                        />
+                        <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
+                            <SphereSpinner loading={loading} color='#000000' size={70}/>
+                        </div>
+                    </PageSection>
             </Page>
         )
     }

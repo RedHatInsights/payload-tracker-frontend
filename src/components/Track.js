@@ -113,7 +113,7 @@ class Track extends Component {
                         runRedirect={this.runRedirect}
                     />
                 </PageSection>
-                <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
+                <PageSection variant={PageSectionVariants.light}>
                     <PayloadsTable
                         payloads={this.state.payloads}
                     />

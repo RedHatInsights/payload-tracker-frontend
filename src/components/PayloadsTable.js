@@ -41,14 +41,16 @@ class Payloads extends Component{
 
     render() {
         return (
-            <Table 
-                cells={this.state.cells} 
-                rows={this.generateRows()}
-                variant={TableVariant.compact}
-            >
-                <TableHeader/>
-                <TableBody/>
-            </Table>
+            <div style={{height:'100vh', overflow:'auto'}}>
+                <Table 
+                    cells={this.state.cells} 
+                    rows={this.generateRows()}
+                    variant={TableVariant.compact}
+                >
+                    <TableHeader/>
+                    <TableBody/>
+                </Table>
+            </div>
         )
     }
 }

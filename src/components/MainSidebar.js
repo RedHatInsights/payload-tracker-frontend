@@ -12,7 +12,6 @@ const MainSidebar = props => {
     return (
         <PageSidebar
             nav = {<Navigation runRedirect={props.runRedirect}/>}
-            style={{height: '100%'}}
         />
     )
 }
