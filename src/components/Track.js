@@ -10,8 +10,10 @@ import openSocket from 'socket.io-client';
 import { SphereSpinner } from 'react-spinners-kit';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
+import OptionsContainer from './OptionsContainer';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
+import { mapStateToProps } from './Definitions';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -115,8 +117,13 @@ class Track extends Component {
                     />
                 </PageSection>
                 <PageSection variant={PageSectionVariants.light}>
+                    <OptionsContainer
+                        dispatch={this.props.dispatch}
+                        cells={this.props.cells}
+                    />
                     <PayloadsTable
                         payloads={this.state.payloads}
+                        cells={this.props.cells}
                     />
                     <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
                         <SphereSpinner loading={loading} color='#000000' size={70}/>
@@ -127,4 +134,4 @@ class Track extends Component {
     }
 }
 
-export default connect()(Track);
+export default connect(mapStateToProps)(Track);

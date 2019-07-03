@@ -11,11 +11,11 @@ import MainSidebar from './MainSidebar';
 import { SphereSpinner } from 'react-spinners-kit';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
+import { mapStateToProps } from './Definitions';
 
 const queryBase = '/v1/payloads?';
 
 class Payloads extends Component {
-
     state = {
         payloads: [],
         count: 0,
@@ -132,6 +132,8 @@ class Payloads extends Component {
                             page_size={this.queryParameters.page_size}
                             updateParameters={this.updateParameters}
                             runRedirect={this.runRedirect}
+                            dispatch={this.props.dispatch}
+                            cells={this.props.cells}
                         />
                         <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
                             <SphereSpinner loading={loading} color='#000000' size={70}/>
@@ -142,4 +144,4 @@ class Payloads extends Component {
     }
 }
 
-export default connect()(Payloads);
+export default connect(mapStateToProps)(Payloads);

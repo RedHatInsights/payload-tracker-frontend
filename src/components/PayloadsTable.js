@@ -1,29 +1,18 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import {
     Table,
     TableHeader,
     TableBody,
-    textCenter,
     TableVariant
 } from '@patternfly/react-table';
-  
 
-class Payloads extends Component{
-
-    constructor(){
-        super();
-        this.state = {
-            cells: cells,
-        }
-    }
-
-    generateRows = () => {
-        var rows = [];
-        Object.values(this.props.payloads).forEach(payload => {
-            var row = [];
-            Object.entries(cells).forEach(([cellKey, cellValue]) => {
-                var valueWasFound = false;
+const generateRows = (props) => {
+    var rows = [];
+    Object.values(props.payloads).forEach(payload => {
+        var row = [];
+        Object.entries(props.cells).forEach(([cellKey, cellValue]) => {
+            var valueWasFound = false;
+            if (cellValue.isActive) {
                 Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
                     if (cellValue.title === payloadKey) {
                         row.push(payloadValue)
@@ -33,78 +22,38 @@ class Payloads extends Component{
                 if(!valueWasFound){
                     row.push("")
                 }
-            })
-            rows.push(row)
+            }
         })
-        return (rows);
-    }
-
-    render() {
-        return (
-            <div style={{height:'100vh', overflow:'auto'}}>
-                <Table 
-                    cells={this.state.cells} 
-                    rows={this.generateRows()}
-                    variant={TableVariant.compact}
-                >
-                    <TableHeader/>
-                    <TableBody/>
-                </Table>
-            </div>
-        )
-    }
+        rows.push({ cells: row })
+    })
+    return (rows);
 }
 
-Payloads.propTypes = {
-    payloads: PropTypes.array.isRequired,
+const generateCells = (props) => {
+    var cells = [];
+    Object.entries(props.cells).forEach(([key, cell]) => {
+        if (cell.isActive) {
+            cells.push(cell);
+        }
+    })
+    return(cells)
 }
 
-const cells = [
-    {
-        title: 'id',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'service',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'source',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'account',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'payload_id',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'inventory_id',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'system_id',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'status',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'status_msg',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'date',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    },{
-        title: 'created_at',
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
-    }
-]
+export default function Payloads(props) {
 
-export default Payloads;
+    const rows = generateRows(props)
+    const cells = generateCells(props)
+
+    return (
+        <div style={{height:'100vh', overflow:'auto'}}>
+            <Table 
+                cells={cells} 
+                rows={rows}
+                variant={TableVariant.compact}
+            >
+                <TableHeader/>
+                <TableBody/>
+            </Table>
+        </div>
+    )
+}

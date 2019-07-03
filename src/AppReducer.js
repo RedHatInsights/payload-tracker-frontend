@@ -1,14 +1,21 @@
 import { combineReducers, createStore } from 'redux';
 import * as ConstantTypes from './AppConstants';
 
-const reducer = (state=ConstantTypes.DEFAULT_CELL_STATE, action) => {
+const initialState = {
+    cells: ConstantTypes.DEFAULT_CELL_STATE
+}
+
+const reducer = (state=initialState, action) => {
     switch (action.type){
         case ConstantTypes.SET_CELL_ACTIVITY:
-            state.map(cell => {
-                if(cell.title = action.title) {
-                    return { ...cell.isActive, ...action.payload }
-                };
-            });
+            return {
+                ...state,
+                cells: state.cells.map(cell => 
+                    cell.title === action.title ?
+                        {...cell, isActive: action.payload}
+                    : cell
+                )
+            }
         default:
             return state;
     }
