@@ -11,6 +11,7 @@ import { SphereSpinner } from 'react-spinners-kit';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import queryString from 'query-string';
+import { connect } from 'react-redux';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -126,4 +127,4 @@ class Track extends Component {
     }
 }
 
-export default Track;
+export default connect()(Track);

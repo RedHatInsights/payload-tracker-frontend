@@ -10,10 +10,11 @@ import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import { SphereSpinner } from 'react-spinners-kit';
 import queryString from 'query-string';
+import { connect } from 'react-redux';
 
 const queryBase = '/v1/payloads?';
 
-class Track extends Component {
+class Payloads extends Component {
 
     state = {
         payloads: [],
@@ -45,7 +46,6 @@ class Track extends Component {
             path += `&${filter.key}=${filter.value}`
         })
         this.props.history.push(path);
-
     }
 
     updateParameters = newParam => {
@@ -142,4 +142,4 @@ class Track extends Component {
     }
 }
 
-export default Track;
+export default connect()(Payloads);
