@@ -32,16 +32,12 @@ const PayloadsPagination = props => {
                 </div>
                 <div>
                     <OptionsContainer
-                        dispatch={props.dispatch}
-                        cells={props.cells}
+                        {...props}
                     />
                 </div>
             </div>
             <PayloadsTable 
-                payloads={props.payloads}
-                cells={props.cells}
-                runRedirect={props.runRedirect}
-                updateParameters={props.updateParameters}
+                {...props}
             />
         </div>
     )

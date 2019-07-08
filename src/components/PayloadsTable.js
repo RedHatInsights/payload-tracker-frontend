@@ -19,16 +19,27 @@ const generateRows = props => {
                         cellValue.isFilterable ?
                             row.push({
                                 title: <HoverableAttribute
+                                    type='filter'
                                     payloadKey={payloadKey}
                                     payloadValue={payloadValue}
-                                    runRedirect={props.runRedirect}
-                                    updateParameters={props.updateParameters}
+                                    {...props}
                                 />,
                                 props: { 
                                     component: 'th' 
-                                }}) :
-                            row.push({ title: payloadValue })
-
+                                }}) : (
+                                    cellValue.isTrackable ?
+                                        row.push({
+                                            title: <HoverableAttribute
+                                                type='track'
+                                                payloadKey={payloadKey}
+                                                payloadValue={payloadValue}
+                                                {...props}
+                                            />,
+                                            props: { 
+                                                component: 'th' 
+                                            }}) :
+                                    row.push({ title: payloadValue })
+                                )
                         valueWasFound = true;
                     }
                 })
@@ -54,8 +65,8 @@ const generateCells = (props) => {
 
 export default function PayloadsTable(props) {
 
-    const rows = generateRows(props)
-    const cells = generateCells(props)
+    const rows = generateRows({...props})
+    const cells = generateCells({...props})
 
     return (
         <div style={{height:'100vh', overflow:'auto'}}>

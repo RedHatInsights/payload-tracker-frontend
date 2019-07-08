@@ -137,8 +137,7 @@ class Payloads extends Component {
                             page_size={this.queryParameters.page_size}
                             updateParameters={this.updateParameters}
                             runRedirect={this.runRedirect}
-                            dispatch={this.props.dispatch}
-                            cells={this.props.cells}
+                            {...this.props}
                         />
                         <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
                             <SphereSpinner loading={loading} color='#000000' size={70}/>

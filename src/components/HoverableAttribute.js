@@ -3,10 +3,12 @@ import { Button } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 
 const clickHandler = (props, key, value)  => {
-    return function () {
+    if (props.type === 'track') {
+        props.history.push(`/home/track/${value}`)
+    } else if (props.type === 'filter') {
         props.updateParameters({name: key, value: value})
         props.runRedirect()
-    }
+    } else { return null; }
 }
 
 const HoverableAttribute = props => {
@@ -15,7 +17,7 @@ const HoverableAttribute = props => {
 
     return(
         <Button 
-            onClick={ clickHandler(props, props.payloadKey, props.payloadValue) }
+            onClick={ () => clickHandler(props, props.payloadKey, props.payloadValue) }
             variant='plain'
             onMouseOver={ () => setHover(true) }
             onMouseOut={ () => setHover(false) }
