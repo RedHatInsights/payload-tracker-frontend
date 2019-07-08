@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { textCenter } from '@patternfly/react-table';
 
 export function useStateWithSessionStorage(sessionStorageKey){
     const [value, setValue] = useState(
       sessionStorage.getItem(sessionStorageKey) || 'false'
     );
   
-    React.useEffect(() => {
+    React.useEffect((sessionStorageKey) => {
       sessionStorage.setItem(sessionStorageKey, value);
     }, [value]);
   

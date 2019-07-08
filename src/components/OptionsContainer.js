@@ -1,4 +1,4 @@
-import React, { useState, updateState } from 'react';
+import React, { useState } from 'react';
 import {
     OptionsMenu,
     OptionsMenuItem,

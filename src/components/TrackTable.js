@@ -5,10 +5,10 @@ import {
     TableBody,
     TableVariant
 } from '@patternfly/react-table';
-import HoverableAttribute from './HoverableAttribute'
 
-const generateRows = props => {
+const generateRows = (props) => {
     var rows = [];
+    console.log(props)
     Object.values(props.payloads).forEach(payload => {
         var row = [];
         Object.entries(props.cells).forEach(([cellKey, cellValue]) => {
@@ -16,19 +16,7 @@ const generateRows = props => {
             if (cellValue.isActive) {
                 Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
                     if (cellValue.title === payloadKey) {
-                        cellValue.isFilterable ?
-                            row.push({
-                                title: <HoverableAttribute
-                                    payloadKey={payloadKey}
-                                    payloadValue={payloadValue}
-                                    runRedirect={props.runRedirect}
-                                    updateParameters={props.updateParameters}
-                                />,
-                                props: { 
-                                    component: 'th' 
-                                }}) :
-                            row.push({ title: payloadValue })
-
+                        row.push({ title: payloadValue } )
                         valueWasFound = true;
                     }
                 })
@@ -52,7 +40,7 @@ const generateCells = (props) => {
     return(cells)
 }
 
-export default function PayloadsTable(props) {
+export default function TrackTable(props) {
 
     const rows = generateRows(props)
     const cells = generateCells(props)

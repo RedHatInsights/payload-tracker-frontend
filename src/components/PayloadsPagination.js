@@ -40,6 +40,8 @@ const PayloadsPagination = props => {
             <PayloadsTable 
                 payloads={props.payloads}
                 cells={props.cells}
+                runRedirect={props.runRedirect}
+                updateParameters={props.updateParameters}
             />
         </div>
     )

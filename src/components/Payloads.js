@@ -69,6 +69,7 @@ class Payloads extends Component {
                 key: newParam.name,
                 value: newParam.value
             })
+            this.queryParameters.page = 1;
         }
         this.buildQuery()
     }

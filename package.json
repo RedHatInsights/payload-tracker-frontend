@@ -5,6 +5,7 @@
   "dependencies": {
     "@patternfly/react-charts": "^4.1.5",
     "@patternfly/react-core": "^3.38.1",
+    "@patternfly/react-icons": "^3.10.8",
     "@patternfly/react-table": "^2.11.1",
     "ag-grid-community": "^21.0.1",
     "ag-grid-react": "^21.0.1",

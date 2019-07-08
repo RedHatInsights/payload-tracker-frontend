@@ -5,7 +5,7 @@ import {
     PageSectionVariants,
 } from '@patternfly/react-core';
 import TrackSearchBar from './TrackSearchBar';
-import PayloadsTable from './PayloadsTable';
+import TrackTable from './TrackTable';
 import openSocket from 'socket.io-client';
 import { SphereSpinner } from 'react-spinners-kit';
 import MainHeader from './MainHeader';
@@ -121,9 +121,11 @@ class Track extends Component {
                         dispatch={this.props.dispatch}
                         cells={this.props.cells}
                     />
-                    <PayloadsTable
+                    <TrackTable
                         payloads={this.state.payloads}
                         cells={this.props.cells}
+                        runRedirect={this.runRedirect}
+                        updateParameters={this.updateParameters}
                     />
                     <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
                         <SphereSpinner loading={loading} color='#000000' size={70}/>
