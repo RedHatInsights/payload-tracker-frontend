@@ -7,37 +7,50 @@ import {
     NavItem,
     NavItemSeparator
 } from '@patternfly/react-core';
-import { useStateWithSessionStorage } from './Definitions'
+import { setActiveGroup, setActiveItem } from '../actions';
 
-const MainSidebar = () => {
+const MainSidebar = props => {
     return (
         <PageSidebar
-            nav = {<Navigation/>}
+            nav = {
+                <Navigation 
+                    activeGroup={props.activeGroup}
+                    activeItem={props.activeItem}
+                    dispatch={props.dispatch}
+                    history={props.history}
+                />
+            }
         />
     )
 }
 
-const Navigation = () => {
+const clickHandler = (props, group, item, url)  => {
+    return function () {
+        props.dispatch(setActiveGroup(`${group}`))
+        props.dispatch(setActiveItem(`${group}_${item}`))
+        props.history.push(url)
+    }
+}
 
-    const [activeGroup, setActiveGroup] = useStateWithSessionStorage('ActiveGroup');
-    const [activeItem, setActiveItem] = useStateWithSessionStorage('ActiveItem');
-
+const Navigation = (props) => {
+    console.log(props)
     return (
         <Nav>
             <NavList>
                 <NavExpandable 
                     title="Home" 
                     groupId="grp1" 
-                    isActive={activeGroup === 'grp1'}
-                    isExpanded={activeGroup === 'grp1'}
-                    onExpand={ () => setActiveGroup('grp1') }
+                    isActive={props.activeGroup === 'grp1'}
+                    isExpanded={props.activeGroup === 'grp1'}
+                    onExpand={ () => props.dispatch(setActiveGroup('grp1'))}
                 >
                     <NavItem
                         to='/home/payloads'
                         groupId="grp1"
                         itemId="grp1_itm1"
-                        isActive={activeItem === 'grp1_itm1'}
-                        onClick={ () => setActiveItem('grp1_itm1') }
+                        preventDefault
+                        isActive={props.activeItem === 'grp1_itm1'}
+                        onClick={ clickHandler(props, 'grp1', 'itm1', '/home/payloads') }
                     >
                         Payloads
                     </NavItem>
@@ -46,8 +59,9 @@ const Navigation = () => {
                         to='/home/track'
                         groupId="grp1"
                         itemId="grp1_itm2"
-                        isActive={activeItem === 'grp1_itm2'}
-                        onClick={ () => setActiveItem('grp1_itm2') }
+                        preventDefault
+                        isActive={props.activeItem === 'grp1_itm2'}
+                        onClick={ clickHandler(props, 'grp1', 'itm2', '/home/track') }
                     >
                         Track
                     </NavItem>
@@ -55,16 +69,17 @@ const Navigation = () => {
                 {/* <NavExpandable 
                     title="Stats" 
                     groupId="grp2" 
-                    isActive={activeGroup === 'grp2'}
-                    isExpanded={activeGroup === 'grp2'}
-                    onExpand={ () => setActiveGroup('grp2') }
+                    isActive={props.activeGroup === 'grp2'}
+                    isExpanded={props.activeGroup === 'grp2'}
+                    onExpand={ () => props.dispatch(setActiveGroup('grp2')) }
                 >
                     <NavItem 
                         to='/stats/successrates'
                         groupId="grp2"
                         itemId="grp2_itm1"
-                        isActive={activeItem === 'grp2_itm1'}
-                        onClick={ () => setActiveItem('grp2_itm1') }
+                        preventDefault
+                        isActive={props.activeItem === 'grp2_itm1'}
+                        onClick={ clickHandler(props, 'grp2', 'itm1', '/stats/successrates') }
                     > 
                         Success Rates
                     </NavItem>

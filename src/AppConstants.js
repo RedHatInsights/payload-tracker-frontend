@@ -1,6 +1,16 @@
 import { textCenter } from '@patternfly/react-table';
 
 export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
+export const SET_ACTIVE_GROUP = 'SET_ACTIVE_GROUP';
+export const SET_ACTIVE_ITEM= 'SET_ACTIVE_ITEM';
+
+export function MAP_STATE_TO_PROPS(state) {
+    return { 
+        cells: state.CellReducer.cells,
+        activeGroup: state.SidebarReducer.activeGroup,
+        activeItem: state.SidebarReducer.activeItem
+    }
+}
 
 export const DEFAULT_CELL_STATE = [
     {

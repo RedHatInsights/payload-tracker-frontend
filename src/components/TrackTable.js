@@ -8,7 +8,6 @@ import {
 
 const generateRows = (props) => {
     var rows = [];
-    console.log(props)
     Object.values(props.payloads).forEach(payload => {
         var row = [];
         Object.entries(props.cells).forEach(([cellKey, cellValue]) => {

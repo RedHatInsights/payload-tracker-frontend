@@ -4,6 +4,7 @@ import {
     PageSection,
     PageSectionVariants,
 } from '@patternfly/react-core';
+import { MAP_STATE_TO_PROPS } from '../AppConstants';
 import SearchBar from './SearchBar';
 import PayloadsPagination from './PayloadsPagination';
 import MainHeader from './MainHeader';
@@ -11,7 +12,6 @@ import MainSidebar from './MainSidebar';
 import { SphereSpinner } from 'react-spinners-kit';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
-import { mapStateToProps } from './Definitions';
 
 const queryBase = '/v1/payloads?';
 
@@ -115,8 +115,18 @@ class Payloads extends Component {
 
     render() {
         const { loading } = this.state;
+        console.log(this.props)
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar/>} isManagedSidebar>
+            <Page 
+                header={<MainHeader/>} 
+                sidebar={<MainSidebar
+                            activeGroup={this.props.activeGroup}
+                            activeItem={this.props.activeItem}
+                            dispatch={this.props.dispatch}
+                            history={this.props.history}
+                        />} 
+                isManagedSidebar
+            >
                 <PageSection variant={PageSectionVariants.dark}>
                     <SearchBar
                         filters={this.queryParameters.filters} 
@@ -145,4 +155,4 @@ class Payloads extends Component {
     }
 }
 
-export default connect(mapStateToProps)(Payloads);
+export default connect(MAP_STATE_TO_PROPS)(Payloads);

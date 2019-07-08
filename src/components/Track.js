@@ -4,6 +4,7 @@ import {
     PageSection,
     PageSectionVariants,
 } from '@patternfly/react-core';
+import { MAP_STATE_TO_PROPS } from '../AppConstants';
 import TrackSearchBar from './TrackSearchBar';
 import TrackTable from './TrackTable';
 import openSocket from 'socket.io-client';
@@ -13,7 +14,6 @@ import MainSidebar from './MainSidebar';
 import OptionsContainer from './OptionsContainer';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
-import { mapStateToProps } from './Definitions';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -106,8 +106,20 @@ class Track extends Component {
     render() {
         const { loading } = this.state;
         const { payload_id } = this.queryParameters;
+        console.log(this.props)
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar/>} isManagedSidebar>
+            <Page 
+                header={<MainHeader/>} 
+                sidebar={
+                    <MainSidebar
+                        activeGroup={this.props.activeGroup}
+                        activeItem={this.props.activeItem}
+                        dispatch={this.props.dispatch}
+                        history={this.props.history}
+                    />
+                } 
+                isManagedSidebar
+            >
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
                         payload_id={payload_id ? payload_id : false}
@@ -136,4 +148,4 @@ class Track extends Component {
     }
 }
 
-export default connect(mapStateToProps)(Track);
+export default connect(MAP_STATE_TO_PROPS)(Track);
