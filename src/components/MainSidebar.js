@@ -13,13 +13,9 @@ const MainSidebar = props => {
     return (
         <PageSidebar
             nav = {
-                <Navigation 
-                    activeGroup={props.activeGroup}
-                    activeItem={props.activeItem}
-                    dispatch={props.dispatch}
-                    history={props.history}
-                />
+                <Navigation {...props}/>
             }
+            isNavOpen={props.isNavigationOpen}
         />
     )
 }
@@ -33,7 +29,6 @@ const clickHandler = (props, group, item, url)  => {
 }
 
 const Navigation = (props) => {
-    console.log(props)
     return (
         <Nav>
             <NavList>

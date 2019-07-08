@@ -3,6 +3,7 @@ import * as ConstantTypes from '../AppConstants';
 const initialState = {
     activeGroup: 'grp1',
     activeItem: 'itm1_grp1',
+    isNavigationOpen: false,
 }
 
 const SidebarReducer = (state=initialState, action) => {
@@ -16,6 +17,11 @@ const SidebarReducer = (state=initialState, action) => {
             return {
                 ...state,
                 activeItem: action.payload
+            }
+        case (ConstantTypes.TOGGLE_NAV):
+            return {
+                ...state,
+                isNavigationOpen: action.payload 
             }
         default:
             return state;

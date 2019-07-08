@@ -11,3 +11,7 @@ export function setActiveGroup(group) {
 export function setActiveItem(item) {
     return {type: ActionTypes.SET_ACTIVE_ITEM, payload: item}
 };
+
+export function toggleNav(bool=true) {
+    return {type: ActionTypes.TOGGLE_NAV, payload: !bool}
+};

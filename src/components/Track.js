@@ -106,18 +106,10 @@ class Track extends Component {
     render() {
         const { loading } = this.state;
         const { payload_id } = this.queryParameters;
-        console.log(this.props)
         return(
             <Page 
-                header={<MainHeader/>} 
-                sidebar={
-                    <MainSidebar
-                        activeGroup={this.props.activeGroup}
-                        activeItem={this.props.activeItem}
-                        dispatch={this.props.dispatch}
-                        history={this.props.history}
-                    />
-                } 
+                header={<MainHeader {...this.props} />} 
+                sidebar={<MainSidebar {...this.props} />} 
                 isManagedSidebar
             >
                 <PageSection variant={PageSectionVariants.dark}>
