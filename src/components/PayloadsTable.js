@@ -69,7 +69,7 @@ export default function PayloadsTable(props) {
     const cells = generateCells({...props})
 
     return (
-        <div style={{height:'100vh', overflow:'auto'}}>
+        <div>
             <Table 
                 cells={cells} 
                 rows={rows}

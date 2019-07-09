@@ -14,6 +14,9 @@ export function MAP_STATE_TO_PROPS(state) {
     }
 }
 
+export const HOME_GROUP = 'grp1';
+export const PAYLOADS_ITEM = `${HOME_GROUP}_itm1`;
+export const TRACK_ITEM = `${HOME_GROUP}_itm2`;
 export const DEFAULT_CELL_STATE = [
     {
         title: 'id',

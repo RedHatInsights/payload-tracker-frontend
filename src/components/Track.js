@@ -3,6 +3,9 @@ import {
     Page,
     PageSection,
     PageSectionVariants,
+    Card,
+    CardHeader,
+    CardBody,
 } from '@patternfly/react-core';
 import { MAP_STATE_TO_PROPS } from '../AppConstants';
 import TrackSearchBar from './TrackSearchBar';
@@ -120,20 +123,29 @@ class Track extends Component {
                         runRedirect={this.runRedirect}
                     />
                 </PageSection>
-                <PageSection variant={PageSectionVariants.light}>
-                    <OptionsContainer
-                        dispatch={this.props.dispatch}
-                        cells={this.props.cells}
-                    />
-                    <TrackTable
-                        payloads={this.state.payloads}
-                        cells={this.props.cells}
-                        runRedirect={this.runRedirect}
-                        updateParameters={this.updateParameters}
-                    />
-                    <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
-                        <SphereSpinner loading={loading} color='#000000' size={70}/>
-                    </div>
+                <PageSection 
+                    variant={PageSectionVariants.light}
+                    style={{height:'80vh', overflow:'auto'}}
+                >
+                    <Card>
+                        <CardHeader>
+                            <OptionsContainer
+                                dispatch={this.props.dispatch}
+                                cells={this.props.cells}
+                            />
+                        </CardHeader>
+                        <CardBody>
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <SphereSpinner loading={loading} color='#000000' size={70}/>
+                            </div>
+                            <TrackTable
+                                payloads={this.state.payloads}
+                                cells={this.props.cells}
+                                runRedirect={this.runRedirect}
+                                updateParameters={this.updateParameters}
+                            />
+                        </CardBody>
+                    </Card>
                 </PageSection>
             </Page>
         )

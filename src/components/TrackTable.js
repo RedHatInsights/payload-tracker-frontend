@@ -45,7 +45,7 @@ export default function TrackTable(props) {
     const cells = generateCells(props)
 
     return (
-        <div style={{height:'100vh', overflow:'auto'}}>
+        <div>
             <Table 
                 cells={cells} 
                 rows={rows}

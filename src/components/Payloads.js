@@ -9,7 +9,6 @@ import SearchBar from './SearchBar';
 import PayloadsPagination from './PayloadsPagination';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
-import { SphereSpinner } from 'react-spinners-kit';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
 
@@ -129,20 +128,18 @@ class Payloads extends Component {
                         runRedirect={this.runRedirect}
                     />
                 </PageSection>
-                    <PageSection variant={PageSectionVariants.light}>
-                        <PayloadsPagination
-                            payloads={this.state.payloads} 
-                            count={this.state.count}
-                            page={this.queryParameters.page}
-                            page_size={this.queryParameters.page_size}
-                            updateParameters={this.updateParameters}
-                            runRedirect={this.runRedirect}
-                            {...this.props}
-                        />
-                        <div style={{display: 'flex', justifyContent: 'center', padding:'50px'}}>
-                            <SphereSpinner loading={loading} color='#000000' size={70}/>
-                        </div>
-                    </PageSection>
+                <PageSection variant={PageSectionVariants.light} style={{height:'80vh', overflow:'auto'}}>
+                    <PayloadsPagination
+                        payloads={this.state.payloads} 
+                        count={this.state.count}
+                        loading={this.state.loading}
+                        page={this.queryParameters.page}
+                        page_size={this.queryParameters.page_size}
+                        updateParameters={this.updateParameters}
+                        runRedirect={this.runRedirect}
+                        {...this.props}
+                    />
+                </PageSection>
             </Page>
         )
     }

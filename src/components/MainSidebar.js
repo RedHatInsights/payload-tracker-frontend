@@ -8,6 +8,7 @@ import {
     NavItemSeparator
 } from '@patternfly/react-core';
 import { setActiveGroup, setActiveItem } from '../actions';
+import { HOME_GROUP, TRACK_ITEM, PAYLOADS_ITEM } from '../AppConstants'
 
 const MainSidebar = props => {
     return (
@@ -22,8 +23,8 @@ const MainSidebar = props => {
 
 const clickHandler = (props, group, item, url)  => {
     return function () {
-        props.dispatch(setActiveGroup(`${group}`))
-        props.dispatch(setActiveItem(`${group}_${item}`))
+        props.dispatch(setActiveGroup(group))
+        props.dispatch(setActiveItem(item))
         props.history.push(url)
     }
 }
@@ -34,29 +35,29 @@ const Navigation = (props) => {
             <NavList>
                 <NavExpandable 
                     title="Home" 
-                    groupId="grp1" 
-                    isActive={props.activeGroup === 'grp1'}
-                    isExpanded={props.activeGroup === 'grp1'}
-                    onExpand={ () => props.dispatch(setActiveGroup('grp1'))}
+                    groupId={HOME_GROUP}
+                    isActive={props.activeGroup === HOME_GROUP}
+                    isExpanded={props.activeGroup === HOME_GROUP}
+                    onExpand={ () => props.dispatch(setActiveGroup(HOME_GROUP)) }
                 >
                     <NavItem
                         to='/home/payloads'
-                        groupId="grp1"
-                        itemId="grp1_itm1"
+                        groupId={HOME_GROUP}
+                        itemId={PAYLOADS_ITEM}
                         preventDefault
-                        isActive={props.activeItem === 'grp1_itm1'}
-                        onClick={ clickHandler(props, 'grp1', 'itm1', '/home/payloads') }
+                        isActive={props.activeItem === PAYLOADS_ITEM}
+                        onClick={ clickHandler(props, HOME_GROUP, PAYLOADS_ITEM, '/home/payloads') }
                     >
                         Payloads
                     </NavItem>
                     <NavItemSeparator/>
                     <NavItem
                         to='/home/track'
-                        groupId="grp1"
-                        itemId="grp1_itm2"
+                        groupId={HOME_GROUP}
+                        itemId={TRACK_ITEM}
                         preventDefault
-                        isActive={props.activeItem === 'grp1_itm2'}
-                        onClick={ clickHandler(props, 'grp1', 'itm2', '/home/track') }
+                        isActive={props.activeItem === TRACK_ITEM}
+                        onClick={ clickHandler(props, HOME_GROUP, TRACK_ITEM, '/home/track') }
                     >
                         Track
                     </NavItem>
