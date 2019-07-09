@@ -4,13 +4,20 @@ export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
 export const SET_ACTIVE_GROUP = 'SET_ACTIVE_GROUP';
 export const SET_ACTIVE_ITEM= 'SET_ACTIVE_ITEM';
 export const TOGGLE_NAV = 'TOGGLE_NAV';
+export const GET_PAYLOADS = 'GET_PAYLOADS';
+export const GET_PAYLOAD_TRACK = 'GET_PAYLOAD_TRACK';
 
 export function MAP_STATE_TO_PROPS(state) {
     return { 
         cells: state.CellReducer.cells,
         activeGroup: state.SidebarReducer.activeGroup,
         activeItem: state.SidebarReducer.activeItem,
-        isNavigationOpen: state.SidebarReducer.isNavigationOpen
+        isNavigationOpen: state.SidebarReducer.isNavigationOpen,
+        payloads: state.PayloadsReducer.payloads,
+        loading: state.PayloadsReducer.loading,
+        loaded: state.PayloadsReducer.loaded,
+        error: state.PayloadsReducer.error,
+        count: state.PayloadsReducer.count,
     }
 }
 

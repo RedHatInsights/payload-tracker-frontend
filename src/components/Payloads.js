@@ -11,15 +11,11 @@ import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
+import { getPayloads } from '../actions'
 
 const queryBase = '/v1/payloads?';
 
 class Payloads extends Component {
-    state = {
-        payloads: [],
-        count: 0,
-        loading: false,
-    }
     queryParameters = {
         filters: [],
         page: 1,
@@ -91,29 +87,10 @@ class Payloads extends Component {
     }
 
     search = (query) => {
-        this.setState({loading: true});
-        fetch(query)
-        .then(res => res.json())
-        .then(
-          (result) => {
-            this.setState({loading: false});
-            this.setState({
-                payloads: result.data,
-                count: result.count,
-            });
-          },
-          (error) => {
-            this.setState({loading: false});
-            this.setState({
-              error
-            });
-          }
-        )
-        .then(this.forceUpdate())
+        this.props.dispatch(getPayloads(query));
     }
 
     render() {
-        const { loading } = this.state;
         return(
             <Page 
                 header={<MainHeader {...this.props} />} 
@@ -128,11 +105,8 @@ class Payloads extends Component {
                         runRedirect={this.runRedirect}
                     />
                 </PageSection>
-                <PageSection variant={PageSectionVariants.light} style={{height:'80vh', overflow:'auto'}}>
+                <PageSection variant={PageSectionVariants.light} style={{height:'80vh', maxWidth:'100vw', overflow:'auto'}}>
                     <PayloadsPagination
-                        payloads={this.state.payloads} 
-                        count={this.state.count}
-                        loading={this.state.loading}
                         page={this.queryParameters.page}
                         page_size={this.queryParameters.page_size}
                         updateParameters={this.updateParameters}

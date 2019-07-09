@@ -17,16 +17,13 @@ import MainSidebar from './MainSidebar';
 import OptionsContainer from './OptionsContainer';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
+import { getPayloadTrack } from '../actions';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
 
 class Track extends Component {
 
-    state = {
-        payloads: [],
-        loading: false,
-    }
     queryParameters = {
         sort_dir: 'desc',
         sort_by: 'date',
@@ -86,28 +83,10 @@ class Track extends Component {
     }
 
     search = (query) => {
-        this.setState({loading: true});
-        fetch(query)
-        .then(res => res.json())
-        .then(
-          (result) => {
-            this.setState({loading: false});
-            this.setState({
-                payloads: result,
-            });
-          },
-          (error) => {
-            this.setState({loading: false});
-            this.setState({
-              error
-            });
-          }
-        )
-        .then(this.forceUpdate())
+        this.props.dispatch(getPayloadTrack(query));
     }
 
     render() {
-        const { loading } = this.state;
         const { payload_id } = this.queryParameters;
         return(
             <Page 
@@ -130,19 +109,17 @@ class Track extends Component {
                     <Card>
                         <CardHeader>
                             <OptionsContainer
-                                dispatch={this.props.dispatch}
-                                cells={this.props.cells}
+                                {...this.props}
                             />
                         </CardHeader>
                         <CardBody>
                             <div style={{display: 'flex', justifyContent: 'center'}}>
-                                <SphereSpinner loading={loading} color='#000000' size={70}/>
+                                <SphereSpinner loading={this.props.loading} color='#000000' size={70}/>
                             </div>
                             <TrackTable
-                                payloads={this.state.payloads}
-                                cells={this.props.cells}
                                 runRedirect={this.runRedirect}
                                 updateParameters={this.updateParameters}
+                                {...this.props}
                             />
                         </CardBody>
                     </Card>
