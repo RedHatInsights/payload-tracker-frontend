@@ -119,6 +119,8 @@ class Track extends Component {
                             <TrackTable
                                 runRedirect={this.runRedirect}
                                 updateParameters={this.updateParameters}
+                                sort_dir={this.queryParameters.sort_dir}
+                                sort_by={this.queryParameters.sort_by}
                                 {...this.props}
                             />
                         </CardBody>

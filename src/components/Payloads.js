@@ -109,6 +109,8 @@ class Payloads extends Component {
                     <PayloadsPagination
                         page={this.queryParameters.page}
                         page_size={this.queryParameters.page_size}
+                        sort_by={this.queryParameters.sort_by}
+                        sort_dir={this.queryParameters.sort_dir}
                         updateParameters={this.updateParameters}
                         runRedirect={this.runRedirect}
                         {...this.props}

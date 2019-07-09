@@ -28,11 +28,6 @@ class SearchBar extends Component {
     }
   }
 
-  setSelected = (filterType, filterValue) => {
-    this.props.updateParameters({name: filterType, value: filterValue})
-    this.props.runRedirect()
-  }
-
   openFilterInput = (type, item) => {
     this.setState({
       filterInputOpen: true,
@@ -73,19 +68,6 @@ class SearchBar extends Component {
   render() {
   return (
     <div style={{margin: '10px'}}>
-      <DropdownContainer 
-        items={['service', 'source', 'account', 'payload_id',
-        'inventory_id', 'system_id', 'status',
-        'status_msg', 'date', 'created_at']}
-        type="Sort By"
-        setSelected={this.setSelected}
-      />
-
-      <DropdownContainer 
-        items={['asc', 'desc']}
-        type="Sort Dir"
-        setSelected={this.setSelected}
-      />
 
       <DropdownContainer
         items={[

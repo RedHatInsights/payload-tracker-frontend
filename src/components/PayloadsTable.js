@@ -3,7 +3,8 @@ import {
     Table,
     TableHeader,
     TableBody,
-    TableVariant
+    TableVariant,
+    SortByDirection
 } from '@patternfly/react-table';
 import HoverableAttribute from './HoverableAttribute'
 
@@ -16,7 +17,7 @@ const generateRows = props => {
             if (cellValue.isActive) {
                 Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
                     if (cellValue.title === payloadKey) {
-                        cellValue.isFilterable ?
+                        if (cellValue.isFilterable) {
                             row.push({
                                 title: <HoverableAttribute
                                     type='filter'
@@ -26,20 +27,21 @@ const generateRows = props => {
                                 />,
                                 props: { 
                                     component: 'th' 
-                                }}) : (
-                                    cellValue.isTrackable ?
-                                        row.push({
-                                            title: <HoverableAttribute
-                                                type='track'
-                                                payloadKey={payloadKey}
-                                                payloadValue={payloadValue}
-                                                {...props}
-                                            />,
-                                            props: { 
-                                                component: 'th' 
-                                            }}) :
-                                    row.push({ title: payloadValue })
-                                )
+                            }})
+                        } else if (cellValue.isTrackable) {
+                            row.push({
+                                title: <HoverableAttribute
+                                    type='track'
+                                    payloadKey={payloadKey}
+                                    payloadValue={payloadValue}
+                                    {...props}
+                                />,
+                                props: { 
+                                    component: 'th' 
+                            }})
+                        } else {
+                            row.push({ title: payloadValue })
+                        }
                         valueWasFound = true;
                     }
                 })
@@ -63,10 +65,21 @@ const generateCells = (props) => {
     return(cells)
 }
 
+function onSort(_event, index, direction, props) {
+    props.updateParameters({name: 'sort_by', value: index});
+    props.updateParameters({name: 'sort_dir', value: direction});
+    props.runRedirect();
+}
+
 export default function PayloadsTable(props) {
 
     const rows = generateRows({...props})
     const cells = generateCells({...props})
+    
+    const sortBy = {
+        index: cells.findIndex(x => x.title === props.sort_by),
+        direction: props.sort_dir
+    }
 
     return (
         <div>
@@ -74,6 +87,8 @@ export default function PayloadsTable(props) {
                 cells={cells} 
                 rows={rows}
                 variant={TableVariant.compact}
+                sortBy={sortBy}
+                onSort={(e, index, direction) => onSort(e, cells[index].title, direction, {...props})}
             >
                 <TableHeader/>
                 <TableBody/>

@@ -39,10 +39,21 @@ const generateCells = (props) => {
     return(cells)
 }
 
+function onSort(_event, index, direction, props) {
+    props.updateParameters({name: 'sort_by', value: index});
+    props.updateParameters({name: 'sort_dir', value: direction});
+    props.runRedirect();
+}
+
 export default function TrackTable(props) {
 
     const rows = generateRows(props)
     const cells = generateCells(props)
+
+    const sortBy = {
+        index: cells.findIndex(x => x.title === props.sort_by),
+        direction: props.sort_dir
+    }
 
     return (
         <div>
@@ -50,6 +61,8 @@ export default function TrackTable(props) {
                 cells={cells} 
                 rows={rows}
                 variant={TableVariant.compact}
+                sortBy={sortBy}
+                onSort = { (e, index, direction) => onSort(e, cells[index].title, direction, {...props}) }
             >
                 <TableHeader/>
                 <TableBody/>

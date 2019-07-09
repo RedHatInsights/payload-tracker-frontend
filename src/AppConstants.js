@@ -1,4 +1,4 @@
-import { textCenter } from '@patternfly/react-table';
+import { sortable } from '@patternfly/react-table';
 
 export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
 export const SET_ACTIVE_GROUP = 'SET_ACTIVE_GROUP';
@@ -30,77 +30,64 @@ export const DEFAULT_CELL_STATE = [
         isActive: true,
         isFilterable: false,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
     },{
         title: 'service',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
+        transforms: [sortable],
     },{
         title: 'source',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
+        transforms: [sortable],
     },{
         title: 'account',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
+        transforms: [sortable],
     },{
         title: 'payload_id',
         isActive: true,
         isFilterable: false,
         isTrackable: true,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
     },{
         title: 'inventory_id',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
+        transforms: [sortable],
     },{
         title: 'system_id',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
+        transforms: [sortable],
     },{
         title: 'status',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
+        transforms: [sortable],
     },{
         title: 'status_msg',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
+        transforms: [sortable],
     },{
         title: 'date',
         isActive: true,
         isFilterable: false,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
+        transforms: [sortable],
     },{
         title: 'created_at',
         isActive: true,
         isFilterable: false,
         isTrackable: false,
-        transforms: [textCenter],
-        cellTransforms: [textCenter],
+        transforms: [sortable],
     }
 ];
