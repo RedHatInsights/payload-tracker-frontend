@@ -11,9 +11,12 @@ class TrackSearchBar extends Component {
         }
     }
 
-    setSelected = (filterType, filterValue) => {
-        this.props.updateParameters({name: filterType, value: filterValue})
-        this.props.buildQuery()
+    componentWillMount() {
+        if (this.props.payload_id) {
+            this.setState({
+                payload_id: this.props.payload_id
+            });
+        }
     }
 
     handlePayloadIDInputChange = payload_id => {
@@ -23,7 +26,11 @@ class TrackSearchBar extends Component {
     }
 
     submitQuery = () => {
-        this.props.runRedirect(`/payloads/track/${this.state.payload_id}`)
+        this.props.updateParameters({
+            name: 'payload_id',
+            value: this.state.payload_id
+        })
+        this.props.runRedirect()
     }
 
     render() {
@@ -39,19 +46,12 @@ class TrackSearchBar extends Component {
                     style={inputStyle}
                     placeholder='Enter Payload ID...'
                 />
-                <Button variant='primary' onClick={(e) => {this.submitQuery()}}> 
+                <Button 
+                    variant='primary' 
+                    onClick={(e) => this.submitQuery()} 
+                    isDisabled={this.state.payload_id === ""}> 
                         Submit
                 </Button>
-                <DropdownContainer 
-                    items={['service', 'source', 'status', 'status_msg', 'date']}
-                    type="Sort By"
-                    setSelected={this.setSelected}
-                />
-                <DropdownContainer 
-                    items={['asc', 'desc']}
-                    type="Sort Dir"
-                    setSelected={this.setSelected}
-                />
             </div>
         )
     }

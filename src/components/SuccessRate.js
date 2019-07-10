@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Page, PageSection, Gallery, GalleryItem, PageSectionVariants, Card, CardBody } from '@patternfly/react-core';
 import { ChartPie, ChartThemeColor, ChartLegend } from '@patternfly/react-charts';
+import { connect } from 'react-redux';
+import { MAP_STATE_TO_PROPS } from '../AppConstants'; 
 import { SphereSpinner } from 'react-spinners-kit';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
@@ -56,8 +58,20 @@ class SuccessRate extends Component {
     render() {
         var data = this.createDataList()
         const { loading } = this.state;
+        console.log(data);
         return(
-            <Page header={<MainHeader/>} sidebar={<MainSidebar runRedirect={this.runRedirect}/>} isManagedSidebar>
+            <Page 
+                header={<MainHeader/>} 
+                sidebar={
+                    <MainSidebar 
+                        activeGroup={this.props.activeGroup}
+                        activeItem={this.props.activeItem}
+                        dispatch={this.props.dispatch}
+                        history={this.props.history}
+                    />
+                } 
+                isManagedSidebar
+            >
                 <PageSection variant={PageSectionVariants.light} style={{minHeight:'800px'}}>
                     <div style={{paddingBottom: '10px'}}>
                         Last 24 Hours
@@ -97,4 +111,4 @@ class SuccessRate extends Component {
     };
 };
 
-export default SuccessRate
+export default connect(MAP_STATE_TO_PROPS)(SuccessRate);
