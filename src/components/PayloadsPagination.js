@@ -7,9 +7,10 @@ import {
 import { SphereSpinner } from 'react-spinners-kit';
 import OptionsContainer from './OptionsContainer';
 import ExportsDropdown from './ExportsDropdown';
+import DateRangeFilter from './DateRangeFilter';
 
 const PayloadsPagination = props => {
-
+    console.log(props)
     return (
         <Card>
             <div>
@@ -42,6 +43,13 @@ const PayloadsPagination = props => {
                         </div>
                         <div style={{float: 'left', paddingLeft: '10px'}}>
                             <ExportsDropdown data={props.payloads}/>
+                        </div>
+                        <div style={{float: 'left', paddingLeft: '10px'}}>
+                            <DateRangeFilter
+                                start={props.startDate}
+                                end={props.endDate}
+                                {...props}
+                            />
                         </div>
                     </div>
                 </CardHeader>
