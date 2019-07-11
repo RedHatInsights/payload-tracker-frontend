@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '@patternfly/react-core/dist/styles/base.css';
 import PayloadsTable from './PayloadsTable'
 import {
@@ -6,8 +6,10 @@ import {
 } from '@patternfly/react-core';
 import { SphereSpinner } from 'react-spinners-kit';
 import OptionsContainer from './OptionsContainer';
+import ExportsDropdown from './ExportsDropdown';
 
 const PayloadsPagination = props => {
+
     return (
         <Card>
             <div>
@@ -33,10 +35,13 @@ const PayloadsPagination = props => {
                                 }
                             />
                         </div>
-                        <div>
+                        <div style={{float:'left'}}>
                             <OptionsContainer
                                 {...props}
                             />
+                        </div>
+                        <div style={{float: 'left', paddingLeft: '10px'}}>
+                            <ExportsDropdown data={props.payloads}/>
                         </div>
                     </div>
                 </CardHeader>

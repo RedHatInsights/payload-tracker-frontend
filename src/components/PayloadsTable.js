@@ -4,7 +4,6 @@ import {
     TableHeader,
     TableBody,
     TableVariant,
-    SortByDirection
 } from '@patternfly/react-table';
 import HoverableAttribute from './HoverableAttribute'
 
