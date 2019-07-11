@@ -18,6 +18,7 @@ import OptionsContainer from './OptionsContainer';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
 import { getPayloadTrack } from '../actions';
+import ExportsDropdown from './ExportsDropdown';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -34,7 +35,7 @@ class Track extends Component {
         this.setState({loading: false});
         socket.on('payload', (data) => {
             if(data.payload_id === this.queryParameters.payload_id){
-                this.state.payloads.unshift(data)
+                this.props.payloads.unshift(data)
                 this.forceUpdate()
             }
         });
@@ -108,9 +109,14 @@ class Track extends Component {
                 >
                     <Card>
                         <CardHeader>
-                            <OptionsContainer
-                                {...this.props}
-                            />
+                            <div style={{float: 'left'}}>
+                                <OptionsContainer
+                                    {...this.props}
+                                />
+                            </div>
+                            <div style={{float: 'left', paddingLeft: '10px'}}>
+                                <ExportsDropdown data={this.props.payloads}/>
+                            </div>
                         </CardHeader>
                         <CardBody>
                             <div style={{display: 'flex', justifyContent: 'center'}}>

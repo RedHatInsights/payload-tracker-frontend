@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, TextInput } from '@patternfly/react-core';
-import DropdownContainer from './DropdownContainer';
 
 class TrackSearchBar extends Component {
 

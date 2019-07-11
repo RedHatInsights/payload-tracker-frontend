@@ -6,6 +6,8 @@ const initialState = {
     error: null,
     payloads: [],
     count: 0,
+    startDate: null,
+    endDate: null,
 }
 
 const PayloadsReducer = (state=initialState, action) => {
@@ -46,6 +48,16 @@ const PayloadsReducer = (state=initialState, action) => {
                 loading: false,
                 loaded: true,
                 payloads: action.payload
+            }
+        case ConstantTypes.SET_START_DATE:
+            return {
+                ...state,
+                startDate: action.payload
+            }
+        case ConstantTypes.SET_END_DATE:
+            return {
+                ...state,
+                endDate: action.payload
             }
         default: {
             return state;

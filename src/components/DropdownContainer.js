@@ -12,7 +12,6 @@ class DropdownContainer extends Component {
         super()
         this.state = {
             isOpen: false,
-            isInit: false,
         };
         this.onToggle = isOpen => {
             this.setState({
@@ -25,6 +24,10 @@ class DropdownContainer extends Component {
             });
         };
         this.dropdownItems = []
+    }
+
+    componentWillMount = () => {
+        this.generateItems(this.props.items)
     }
 
     setSelected = (item) => {
@@ -46,9 +49,6 @@ class DropdownContainer extends Component {
 
     render(){ 
         const { type } = this.props
-        if(!this.state.isInit){
-            this.generateItems(this.props.items)
-        }
         return (
             <Dropdown
                 onSelect={this.onSelect}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DropdownContainer from './DropdownContainer';
 import { Chip, Button, TextInput } from '@patternfly/react-core';
+import {setStartDate, setEndDate } from '../actions';
 
 const ChipContainer = props => {
   return(
@@ -52,6 +53,11 @@ class SearchBar extends Component {
   closeChip = (id) => {
     for(var i = 0; i < this.props.filters.length; i++) {
       if(this.props.filters[i].id === id){
+        if(this.props.filters[i].key === 'date_gte') {
+          this.props.dispatch(setStartDate(null))
+        } else if (this.props.filters[i].key === 'date_lte') {
+          this.props.dispatch(setEndDate(null))
+        }
           this.props.filters.splice(i,1)
       }
     }
@@ -75,7 +81,7 @@ class SearchBar extends Component {
           'system_id', 'status', 'status_msg', 'date_lt', 
           'date_gt', 'date_lte', 'date_gte', 'created_at_lt',
           'created_at_gt', 'created_at_lte', 'created_at_gte']}
-        type="Filter By"
+        type="Add Filter"
         setSelected={this.openFilterInput}
       />
 

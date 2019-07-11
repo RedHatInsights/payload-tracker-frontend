@@ -6,6 +6,8 @@ export const SET_ACTIVE_ITEM= 'SET_ACTIVE_ITEM';
 export const TOGGLE_NAV = 'TOGGLE_NAV';
 export const GET_PAYLOADS = 'GET_PAYLOADS';
 export const GET_PAYLOAD_TRACK = 'GET_PAYLOAD_TRACK';
+export const SET_START_DATE = 'SET_START_DATE';
+export const SET_END_DATE = 'SET_END_DATE';
 
 export function MAP_STATE_TO_PROPS(state) {
     return { 
@@ -18,6 +20,8 @@ export function MAP_STATE_TO_PROPS(state) {
         loaded: state.PayloadsReducer.loaded,
         error: state.PayloadsReducer.error,
         count: state.PayloadsReducer.count,
+        startDate: state.PayloadsReducer.startDate,
+        endDate: state.PayloadsReducer.endDate,
     }
 }
 

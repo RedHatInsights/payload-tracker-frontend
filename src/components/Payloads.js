@@ -11,7 +11,7 @@ import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
-import { getPayloads } from '../actions'
+import { getPayloads, setStartDate, setEndDate } from '../actions'
 
 const queryBase = '/v1/payloads?';
 
@@ -59,6 +59,21 @@ class Payloads extends Component {
             this.queryParameters.sort_by = newParam.value
             this.queryParameters.page = 1;
         } else {
+            if (newParam.name === 'date_gte'){
+                this.props.dispatch(setStartDate(newParam.value))
+                for(var i = 0; i < this.queryParameters.filters.length; i++) {
+                    if(this.queryParameters.filters[i].key === 'date_gte'){
+                        this.queryParameters.filters.splice(i,1)
+                    }
+                }
+            } else if (newParam.name === 'date_lte'){
+                this.props.dispatch(setEndDate(newParam.value))
+                for(var i = 0; i < this.queryParameters.filters.length; i++) {
+                    if(this.queryParameters.filters[i].key === 'date_lte'){
+                        this.queryParameters.filters.splice(i,1)
+                    }
+                }
+            }
             this.queryParameters.filters.push({
                 id: this.queryParameters.filters.length,
                 key: newParam.name,
@@ -103,6 +118,7 @@ class Payloads extends Component {
                         buildQuery={this.buildQuery}
                         updateParameters={this.updateParameters}
                         runRedirect={this.runRedirect}
+                        dispatch={this.props.dispatch}
                     />
                 </PageSection>
                 <PageSection variant={PageSectionVariants.light} style={{height:'80vh', maxWidth:'100vw', overflow:'auto'}}>

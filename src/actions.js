@@ -38,3 +38,11 @@ export const getPayloadTrack = (url) => dispatch => {
             dispatch({type: `${ActionTypes.GET_PAYLOAD_TRACK}_REJECTED`, payload: error})
         })
 };
+
+export function setStartDate(date) {
+    return {type: ActionTypes.SET_START_DATE, payload: date}
+}
+
+export function setEndDate(date) {
+    return {type: ActionTypes.SET_END_DATE, payload: date}
+}
