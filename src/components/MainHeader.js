@@ -1,6 +1,6 @@
 import React from 'react';
 import {Brand, Button, PageHeader} from '@patternfly/react-core';
-import whLogo from './static/images/rh-logo-white.svg';
+import newlogo from './static/images/rh-new-logo.svg';
 import { toggleNav } from '../actions';
 
 
@@ -13,7 +13,7 @@ const logoProps = {
 const MainHeader = props => {
     return (
         <PageHeader 
-            logo={<Brand src={whLogo} alt= "Red Hat Logo White"/>}
+            logo={<Brand src={newlogo} alt= "Red Hat Logo White"/>}
             logoProps={logoProps}
             toolbar={
                 <Button 
