@@ -5,6 +5,7 @@ import {
     TableBody,
     TableVariant
 } from '@patternfly/react-table';
+import Moment from 'react-moment';
 import { setTrackSortBy, setTrackSortDir, removeTrackSortBy, removeTrackSortDir } from '../actions';
 
 const generateRows = (props) => {
@@ -16,7 +17,13 @@ const generateRows = (props) => {
             if (cellValue.isActive) {
                 Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
                     if (cellValue.title === payloadKey) {
-                        row.push({ title: payloadValue } )
+                        cellValue.isDate ?
+                            row.push({
+                                title: <Moment local format='LLLL'>
+                                { payloadValue }
+                                </Moment>
+                            }) :
+                            row.push({ title: payloadValue } )
                         valueWasFound = true;
                     }
                 })
