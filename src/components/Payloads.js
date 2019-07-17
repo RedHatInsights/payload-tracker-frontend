@@ -17,7 +17,7 @@ const queryBase = '/v1/payloads?';
 class Payloads extends Component {
 
     componentDidMount() {
-        this.search();
+        this.search(); 
     }
 
     componentDidUpdate(prevProps) {
