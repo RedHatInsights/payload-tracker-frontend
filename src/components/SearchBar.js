@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import DropdownContainer from './DropdownContainer';
 import { Chip, Button, TextInput } from '@patternfly/react-core';
-import {setStartDate, setEndDate } from '../actions';
+import {
+  removeStartDate, removeEndDate, addPayloadsFilter, 
+  setPayloadsPage, removePayloadsFilter 
+} from '../actions';
+import { FILTER_TYPES } from '../AppConstants';
 
 const ChipContainer = props => {
   return(
@@ -10,7 +13,7 @@ const ChipContainer = props => {
       {props.filters.map(chip =>
         <React.Fragment>
           <Chip key={chip.id} onClick={() => props.closeChip(chip.id)}>
-            {chip.key + '=' + chip.value}
+            {chip.type + '=' + chip.value}
           </Chip>
         </React.Fragment>
       )}
@@ -39,33 +42,30 @@ class SearchBar extends Component {
   createChip = () => {
     var {newFilter, newValue} = this.state
     if (newValue !== '' && newFilter !== ''){
-      this.props.updateParameters({name: newFilter, value: newValue})
+      this.props.dispatch(addPayloadsFilter(newFilter, newValue));
       this.setState({
         filterInputOpen: false,
         newFilter: '',
         newValue: '',
       })
-      this.props.updateParameters({name: 'page', value: 1})
-      this.props.runRedirect()
+      this.props.dispatch(setPayloadsPage(1));
     }
   }
 
   closeChip = (id) => {
     for(var i = 0; i < this.props.filters.length; i++) {
       if(this.props.filters[i].id === id){
-        if(this.props.filters[i].key === 'date_gte') {
-          this.props.dispatch(setStartDate(null))
-        } else if (this.props.filters[i].key === 'date_lte') {
-          this.props.dispatch(setEndDate(null))
+        if(this.props.filters[i].type === 'date_gte') {
+          this.props.dispatch(removeStartDate())
+        } else if (this.props.filters[i].type === 'date_lte') {
+          this.props.dispatch(removeEndDate())
         }
-          this.props.filters.splice(i,1)
+        this.props.dispatch(removePayloadsFilter(id))
       }
     }
-    this.props.runRedirect()
-    this.props.buildQuery()
   }
 
-  handleNewValueInputChange = newValue =>{
+  handleNewValueInputChange = newValue => {
     this.setState({
         newValue
     })
@@ -76,11 +76,7 @@ class SearchBar extends Component {
     <div style={{margin: '10px'}}>
 
       <DropdownContainer
-        items={[
-          'service', 'source', 'account', 'inventory_id', 
-          'system_id', 'status', 'status_msg', 'date_lt', 
-          'date_gt', 'date_lte', 'date_gte', 'created_at_lt',
-          'created_at_gt', 'created_at_lte', 'created_at_gte']}
+        items={ FILTER_TYPES }
         type="Add Filter"
         setSelected={this.openFilterInput}
       />
@@ -116,12 +112,6 @@ class SearchBar extends Component {
   );
   }
 
-}
-
-SearchBar.propTypes = {
-  buildQuery: PropTypes.func.isRequired,
-  filters: PropTypes.array.isRequired,
-  updateParameters: PropTypes.func.isRequired,
 }
 
 export default SearchBar;

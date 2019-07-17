@@ -5,7 +5,7 @@ import { toggleNav } from '../actions';
 
 
 const logoProps = {
-    href: '/',
+    href: '/home/payloads',
     onClick: () => console.log('clicked logo'),
     target: '_blank'
 };
