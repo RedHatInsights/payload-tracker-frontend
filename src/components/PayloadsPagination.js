@@ -5,7 +5,6 @@ import {
     Pagination, CardBody, Card, CardHeader, CardFooter, SplitItem, Split, Button
 } from '@patternfly/react-core';
 import { SphereSpinner } from 'react-spinners-kit';
-import { ArrowUpIcon, ArrowDownIcon } from '@patternfly/react-icons'
 import { setPayloadsPage, setPayloadsPageSize, removePayloadsPage, removePayloadsPageSize } from '../actions';
 import OptionsContainer from './OptionsContainer';
 import ExportsDropdown from './ExportsDropdown';
@@ -25,23 +24,14 @@ const PayloadsPagination = props => {
                         <ExportsDropdown data={props.payloads}/>
                     </SplitItem>
                     <SplitItem>
-                        <DateRangeFilter
+                        {/* <DateRangeFilter
                             filters={props.payloadsParams.filters}
                             start={props.payloadsParams.startDate}
                             end={props.payloadsParams.endDate}
                             {...props}
-                        />
+                        /> */}
                     </SplitItem>
                     <SplitItem isFilled/>
-                    <SplitItem>
-                        {/* <Button
-                            variant='plain'
-                            isInline
-                            onClick={ () => window.scrollTo(0, scrollPosFooter.y) }
-                        >
-                            <ArrowDownIcon/>
-                        </Button> */}
-                    </SplitItem>
                     <SplitItem>
                         <Pagination 
                             itemCount={props.count}
@@ -75,15 +65,6 @@ const PayloadsPagination = props => {
             <CardFooter>
                 <Split gutter='md'>
                     <SplitItem isFilled/>
-                    <SplitItem>
-                        {/* <Button
-                            variant='plain'
-                            isInline
-                            onClick={ () => window.scrollTo(0, scrollPosHeader.y) }
-                        >
-                            <ArrowUpIcon/>
-                        </Button> */}
-                    </SplitItem>
                     <SplitItem>
                         <Pagination 
                             itemCount={props.count}
