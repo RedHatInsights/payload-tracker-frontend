@@ -11,10 +11,11 @@ class App extends Component {
     return (
       <Router>
         <Switch>
-            <Route path='/home/payloads' component={Payloads}/>
-            <Route exact path='/home/track' component={Track}/>
-            <Route path='/home/track/:payload_id' component={Track}/>
-            {/* <Route path='/stats/successrates' component={SuccessRate}/> */}
+          <Route path='/home/payloads' component={Payloads}/>
+          <Route exact path='/home/track' component={Track}/>
+          <Route path='/home/track/:payload_id' component={Track}/>
+          {/* <Route path='/stats/successrates' component={SuccessRate}/> */}
+          <Redirect from="/" to="/home/payloads"/>
         </Switch>
       </Router>
     )
