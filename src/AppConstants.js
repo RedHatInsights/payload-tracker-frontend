@@ -70,6 +70,23 @@ export function GET_VALUE_FROM_URL(input) {
     return targetProp === undefined ? null : targetProp;
 }
 
+export function CHECK_OBJECT_EQUIVALENCE(a, b) {
+    var aProps = Object.getOwnPropertyNames(a);
+    var bProps = Object.getOwnPropertyNames(b);
+
+    if (aProps.length != bProps.length) {
+        return false;
+    }
+
+    for (var i = 0; i < aProps.length; i++) {
+        var propName = aProps[i];
+        if (a[propName] !== b[propName]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 export const HOME_GROUP = 'grp1';
 export const PAYLOADS_ITEM = `${HOME_GROUP}_itm1`;
 export const TRACK_ITEM = `${HOME_GROUP}_itm2`;

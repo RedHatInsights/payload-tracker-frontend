@@ -42,13 +42,13 @@ class SearchBar extends Component {
   createChip = () => {
     var {newFilter, newValue} = this.state
     if (newValue !== '' && newFilter !== ''){
-      this.props.dispatch(addPayloadsFilter(newFilter, newValue))
+      this.props.dispatch(addPayloadsFilter(newFilter, newValue));
       this.setState({
         filterInputOpen: false,
         newFilter: '',
         newValue: '',
       })
-      this.props.dispatch(setPayloadsPage(1))
+      this.props.dispatch(setPayloadsPage(1));
     }
   }
 

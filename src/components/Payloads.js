@@ -4,16 +4,42 @@ import {
     PageSection,
     PageSectionVariants,
 } from '@patternfly/react-core';
-import { MAP_STATE_TO_PROPS } from '../AppConstants';
+import { MAP_STATE_TO_PROPS, CHECK_OBJECT_EQUIVALENCE } from '../AppConstants';
 import SearchBar from './SearchBar';
 import PayloadsPagination from './PayloadsPagination';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import { connect } from 'react-redux';
+import { getPayloads } from '../actions';
 
-const queryBase = 'http://localhost:8080/v1/payloads?';
+const queryBase = '/v1/payloads?';
 
 class Payloads extends Component {
+
+    componentDidMount() {
+        this.search();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!CHECK_OBJECT_EQUIVALENCE(prevProps.payloadsParams, this.props.payloadsParams)) {
+            this.search();
+        }
+    }
+
+    search = () => {
+        var query = queryBase;
+        const { sort_by, sort_dir, page, page_size, filters } = this.props.payloadsParams
+        query += `sort_by=${sort_by}&sort_dir=${sort_dir}&page=${page - 1}&page_size=${page_size}`
+
+        if(filters) {
+            filters.map(filter => {
+                query += `&${filter.type}=${filter.value}`
+            })
+        }
+ 
+        this.props.dispatch(getPayloads(query));
+    }
+
     render() {
         return(
             <Page 

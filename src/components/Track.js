@@ -7,7 +7,7 @@ import {
     CardHeader,
     CardBody,
 } from '@patternfly/react-core';
-import { MAP_STATE_TO_PROPS } from '../AppConstants';
+import { MAP_STATE_TO_PROPS, CHECK_OBJECT_EQUIVALENCE } from '../AppConstants';
 import TrackSearchBar from './TrackSearchBar';
 import TrackTable from './TrackTable';
 import openSocket from 'socket.io-client';
@@ -17,6 +17,7 @@ import MainSidebar from './MainSidebar';
 import OptionsContainer from './OptionsContainer';
 import { connect } from 'react-redux';
 import ExportsDropdown from './ExportsDropdown';
+import { getPayloadTrack } from '../actions'; 
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -30,6 +31,26 @@ class Track extends Component {
                 this.forceUpdate()
             }
         });
+    }
+
+    componentDidMount() {
+        this.search();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!CHECK_OBJECT_EQUIVALENCE(prevProps.trackParams, this.props.trackParams)) {
+            this.search();
+        }
+    }
+
+    search = () => {
+        var query = queryBase;
+        const { sort_by, sort_dir, payload_id } = this.props.trackParams
+
+        if (payload_id) {
+            query += `${payload_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`
+            this.props.dispatch(getPayloadTrack(query));
+        }
     }
 
     render() {
