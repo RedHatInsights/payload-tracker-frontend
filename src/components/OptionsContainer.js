@@ -25,6 +25,7 @@ const Option = (props) => {
             }
             id={props.cell.title}
             key={props.key}
+            isDisabled={props.isDisabled ? true : false}
         >
             {props.cell.title}
         </OptionsMenuItem>
@@ -36,7 +37,9 @@ const generateOptions = props => {
     Object.entries(props.cells).forEach(([key, cell]) => {
         // id is required to maintain distinct rows in patternfly react-table
         if (cell.title !== 'id') {
-            options.push(<Option key={key} cell={cell} {...props}/>)
+            options.push(
+                <Option key={key} cell={cell} {...props}/>
+            )
         }
     })
     return (options);

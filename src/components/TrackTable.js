@@ -5,6 +5,7 @@ import {
     TableBody,
     TableVariant
 } from '@patternfly/react-table';
+import { setTrackSortBy, setTrackSortDir, removeTrackSortBy, removeTrackSortDir } from '../actions';
 
 const generateRows = (props) => {
     var rows = [];
@@ -40,9 +41,10 @@ const generateCells = (props) => {
 }
 
 function onSort(_event, index, direction, props) {
-    props.updateParameters({name: 'sort_by', value: index});
-    props.updateParameters({name: 'sort_dir', value: direction});
-    props.runRedirect();
+    props.dispatch(removeTrackSortBy());
+    props.dispatch(removeTrackSortDir());
+    props.dispatch(setTrackSortBy(index));
+    props.dispatch(setTrackSortDir(direction));
 }
 
 export default function TrackTable(props) {
@@ -55,18 +57,33 @@ export default function TrackTable(props) {
         direction: props.sort_dir
     }
 
-    return (
-        <div>
-            <Table 
-                cells={cells} 
-                rows={rows}
-                variant={TableVariant.compact}
-                sortBy={sortBy}
-                onSort = { (e, index, direction) => onSort(e, cells[index].title, direction, {...props}) }
-            >
-                <TableHeader/>
-                <TableBody/>
-            </Table>
-        </div>
-    )
+    if (props.isDisabled) {
+        return (
+            <div>
+                <Table
+                    cells={cells} 
+                    rows={rows}
+                    variant={TableVariant.compact}
+                >
+                    <TableHeader/>
+                    <TableBody/>
+                </Table>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Table 
+                    cells={cells} 
+                    rows={rows}
+                    variant={TableVariant.compact}
+                    sortBy={sortBy}
+                    onSort = { (e, index, direction) => onSort(e, cells[index].title, direction, {...props}) }
+                >
+                    <TableHeader/>
+                    <TableBody/>
+                </Table>
+            </div>
+        )
+    }
 }

@@ -207,3 +207,50 @@ export function removePayloadsFilter(id) {
         }
     }
 }
+
+export function setTrackPayloadID(payload_id) {
+    return {
+        type: ActionTypes.SET_TRACK_PAYLOAD_ID,
+        payload: payload_id
+    }
+};
+
+export function setTrackSortBy(sort_by) {
+    return {
+        type: ActionTypes.SET_TRACK_SORT_BY,
+        payload: sort_by,
+        pushToUrl: {
+            sort_by: sort_by
+        }
+    }
+};
+
+export function removeTrackSortBy() {
+    return {
+        type: ActionTypes.SET_TRACK_SORT_BY,
+        payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by,
+        removeFromUrl: {
+            type: 'sort_by'
+        }
+    }
+};
+
+export function setTrackSortDir(sort_dir) {
+    return {
+        type: ActionTypes.SET_TRACK_SORT_DIR,
+        payload: sort_dir,
+        pushToUrl: {
+            sort_dir: sort_dir
+        }
+    }
+};
+
+export function removeTrackSortDir() {
+    return {
+        type: ActionTypes.SET_TRACK_SORT_DIR,
+        payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir,
+        removeFromUrl: {
+            type: 'sort_dir'
+        }
+    }
+};

@@ -26,8 +26,9 @@ const PayloadsPagination = props => {
                     </SplitItem>
                     <SplitItem>
                         <DateRangeFilter
-                            start={props.startDate}
-                            end={props.endDate}
+                            filters={props.payloadsParams.filters}
+                            start={props.payloadsParams.startDate}
+                            end={props.payloadsParams.endDate}
                             {...props}
                         />
                     </SplitItem>

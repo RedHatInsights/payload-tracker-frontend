@@ -1,5 +1,6 @@
 import * as ConstantTypes from '../AppConstants';
 import * as actions from '../actions';
+import { LOCATION_CHANGE } from 'connected-react-router';
 
 const filters = ConstantTypes.FILTER_TYPES.reduce((array, filter) => {
     var newFilter = ConstantTypes.GET_VALUE_FROM_URL(`/home/payloads.${filter}`)
@@ -79,6 +80,17 @@ export default (state=initialState, action) => {
                 filters: state.filters.filter(filter => {
                     return filter.id !== action.payload
                 })
+            }
+        case LOCATION_CHANGE:
+            return action.payload.location.pathname === '/home/payloads' ? state : {
+                ...state,
+                filters: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.filters,
+                page: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.page,
+                page_size: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.page_size,
+                sort_dir: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.sort_dir,
+                sort_by: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.sort_by,
+                startDate: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.startDate,
+                endDate: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.endDate
             }
         default:
             return state;

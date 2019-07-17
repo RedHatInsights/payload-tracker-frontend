@@ -15,9 +15,7 @@ import { SphereSpinner } from 'react-spinners-kit';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import OptionsContainer from './OptionsContainer';
-import queryString from 'query-string';
 import { connect } from 'react-redux';
-import { getPayloadTrack, setCellActivity } from '../actions';
 import ExportsDropdown from './ExportsDropdown';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
@@ -25,88 +23,17 @@ const queryBase = '/v1/payloads/';
 
 class Track extends Component {
 
-    queryParameters = {
-        sort_dir: 'desc',
-        sort_by: 'date',
-        payload_id: '',
-    }
-
     componentWillMount() {
-        this.setState({loading: false});
         socket.on('payload', (data) => {
-            if(data.payload_id === this.queryParameters.payload_id){
+            if(data.payload_id === this.props.payload_id){
                 this.props.payloads.unshift(data)
                 this.forceUpdate()
             }
         });
-
-        const { payload_id } = this.props.match.params;
-        this.updateParameters({name: 'payload_id', value: payload_id});
-        
-        const params = queryString.parse(this.props.location.search);
-
-        Object.entries(params).forEach(([param, value]) => {
-            if (param === 'hidden[]') {
-                typeof value === 'string' ?
-                this.props.dispatch(setCellActivity(value)):
-                value.map(cell => {
-                    this.props.dispatch(setCellActivity(cell))
-                })
-            } else {
-                this.updateParameters({name: param, value: value})
-            }
-        })
-
-        this.buildQuery();
-    }
-
-    updateParameters = newParam => {
-        if (newParam.name === 'payload_id') {
-            this.queryParameters.payload_id = newParam.value
-        }
-        else if (newParam.name === 'Sort Dir' || newParam.name === 'sort_dir') {
-            this.queryParameters.sort_dir = newParam.value
-            this.queryParameters.page = 1;
-        }
-        else if (newParam.name === 'Sort By' || newParam.name === 'sort_by') {
-            this.queryParameters.sort_by = newParam.value
-            this.queryParameters.page = 1;
-        }
-        this.buildQuery();
-    }
-
-    buildQuery = () => {
-        const { payload_id, sort_by, sort_dir } = this.queryParameters
-        if(payload_id !== '') {
-            var query = queryBase + 
-                `${payload_id}` +
-                `?sort_by=${sort_by}` +
-                `&sort_dir=${sort_dir}`
-            this.search(query)
-        }
-    }
-
-    runRedirect = (path=`/home/track/`) => {
-
-        console.log(this.props.cells)
-
-        const { payload_id, sort_by, sort_dir } = this.queryParameters;
-        path += `${payload_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`;
-        Object.entries(this.props.cells).forEach(([key, value]) => {
-            if (!value.isActive) {
-                path += `&hidden[]=${value.title}`;
-            }
-        })
-        this.props.history.push(path);
-        this.buildQuery();
-    }
-
-    search = (query) => {
-        this.props.dispatch(getPayloadTrack(query));
     }
 
     render() {
-        const { payload_id } = this.queryParameters;
+        const { payload_id, sort_by, sort_dir } = this.props.trackParams;
         return(
             <Page 
                 header={<MainHeader {...this.props} />} 
@@ -115,10 +42,8 @@ class Track extends Component {
             >
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
-                        payload_id={payload_id ? payload_id : false}
-                        buildQuery={this.buildQuery}
-                        updateParameters={this.updateParameters}
-                        runRedirect={this.runRedirect}
+                        payload_id={payload_id ? payload_id : ""}
+                        {...this.props}
                     />
                 </PageSection>
                 <PageSection 
@@ -129,7 +54,7 @@ class Track extends Component {
                         <CardHeader>
                             <div style={{float: 'left'}}>
                                 <OptionsContainer
-                                    runRedirect={this.runRedirect}
+                                    isDisabled={payload_id ? false : true}
                                     {...this.props}
                                 />
                             </div>
@@ -142,10 +67,9 @@ class Track extends Component {
                                 <SphereSpinner loading={this.props.loading} color='#000000' size={70}/>
                             </div>
                             <TrackTable
-                                runRedirect={this.runRedirect}
-                                updateParameters={this.updateParameters}
-                                sort_dir={this.queryParameters.sort_dir}
-                                sort_by={this.queryParameters.sort_by}
+                                isDisabled={payload_id ? false : true}
+                                sort_dir={sort_dir}
+                                sort_by={sort_by}
                                 {...this.props}
                             />
                         </CardBody>

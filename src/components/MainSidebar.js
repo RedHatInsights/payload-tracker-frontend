@@ -9,6 +9,7 @@ import {
 } from '@patternfly/react-core';
 import { setActiveGroup, setActiveItem } from '../actions';
 import { HOME_GROUP, TRACK_ITEM, PAYLOADS_ITEM } from '../AppConstants'
+import { push } from 'connected-react-router';
 
 const MainSidebar = props => {
     return (
@@ -23,9 +24,10 @@ const MainSidebar = props => {
 
 const clickHandler = (props, group, item, url)  => {
     return function () {
-        props.dispatch(setActiveGroup(group))
-        props.dispatch(setActiveItem(item))
-        props.history.push(url)
+        props.dispatch(setActiveGroup(group));
+        props.dispatch(setActiveItem(item));
+        props.dispatch(push(url));
+        props.history.push(url);
     }
 }
 

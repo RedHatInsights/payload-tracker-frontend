@@ -16,6 +16,9 @@ export const SET_PAYLOADS_SORT_DIR = 'SET_PAYLOADS_SORT_DIR';
 export const SET_PAYLOADS_SORT_BY = 'SET_PAYLOADS_SORT_BY';
 export const ADD_PAYLOADS_FILTER = 'ADD_PAYLOADS_FILTER';
 export const REMOVE_PAYLOADS_FILTER = 'REMOVE_PAYLOADS_FILTER';
+export const SET_TRACK_PAYLOAD_ID = 'SET_TRACK_PAYLOAD_ID';
+export const SET_TRACK_SORT_DIR = 'SET_TRACK_SORT_DIR';
+export const SET_TRACK_SORT_BY = 'SET_TRACK_SORT_BY';
 
 export const FILTER_TYPES = [
     'service', 'source', 'account', 'inventory_id', 
@@ -35,13 +38,20 @@ export function MAP_STATE_TO_PROPS(state) {
         loaded: state.data.loaded,
         error: state.data.error,
         count: state.data.count,
-        startDate: state.payloads.startDate,
-        endDate: state.payloads.endDate,
-        filters: state.payloads.filters,
-        page: state.payloads.page,
-        page_size: state.payloads.page_size,
-        sort_by: state.payloads.sort_by,
-        sort_dir: state.payloads.sort_dir
+        payloadsParams: {
+            startDate: state.payloads.startDate,
+            endDate: state.payloads.endDate,
+            filters: state.payloads.filters,
+            page: state.payloads.page,
+            page_size: state.payloads.page_size,
+            sort_by: state.payloads.sort_by,
+            sort_dir: state.payloads.sort_dir
+        },
+        trackParams: {
+            payload_id: state.track.payload_id,
+            sort_by: state.track.sort_by,
+            sort_dir: state.track.sort_dir
+        }
     }
 }
 
@@ -72,6 +82,12 @@ export const DEFAULT_PAYLOADS_PAGE_STATE = {
     startDate: null,
     endDate: null
 }
+export const DEFAULT_TRACK_PAGE_STATE = {
+    payload_id: '',
+    sort_by: 'date',
+    sort_dir: 'desc'
+}
+
 export const DEFAULT_CELL_STATE = [
     {
         title: 'id',

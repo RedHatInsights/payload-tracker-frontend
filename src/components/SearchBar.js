@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import DropdownContainer from './DropdownContainer';
 import { Chip, Button, TextInput } from '@patternfly/react-core';
 import {
@@ -113,12 +112,6 @@ class SearchBar extends Component {
   );
   }
 
-}
-
-SearchBar.propTypes = {
-  buildQuery: PropTypes.func.isRequired,
-  filters: PropTypes.array.isRequired,
-  updateParameters: PropTypes.func.isRequired,
 }
 
 export default SearchBar;

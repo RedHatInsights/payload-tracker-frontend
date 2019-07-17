@@ -26,7 +26,7 @@ const DateRangeFilter = props => {
         props.dispatch(removePayloadsFilter(_getId(props.filters, 'date_gte')));
         props.dispatch(setStartDate(value.start.format("YYYY-MM-DD")));
         props.dispatch(addPayloadsFilter('date_gte', value.start.format("YYYY-MM-DD")));
-        props.dispatch(removePayloadsFilter(_getId(props.filters, 'date_lte')));
+        props.dispatch(removePayloadsFilter(_getId(props.payloadsParams.filters, 'date_lte')));
         props.dispatch(setEndDate(value.end.format("YYYY-MM-DD")));
         props.dispatch(addPayloadsFilter('date_lte', value.end.format("YYYY-MM-DD")));
         setOpen(false);
