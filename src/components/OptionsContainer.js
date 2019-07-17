@@ -5,15 +5,20 @@ import {
     OptionsMenuPosition,
     OptionsMenuToggle
 } from '@patternfly/react-core';
-import { setCellActivity } from '../actions'
+import { setCellInactive, setCellActive } from '../actions'
 
 const Option = (props) => {
+
+    function clickHandler(props) {
+        props.cell.isActive ?
+            props.dispatch(setCellInactive(props.cell.title)) :
+            props.dispatch(setCellActive(props.cell.title));
+    }
+
     return (
         <OptionsMenuItem 
             onSelect={ 
-                () => {
-                    props.dispatch(setCellActivity(props.cell.title, !props.cell.isActive))
-                }
+                () => { clickHandler({...props}) }
             }
             isSelected={
                 props.cell.isActive
@@ -31,7 +36,7 @@ const generateOptions = props => {
     Object.entries(props.cells).forEach(([key, cell]) => {
         // id is required to maintain distinct rows in patternfly react-table
         if (cell.title !== 'id') {
-            options.push(<Option key={key} cell={cell} dispatch={props.dispatch}/>)
+            options.push(<Option key={key} cell={cell} {...props}/>)
         }
     })
     return (options);

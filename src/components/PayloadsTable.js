@@ -6,6 +6,10 @@ import {
     TableVariant,
 } from '@patternfly/react-table';
 import HoverableAttribute from './HoverableAttribute'
+import { 
+    setPayloadsSortBy, setPayloadsSortDir,
+    removePayloadsSortDir, removePayloadsSortBy 
+} from '../actions';
 
 const generateRows = props => {
     var rows = [];
@@ -65,9 +69,10 @@ const generateCells = (props) => {
 }
 
 function onSort(_event, index, direction, props) {
-    props.updateParameters({name: 'sort_by', value: index});
-    props.updateParameters({name: 'sort_dir', value: direction});
-    props.runRedirect();
+    props.dispatch(removePayloadsSortBy());
+    props.dispatch(setPayloadsSortBy(index));
+    props.dispatch(removePayloadsSortDir());
+    props.dispatch(setPayloadsSortDir(direction));
 }
 
 export default function PayloadsTable(props) {

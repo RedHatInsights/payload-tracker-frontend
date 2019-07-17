@@ -17,7 +17,7 @@ import MainSidebar from './MainSidebar';
 import OptionsContainer from './OptionsContainer';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
-import { getPayloadTrack } from '../actions';
+import { getPayloadTrack, setCellActivity } from '../actions';
 import ExportsDropdown from './ExportsDropdown';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
@@ -44,9 +44,18 @@ class Track extends Component {
         this.updateParameters({name: 'payload_id', value: payload_id});
         
         const params = queryString.parse(this.props.location.search);
+
         Object.entries(params).forEach(([param, value]) => {
-            this.updateParameters({name: param, value: value});
-        });
+            if (param === 'hidden[]') {
+                typeof value === 'string' ?
+                this.props.dispatch(setCellActivity(value)):
+                value.map(cell => {
+                    this.props.dispatch(setCellActivity(cell))
+                })
+            } else {
+                this.updateParameters({name: param, value: value})
+            }
+        })
 
         this.buildQuery();
     }
@@ -78,8 +87,17 @@ class Track extends Component {
     }
 
     runRedirect = (path=`/home/track/`) => {
+
+        console.log(this.props.cells)
+
         const { payload_id, sort_by, sort_dir } = this.queryParameters;
-        this.props.history.push(path + `${payload_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
+        path += `${payload_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`;
+        Object.entries(this.props.cells).forEach(([key, value]) => {
+            if (!value.isActive) {
+                path += `&hidden[]=${value.title}`;
+            }
+        })
+        this.props.history.push(path);
         this.buildQuery();
     }
 
@@ -111,6 +129,7 @@ class Track extends Component {
                         <CardHeader>
                             <div style={{float: 'left'}}>
                                 <OptionsContainer
+                                    runRedirect={this.runRedirect}
                                     {...this.props}
                                 />
                             </div>

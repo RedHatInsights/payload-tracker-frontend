@@ -11,9 +11,9 @@ import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
-import { getPayloads, setStartDate, setEndDate } from '../actions'
+import { getPayloads, setStartDate, setEndDate, setCellActivity } from '../actions'
 
-const queryBase = '/v1/payloads?';
+const queryBase = 'http://localhost:8080/v1/payloads?';
 
 class Payloads extends Component {
     queryParameters = {
@@ -26,20 +26,37 @@ class Payloads extends Component {
 
     componentWillMount(){
         const params = queryString.parse(this.props.location.search);
+
         Object.entries(params).forEach(([param, value]) => {
-            this.updateParameters({name: param, value: value})
+            if (param === 'hidden[]') {
+                typeof value === 'string' ?
+                this.props.dispatch(setCellActivity(value)):
+                value.map(cell => {
+                    this.props.dispatch(setCellActivity(cell))
+                })
+            } else {
+                this.updateParameters({name: param, value: value})
+            }
         })
 
         this.buildQuery()
     }
 
     runRedirect = (path='/home/payloads') => {
+
         const { sort_by, sort_dir, page, page_size, filters } = this.queryParameters
         path += `?sort_by=${sort_by}&sort_dir=${sort_dir}&page=${page}&page_size=${page_size}`
 
         Object.entries(filters).forEach(([id, filter]) => {
             path += `&${filter.key}=${filter.value}`
         })
+
+        Object.entries(this.props.cells).forEach(([key, value]) => {
+            if (!value.isActive) {
+                path += `&hidden[]=${value.title}`;
+            }
+        })
+
         this.props.history.push(path);
     }
 
@@ -58,22 +75,21 @@ class Payloads extends Component {
         else if (newParam.name === "Sort By" || newParam.name === "sort_by") {
             this.queryParameters.sort_by = newParam.value
             this.queryParameters.page = 1;
-        } else {
-            if (newParam.name === 'date_gte'){
-                this.props.dispatch(setStartDate(newParam.value))
-                for(var i = 0; i < this.queryParameters.filters.length; i++) {
-                    if(this.queryParameters.filters[i].key === 'date_gte'){
-                        this.queryParameters.filters.splice(i,1)
-                    }
-                }
-            } else if (newParam.name === 'date_lte'){
-                this.props.dispatch(setEndDate(newParam.value))
-                for(var i = 0; i < this.queryParameters.filters.length; i++) {
-                    if(this.queryParameters.filters[i].key === 'date_lte'){
-                        this.queryParameters.filters.splice(i,1)
-                    }
+        } else if (newParam.name === 'date_gte'){
+            this.props.dispatch(setStartDate(newParam.value))
+            for(var i = 0; i < this.queryParameters.filters.length; i++) {
+                if(this.queryParameters.filters[i].key === 'date_gte'){
+                    this.queryParameters.filters.splice(i,1)
                 }
             }
+        } else if (newParam.name === 'date_lte'){
+            this.props.dispatch(setEndDate(newParam.value))
+            for(var i = 0; i < this.queryParameters.filters.length; i++) {
+                if(this.queryParameters.filters[i].key === 'date_lte'){
+                    this.queryParameters.filters.splice(i,1)
+                }
+            }
+        } else {
             this.queryParameters.filters.push({
                 id: this.queryParameters.filters.length,
                 key: newParam.name,
@@ -114,7 +130,7 @@ class Payloads extends Component {
             >
                 <PageSection variant={PageSectionVariants.dark}>
                     <SearchBar
-                        filters={this.queryParameters.filters} 
+                        filters={this.props.filters} 
                         buildQuery={this.buildQuery}
                         updateParameters={this.updateParameters}
                         runRedirect={this.runRedirect}

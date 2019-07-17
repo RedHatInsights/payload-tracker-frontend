@@ -1,87 +1,110 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '@patternfly/react-core/dist/styles/base.css';
 import PayloadsTable from './PayloadsTable'
 import {
-    Pagination, CardBody, Card, CardHeader, CardFooter
+    Pagination, CardBody, Card, CardHeader, CardFooter, SplitItem, Split, Button
 } from '@patternfly/react-core';
 import { SphereSpinner } from 'react-spinners-kit';
+import { ArrowUpIcon, ArrowDownIcon } from '@patternfly/react-icons'
+import { setPayloadsPage, setPayloadsPageSize, removePayloadsPage, removePayloadsPageSize } from '../actions';
 import OptionsContainer from './OptionsContainer';
 import ExportsDropdown from './ExportsDropdown';
 import DateRangeFilter from './DateRangeFilter';
 
 const PayloadsPagination = props => {
-    console.log(props)
     return (
         <Card>
-            <div>
-                <CardHeader>
-                    <div>
-                        <div style={{float:'right'}}>
-                            <Pagination 
-                                itemCount={props.count}
-                                perPage={props.page_size}
-                                page={props.page}
-                                onSetPage={
-                                    (_event, pageNumber) => {
-                                        props.updateParameters({name: 'page', value: pageNumber});
-                                        props.runRedirect();
-                                    }
+            <CardHeader>
+                <Split gutter='md'>
+                    <SplitItem>
+                        <OptionsContainer
+                            {...props}
+                        />
+                    </SplitItem>
+                    <SplitItem>
+                        <ExportsDropdown data={props.payloads}/>
+                    </SplitItem>
+                    <SplitItem>
+                        <DateRangeFilter
+                            start={props.startDate}
+                            end={props.endDate}
+                            {...props}
+                        />
+                    </SplitItem>
+                    <SplitItem isFilled/>
+                    <SplitItem>
+                        {/* <Button
+                            variant='plain'
+                            isInline
+                            onClick={ () => window.scrollTo(0, scrollPosFooter.y) }
+                        >
+                            <ArrowDownIcon/>
+                        </Button> */}
+                    </SplitItem>
+                    <SplitItem>
+                        <Pagination 
+                            itemCount={props.count}
+                            perPage={props.page_size}
+                            page={props.page}
+                            onSetPage={
+                                (_event, pageNumber) => {
+                                    props.dispatch(removePayloadsPage())
+                                    props.dispatch(setPayloadsPage(pageNumber))
                                 }
-                                widgetId="pagination-options-menu-top"
-                                onPerPageSelect={
-                                    (_event, perPage) => {
-                                        props.updateParameters({name: 'page_size', value: perPage});
-                                        props.runRedirect();
-                                    }
+                            }
+                            widgetId="pagination-options-menu-top"
+                            onPerPageSelect={
+                                (_event, perPage) => {
+                                    props.dispatch(removePayloadsPageSize())
+                                    props.dispatch(setPayloadsPageSize(perPage))
                                 }
-                            />
-                        </div>
-                        <div style={{float:'left'}}>
-                            <OptionsContainer
-                                {...props}
-                            />
-                        </div>
-                        <div style={{float: 'left', paddingLeft: '10px'}}>
-                            <ExportsDropdown data={props.payloads}/>
-                        </div>
-                        <div style={{float: 'left', paddingLeft: '10px'}}>
-                            <DateRangeFilter
-                                start={props.startDate}
-                                end={props.endDate}
-                                {...props}
-                            />
-                        </div>
-                    </div>
-                </CardHeader>
-                <CardBody>
-                    <div style={{display: 'flex', justifyContent: 'center'}}>
-                        <SphereSpinner loading={props.loading} color='#000000' size={70}/>
-                    </div>
-                    <PayloadsTable 
-                        {...props}
-                    />
-                </CardBody>
-                <CardFooter>
-                    <Pagination 
-                        itemCount={props.count}
-                        perPage={props.page_size}
-                        page={props.page}
-                        onSetPage={
-                            (_event, pageNumber) => {
-                                props.updateParameters({name: 'page', value: pageNumber});
-                                props.runRedirect();
                             }
-                        }
-                        widgetId="pagination-options-menu-bottom"
-                        onPerPageSelect={
-                            (_event, perPage) => {
-                                props.updateParameters({name: 'page_size', value: perPage});
-                                props.runRedirect();
+                        />
+                    </SplitItem>
+                </Split>
+            </CardHeader>
+            <CardBody>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <SphereSpinner loading={props.loading} color='#000000' size={70}/>
+                </div>
+                <PayloadsTable 
+                    {...props}
+                />
+            </CardBody>
+            <CardFooter>
+                <Split gutter='md'>
+                    <SplitItem isFilled/>
+                    <SplitItem>
+                        {/* <Button
+                            variant='plain'
+                            isInline
+                            onClick={ () => window.scrollTo(0, scrollPosHeader.y) }
+                        >
+                            <ArrowUpIcon/>
+                        </Button> */}
+                    </SplitItem>
+                    <SplitItem>
+                        <Pagination 
+                            itemCount={props.count}
+                            perPage={props.page_size}
+                            page={props.page}
+                            onSetPage={
+                                (_event, pageNumber) => {
+                                    props.dispatch(removePayloadsPage())
+                                    props.dispatch(setPayloadsPage(pageNumber))
+                                }
                             }
-                        }
-                    />
-                </CardFooter>
-            </div>
+                            widgetId="pagination-options-menu-top"
+                            onPerPageSelect={
+                                (_event, perPage) => {
+                                    props.dispatch(removePayloadsPageSize())
+                                    props.dispatch(setPayloadsPageSize(perPage))
+                                }
+                            }
+                        />
+                    </SplitItem>
+                </Split>
+            </CardFooter>
         </Card>
     )
 }

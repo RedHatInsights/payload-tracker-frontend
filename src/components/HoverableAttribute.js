@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
-import { setActiveItem, setActiveGroup } from '../actions';
+import { setActiveItem, setActiveGroup, addPayloadsFilter } from '../actions';
 import { TRACK_ITEM, HOME_GROUP } from '../AppConstants'
 
 const clickHandler = (props, key, value)  => {
@@ -10,8 +10,7 @@ const clickHandler = (props, key, value)  => {
         props.dispatch(setActiveItem(TRACK_ITEM))
         props.dispatch(setActiveGroup(HOME_GROUP))
     } else if (props.type === 'filter') {
-        props.updateParameters({name: key, value: value})
-        props.runRedirect()
+        props.dispatch(addPayloadsFilter(key, value))
     } else { return null; }
 }
 
