@@ -24,12 +24,12 @@ const PayloadsPagination = props => {
                         <ExportsDropdown data={props.payloads}/>
                     </SplitItem>
                     <SplitItem>
-                        {/* <DateRangeFilter
+                        <DateRangeFilter
                             filters={props.payloadsParams.filters}
                             start={props.payloadsParams.startDate}
                             end={props.payloadsParams.endDate}
                             {...props}
-                        /> */}
+                        />
                     </SplitItem>
                     <SplitItem isFilled/>
                     <SplitItem>

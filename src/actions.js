@@ -74,6 +74,21 @@ export const getPayloadTrack = (url) => dispatch => {
         })
 };
 
+export const updateDateRange = (moment, startId, endId) => dispatch => {
+
+    const startDate = moment.start.format("YYYY-MM-DD");
+    const endDate = moment.end.format("YYYY-MM-DD");
+
+    dispatch([
+        setStartDate(startDate),
+        setEndDate(endDate),
+        removePayloadsFilter(startId),
+        removePayloadsFilter(endId),
+        addPayloadsFilter('date_gte', startDate),
+        addPayloadsFilter('date_lte', endDate)
+    ]);
+}
+
 export function setStartDate(date) {
     return {
         type: ActionTypes.SET_START_DATE,
