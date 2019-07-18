@@ -76,10 +76,12 @@ const generateCells = (props) => {
 }
 
 function onSort(_event, index, direction, props) {
-    props.dispatch(removePayloadsSortBy());
-    props.dispatch(setPayloadsSortBy(index));
-    props.dispatch(removePayloadsSortDir());
-    props.dispatch(setPayloadsSortDir(direction));
+    props.dispatch([
+        removePayloadsSortBy(),
+        setPayloadsSortBy(index),
+        removePayloadsSortDir(),
+        setPayloadsSortDir(direction)
+    ]);
 }
 
 export default function PayloadsTable(props) {

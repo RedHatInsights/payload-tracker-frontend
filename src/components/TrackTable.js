@@ -48,10 +48,12 @@ const generateCells = (props) => {
 }
 
 function onSort(_event, index, direction, props) {
-    props.dispatch(removeTrackSortBy());
-    props.dispatch(removeTrackSortDir());
-    props.dispatch(setTrackSortBy(index));
-    props.dispatch(setTrackSortDir(direction));
+    props.dispatch([
+        removeTrackSortBy(),
+        removeTrackSortDir(),
+        setTrackSortBy(index),
+        setTrackSortDir(direction)
+    ]);
 }
 
 export default function TrackTable(props) {

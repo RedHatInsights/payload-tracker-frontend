@@ -24,9 +24,11 @@ const MainSidebar = props => {
 
 const clickHandler = (props, group, item, url)  => {
     return function () {
-        props.dispatch(setActiveGroup(group));
-        props.dispatch(setActiveItem(item));
-        props.dispatch(push(url));
+        props.dispatch([
+            setActiveGroup(group),
+            setActiveItem(item),
+            push(url)
+        ]);
         props.history.push(url);
     }
 }

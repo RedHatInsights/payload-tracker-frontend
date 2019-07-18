@@ -39,15 +39,19 @@ const PayloadsPagination = props => {
                             page={props.page}
                             onSetPage={
                                 (_event, pageNumber) => {
-                                    props.dispatch(removePayloadsPage())
-                                    props.dispatch(setPayloadsPage(pageNumber))
+                                    props.dispatch([
+                                        removePayloadsPage(),
+                                        setPayloadsPage(pageNumber)
+                                    ])
                                 }
                             }
                             widgetId="pagination-options-menu-top"
                             onPerPageSelect={
                                 (_event, perPage) => {
-                                    props.dispatch(removePayloadsPageSize())
-                                    props.dispatch(setPayloadsPageSize(perPage))
+                                    props.dispatch([
+                                        removePayloadsPageSize(),
+                                        setPayloadsPageSize(perPage)
+                                    ])
                                 }
                             }
                         />
@@ -72,15 +76,19 @@ const PayloadsPagination = props => {
                             page={props.page}
                             onSetPage={
                                 (_event, pageNumber) => {
-                                    props.dispatch(removePayloadsPage())
-                                    props.dispatch(setPayloadsPage(pageNumber))
+                                    props.dispatch([
+                                        removePayloadsPage(),
+                                        setPayloadsPage(pageNumber)
+                                    ])
                                 }
                             }
                             widgetId="pagination-options-menu-top"
                             onPerPageSelect={
                                 (_event, perPage) => {
-                                    props.dispatch(removePayloadsPageSize())
-                                    props.dispatch(setPayloadsPageSize(perPage))
+                                    props.dispatch([
+                                        removePayloadsPageSize(),
+                                        setPayloadsPageSize(perPage)
+                                    ])
                                 }
                             }
                         />

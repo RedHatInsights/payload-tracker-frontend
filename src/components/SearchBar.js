@@ -60,7 +60,10 @@ class SearchBar extends Component {
         } else if (this.props.filters[i].type === 'date_lte') {
           this.props.dispatch(removeEndDate())
         }
-        this.props.dispatch(removePayloadsFilter(id))
+        this.props.dispatch([
+          removePayloadsFilter(id),
+          setPayloadsPage(1)
+        ])
       }
     }
   }

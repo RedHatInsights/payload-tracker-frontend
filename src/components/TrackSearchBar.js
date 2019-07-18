@@ -15,7 +15,6 @@ const TrackSearchBar = props => {
         props.dispatch(setTrackPayloadID(payload_id));
         props.dispatch(push(`${props.history.location.pathname}/${payload_id}`));
         props.history.push(`${props.history.location.pathname}/${payload_id}`);
-        props.search();
     }
 
     return (
