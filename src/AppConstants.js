@@ -104,6 +104,13 @@ export const DEFAULT_TRACK_PAGE_STATE = {
     sort_by: 'date',
     sort_dir: 'desc'
 }
+export const DEFAULT_DATA_REDUCER_STATE = {
+    loading: false,
+    loaded: false,
+    error: null,
+    payloads: [],
+    count: 0,
+}
 
 export const DEFAULT_CELL_STATE = [
     {

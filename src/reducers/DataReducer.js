@@ -1,11 +1,14 @@
 import * as ConstantTypes from '../AppConstants';
+import { LOCATION_CHANGE } from 'connected-react-router';
+import history from '../history';
 
 const initialState = {
-    loading: false,
-    loaded: false,
-    error: null,
-    payloads: [],
-    count: 0,
+    loading: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loading,
+    loaded: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loaded,
+    error: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.error,
+    payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
+    count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
+    cellPath: `${history.location.pathname}`
 }
 
 const DataReducer = (state=initialState, action) => {
@@ -46,6 +49,16 @@ const DataReducer = (state=initialState, action) => {
                 loading: false,
                 loaded: true,
                 payloads: action.payload
+            }
+        case LOCATION_CHANGE:
+            return action.payload.location.pathname === state.cellPath ? state : {
+                ...state,
+                loading: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loading,
+                loaded: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loaded,
+                error: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.error,
+                payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
+                count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
+                cellPath: action.payload.location.pathname
             }
         default: {
             return state;
