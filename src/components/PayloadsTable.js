@@ -6,6 +6,11 @@ import {
     TableVariant,
 } from '@patternfly/react-table';
 import HoverableAttribute from './HoverableAttribute'
+import Moment from 'react-moment';
+import { 
+    setPayloadsSortBy, setPayloadsSortDir,
+    removePayloadsSortDir, removePayloadsSortBy 
+} from '../actions';
 
 const generateRows = props => {
     var rows = [];
@@ -38,6 +43,12 @@ const generateRows = props => {
                                 props: { 
                                     component: 'th' 
                             }})
+                        } else if (cellValue.isDate) {
+                            row.push({
+                                title: <Moment local format='LLLL'>
+                                { payloadValue }
+                                </Moment>
+                            })
                         } else {
                             row.push({ title: payloadValue })
                         }
@@ -65,9 +76,12 @@ const generateCells = (props) => {
 }
 
 function onSort(_event, index, direction, props) {
-    props.updateParameters({name: 'sort_by', value: index});
-    props.updateParameters({name: 'sort_dir', value: direction});
-    props.runRedirect();
+    props.dispatch([
+        removePayloadsSortBy(),
+        setPayloadsSortBy(index),
+        removePayloadsSortDir(),
+        setPayloadsSortDir(direction)
+    ]);
 }
 
 export default function PayloadsTable(props) {

@@ -1,7 +1,16 @@
-import { createStore, applyMiddleware } from 'redux';
-import reducer from '../AppReducer';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { routerMiddleware } from 'connected-react-router';
+import urlSyncMiddleware from '../middlewares/urlSync';
+import { reduxBatch } from '@manaflair/redux-batch';
+import history from '../history';
+import createRootReducer from '../AppReducer';
 import thunk from 'redux-thunk';
 
-const middleware = applyMiddleware(thunk)
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export default createStore(reducer, middleware);
+const middlewares = [thunk, routerMiddleware(history), urlSyncMiddleware]
+
+export default createStore(
+    createRootReducer(history),
+    composeEnhancers(reduxBatch, applyMiddleware(...middlewares), reduxBatch)
+);

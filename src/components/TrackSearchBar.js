@@ -1,59 +1,42 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button, TextInput } from '@patternfly/react-core';
+import { setTrackPayloadID } from '../actions';
+import { push } from 'connected-react-router';
 
-class TrackSearchBar extends Component {
+const TrackSearchBar = props => {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            payload_id: '',
-        }
+    const [payload_id, setPayloadID] = useState(props.payload_id)
+
+    const handlePayloadIDInputChange = payload_id => {
+        setPayloadID(payload_id)
     }
 
-    componentWillMount() {
-        if (this.props.payload_id) {
-            this.setState({
-                payload_id: this.props.payload_id
-            });
-        }
+    const submitQuery = () => {
+        props.dispatch(setTrackPayloadID(payload_id));
+        props.dispatch(push(`${props.history.location.pathname}/${payload_id}`));
+        props.history.push(`${props.history.location.pathname}/${payload_id}`);
     }
 
-    handlePayloadIDInputChange = payload_id => {
-        this.setState({
-            payload_id
-        })
-    }
-
-    submitQuery = () => {
-        this.props.updateParameters({
-            name: 'payload_id',
-            value: this.state.payload_id
-        })
-        this.props.runRedirect()
-    }
-
-    render() {
-        return (
-            <div>
-                <TextInput
-                    isRequired
-                    id='payload_id'
-                    type="text"
-                    name="payload_id"
-                    value={this.state.payload_id}
-                    onChange={this.handlePayloadIDInputChange}
-                    style={inputStyle}
-                    placeholder='Enter Payload ID...'
-                />
-                <Button 
-                    variant='primary' 
-                    onClick={(e) => this.submitQuery()} 
-                    isDisabled={this.state.payload_id === ""}> 
-                        Submit
-                </Button>
-            </div>
-        )
-    }
+    return (
+        <div>
+            <TextInput
+                isRequired
+                id='payload_id'
+                type="text"
+                name="payload_id"
+                value={payload_id}
+                onChange={handlePayloadIDInputChange}
+                style={inputStyle}
+                placeholder='Enter Payload ID...'
+            />
+            <Button 
+                variant='primary' 
+                onClick={(e) => submitQuery()} 
+                isDisabled={payload_id === ""}> 
+                    Submit
+            </Button>
+        </div>
+    )
 };
 
 const inputStyle = {

@@ -5,6 +5,8 @@ import {
     TableBody,
     TableVariant
 } from '@patternfly/react-table';
+import Moment from 'react-moment';
+import { setTrackSortBy, setTrackSortDir, removeTrackSortBy, removeTrackSortDir } from '../actions';
 
 const generateRows = (props) => {
     var rows = [];
@@ -15,7 +17,13 @@ const generateRows = (props) => {
             if (cellValue.isActive) {
                 Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
                     if (cellValue.title === payloadKey) {
-                        row.push({ title: payloadValue } )
+                        cellValue.isDate ?
+                            row.push({
+                                title: <Moment local format='LLLL'>
+                                { payloadValue }
+                                </Moment>
+                            }) :
+                            row.push({ title: payloadValue } )
                         valueWasFound = true;
                     }
                 })
@@ -40,9 +48,12 @@ const generateCells = (props) => {
 }
 
 function onSort(_event, index, direction, props) {
-    props.updateParameters({name: 'sort_by', value: index});
-    props.updateParameters({name: 'sort_dir', value: direction});
-    props.runRedirect();
+    props.dispatch([
+        removeTrackSortBy(),
+        removeTrackSortDir(),
+        setTrackSortBy(index),
+        setTrackSortDir(direction)
+    ]);
 }
 
 export default function TrackTable(props) {
@@ -55,18 +66,33 @@ export default function TrackTable(props) {
         direction: props.sort_dir
     }
 
-    return (
-        <div>
-            <Table 
-                cells={cells} 
-                rows={rows}
-                variant={TableVariant.compact}
-                sortBy={sortBy}
-                onSort = { (e, index, direction) => onSort(e, cells[index].title, direction, {...props}) }
-            >
-                <TableHeader/>
-                <TableBody/>
-            </Table>
-        </div>
-    )
+    if (props.isDisabled) {
+        return (
+            <div>
+                <Table
+                    cells={cells} 
+                    rows={rows}
+                    variant={TableVariant.compact}
+                >
+                    <TableHeader/>
+                    <TableBody/>
+                </Table>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <Table 
+                    cells={cells} 
+                    rows={rows}
+                    variant={TableVariant.compact}
+                    sortBy={sortBy}
+                    onSort = { (e, index, direction) => onSort(e, cells[index].title, direction, {...props}) }
+                >
+                    <TableHeader/>
+                    <TableBody/>
+                </Table>
+            </div>
+        )
+    }
 }

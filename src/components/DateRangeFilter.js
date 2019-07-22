@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dropdown, DropdownToggle } from '@patternfly/react-core';
 import { ArrowRightIcon } from '@patternfly/react-icons'
 import DateRangePicker from 'react-daterange-picker'
+import { updateDateRange } from '../actions';
 import 'react-daterange-picker/dist/css/react-calendar.css'
 import originalMoment from "moment";
 import { extendMoment } from "moment-range";
@@ -11,14 +12,19 @@ const DateRangeFilter = props => {
 
     const [isOpen, setOpen] = useState(null)
 
-    const setDates = (value, states) => {
-        props.updateParameters({name: 'date_gte', value: value.start.format("YYYY-MM-DD")});
-        props.updateParameters({name: 'date_lte', value: value.end.format("YYYY-MM-DD")});
-        props.runRedirect();
-        setOpen(false)
+    function _getId(array, type) {
+        for(var i = 0; i < array.length; i++) {
+            if(array[i].type === type){
+                return array[i].id
+            }
+        }
     }
 
-    console.log(moment.range(moment(props.start, 'YYYY-MM-DD'), moment(props.end, 'YYYY-MM-DD')))
+    const setDates = (value, states) => {
+        props.dispatch(updateDateRange(value, _getId(props.filters, 'date_gte'), _getId(props.filters, 'date_lte')));
+        setOpen(false);
+    }
+
     return (
         <Dropdown
             toggle={

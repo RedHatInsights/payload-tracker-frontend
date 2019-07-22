@@ -7,7 +7,7 @@ import {
     CardHeader,
     CardBody,
 } from '@patternfly/react-core';
-import { MAP_STATE_TO_PROPS } from '../AppConstants';
+import { MAP_STATE_TO_PROPS, CHECK_OBJECT_EQUIVALENCE } from '../AppConstants';
 import TrackSearchBar from './TrackSearchBar';
 import TrackTable from './TrackTable';
 import openSocket from 'socket.io-client';
@@ -15,80 +15,46 @@ import { SphereSpinner } from 'react-spinners-kit';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import OptionsContainer from './OptionsContainer';
-import queryString from 'query-string';
 import { connect } from 'react-redux';
-import { getPayloadTrack } from '../actions';
 import ExportsDropdown from './ExportsDropdown';
+import { getPayloadTrack } from '../actions'; 
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
 
 class Track extends Component {
 
-    queryParameters = {
-        sort_dir: 'desc',
-        sort_by: 'date',
-        payload_id: '',
-    }
-
     componentWillMount() {
-        this.setState({loading: false});
         socket.on('payload', (data) => {
-            if(data.payload_id === this.queryParameters.payload_id){
+            if(data.payload_id === this.props.payload_id){
                 this.props.payloads.unshift(data)
                 this.forceUpdate()
             }
         });
-
-        const { payload_id } = this.props.match.params;
-        this.updateParameters({name: 'payload_id', value: payload_id});
-        
-        const params = queryString.parse(this.props.location.search);
-        Object.entries(params).forEach(([param, value]) => {
-            this.updateParameters({name: param, value: value});
-        });
-
-        this.buildQuery();
     }
 
-    updateParameters = newParam => {
-        if (newParam.name === 'payload_id') {
-            this.queryParameters.payload_id = newParam.value
-        }
-        else if (newParam.name === 'Sort Dir' || newParam.name === 'sort_dir') {
-            this.queryParameters.sort_dir = newParam.value
-            this.queryParameters.page = 1;
-        }
-        else if (newParam.name === 'Sort By' || newParam.name === 'sort_by') {
-            this.queryParameters.sort_by = newParam.value
-            this.queryParameters.page = 1;
-        }
-        this.buildQuery();
+    componentDidMount() {
+        this.search();
     }
 
-    buildQuery = () => {
-        const { payload_id, sort_by, sort_dir } = this.queryParameters
-        if(payload_id !== '') {
-            var query = queryBase + 
-                `${payload_id}` +
-                `?sort_by=${sort_by}` +
-                `&sort_dir=${sort_dir}`
-            this.search(query)
+    componentDidUpdate(prevProps) {
+        if (!CHECK_OBJECT_EQUIVALENCE(prevProps.trackParams, this.props.trackParams)) {
+            this.search();
         }
     }
 
-    runRedirect = (path=`/home/track/`) => {
-        const { payload_id, sort_by, sort_dir } = this.queryParameters;
-        this.props.history.push(path + `${payload_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
-        this.buildQuery();
-    }
+    search = () => {
+        var query = queryBase;
+        const { sort_by, sort_dir, payload_id } = this.props.trackParams
 
-    search = (query) => {
-        this.props.dispatch(getPayloadTrack(query));
+        if (payload_id) {
+            query += `${payload_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`
+            this.props.dispatch(getPayloadTrack(query));
+        }
     }
 
     render() {
-        const { payload_id } = this.queryParameters;
+        const { payload_id, sort_by, sort_dir } = this.props.trackParams;
         return(
             <Page 
                 header={<MainHeader {...this.props} />} 
@@ -97,10 +63,8 @@ class Track extends Component {
             >
                 <PageSection variant={PageSectionVariants.dark}>
                     <TrackSearchBar 
-                        payload_id={payload_id ? payload_id : false}
-                        buildQuery={this.buildQuery}
-                        updateParameters={this.updateParameters}
-                        runRedirect={this.runRedirect}
+                        payload_id={payload_id ? payload_id : ""}
+                        {...this.props}
                     />
                 </PageSection>
                 <PageSection 
@@ -111,6 +75,7 @@ class Track extends Component {
                         <CardHeader>
                             <div style={{float: 'left'}}>
                                 <OptionsContainer
+                                    isDisabled={payload_id ? false : true}
                                     {...this.props}
                                 />
                             </div>
@@ -123,10 +88,9 @@ class Track extends Component {
                                 <SphereSpinner loading={this.props.loading} color='#000000' size={70}/>
                             </div>
                             <TrackTable
-                                runRedirect={this.runRedirect}
-                                updateParameters={this.updateParameters}
-                                sort_dir={this.queryParameters.sort_dir}
-                                sort_by={this.queryParameters.sort_by}
+                                isDisabled={payload_id ? false : true}
+                                sort_dir={sort_dir}
+                                sort_by={sort_by}
                                 {...this.props}
                             />
                         </CardBody>
