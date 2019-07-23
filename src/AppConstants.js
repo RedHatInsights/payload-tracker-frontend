@@ -19,6 +19,7 @@ export const REMOVE_PAYLOADS_FILTER = 'REMOVE_PAYLOADS_FILTER';
 export const SET_TRACK_PAYLOAD_ID = 'SET_TRACK_PAYLOAD_ID';
 export const SET_TRACK_SORT_DIR = 'SET_TRACK_SORT_DIR';
 export const SET_TRACK_SORT_BY = 'SET_TRACK_SORT_BY';
+export const SET_ACTIVE_TAB_KEY = 'SET_ACTIVE_TAB_KEY';
 
 export const FILTER_TYPES = [
     'service', 'source', 'account', 'inventory_id', 
@@ -50,7 +51,8 @@ export function MAP_STATE_TO_PROPS(state) {
         trackParams: {
             payload_id: state.track.payload_id,
             sort_by: state.track.sort_by,
-            sort_dir: state.track.sort_dir
+            sort_dir: state.track.sort_dir,
+            activeTabKey: state.track.activeTabKey
         }
     }
 }
@@ -102,7 +104,8 @@ export const DEFAULT_PAYLOADS_PAGE_STATE = {
 export const DEFAULT_TRACK_PAGE_STATE = {
     payload_id: '',
     sort_by: 'date',
-    sort_dir: 'desc'
+    sort_dir: 'desc',
+    activeTabKey: 0,
 }
 export const DEFAULT_DATA_REDUCER_STATE = {
     loading: false,
