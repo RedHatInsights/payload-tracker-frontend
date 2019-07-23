@@ -9,7 +9,7 @@ function generateUniqueServices(payloads) {
     return (Array.from(servicesSet));
 }
 
-function getStatusesFromService(payloads, services) {
+function getStatusesByService(payloads, services) {
     var servicesToStatuses = {}
     services.map(service => {
         servicesToStatuses[service] = []
@@ -22,14 +22,32 @@ function getStatusesFromService(payloads, services) {
     return (servicesToStatuses);
 }
 
+function getMessagesFromService(payloads, services) {
+    var servicesToMessages = {}
+    services.map(service => {
+        servicesToMessages[service] = []
+        payloads.map(payload => {
+            if (payload.service === service) {
+                servicesToMessages[service].push({
+                    'message': payload.status_msg,
+                    'status': payload.status
+                })
+            }
+        })
+    })
+    return (servicesToMessages);
+}
+
 export default props => {
     var services = generateUniqueServices(props.payloads)
-    var statuses = getStatusesFromService(props.payloads, services)
+    var statuses = getStatusesByService(props.payloads, services)
+    var messages = getMessagesFromService(props.payloads, services)
     return services.map(service => 
         <div style={{padding: '10px'}}>
             <TrackGraphic 
                 service={service} 
                 statuses={statuses[service]}
+                messages={messages[service]}
             />
         </div>
     )
