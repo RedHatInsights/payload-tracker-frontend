@@ -87,12 +87,14 @@ class Track extends Component {
                                     <div style={{display: 'flex', justifyContent: 'center'}}>
                                         <SphereSpinner loading={this.props.loading} color='#000000' size={70}/>
                                     </div>
-                                    <TrackTable
-                                        isDisabled={payload_id ? false : true}
-                                        sort_dir={sort_dir}
-                                        sort_by={sort_by}
-                                        {...this.props}
-                                    />
+                                    <div style={{maxWidth: '100vw', overflow: 'auto'}}>
+                                        <TrackTable
+                                            isDisabled={payload_id ? false : true}
+                                            sort_dir={sort_dir}
+                                            sort_by={sort_by}
+                                            {...this.props}
+                                        />
+                                    </div>
                                 </CardBody>
                             </Card>
                         </Tab>

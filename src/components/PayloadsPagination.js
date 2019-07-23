@@ -79,9 +79,11 @@ const PayloadsPagination = props => {
                 <div style={{display: 'flex', justifyContent: 'center'}}>
                     <SphereSpinner loading={props.loading} color='#000000' size={70}/>
                 </div>
-                <PayloadsTable 
-                    {...props}
-                />
+                <div style={{maxWidth:'100vw', overflow:'auto'}}>
+                    <PayloadsTable 
+                        {...props}
+                    />
+                </div>
             </CardBody>
             <div ref={footerRef}>
                 <CardFooter>
