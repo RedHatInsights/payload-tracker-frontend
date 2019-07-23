@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import {
-    Page,
-    PageSection,
-    PageSectionVariants,
-    Card,
-    CardHeader,
-    CardBody,
+    Page, PageSection, PageSectionVariants,
+    Card, CardHeader, CardBody,
+    Tabs, Tab
 } from '@patternfly/react-core';
 import { MAP_STATE_TO_PROPS, CHECK_OBJECT_EQUIVALENCE } from '../AppConstants';
 import TrackSearchBar from './TrackSearchBar';
@@ -15,9 +12,10 @@ import { SphereSpinner } from 'react-spinners-kit';
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import OptionsContainer from './OptionsContainer';
+import TrackGraphic from './TrackGraphicView';
 import { connect } from 'react-redux';
 import ExportsDropdown from './ExportsDropdown';
-import { getPayloadTrack } from '../actions'; 
+import { getPayloadTrack, setActiveTabKey } from '../actions'; 
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -54,7 +52,7 @@ class Track extends Component {
     }
 
     render() {
-        const { payload_id, sort_by, sort_dir } = this.props.trackParams;
+        const { payload_id, sort_by, sort_dir, activeTabKey } = this.props.trackParams;
         return(
             <Page 
                 header={<MainHeader {...this.props} />} 
@@ -71,30 +69,46 @@ class Track extends Component {
                     variant={PageSectionVariants.light}
                     style={{height:'80vh', overflow:'auto'}}
                 >
-                    <Card>
-                        <CardHeader>
-                            <div style={{float: 'left'}}>
-                                <OptionsContainer
-                                    isDisabled={payload_id ? false : true}
-                                    {...this.props}
-                                />
-                            </div>
-                            <div style={{float: 'left', paddingLeft: '10px'}}>
-                                <ExportsDropdown data={this.props.payloads}/>
-                            </div>
-                        </CardHeader>
-                        <CardBody>
-                            <div style={{display: 'flex', justifyContent: 'center'}}>
-                                <SphereSpinner loading={this.props.loading} color='#000000' size={70}/>
-                            </div>
-                            <TrackTable
-                                isDisabled={payload_id ? false : true}
-                                sort_dir={sort_dir}
-                                sort_by={sort_by}
-                                {...this.props}
-                            />
-                        </CardBody>
-                    </Card>
+                    <Tabs activeKey={activeTabKey} onSelect={ (e, index) => this.props.dispatch(setActiveTabKey(index)) }>
+                        <Tab eventKey={0} title='Table View'>
+                            <Card>
+                                <CardHeader>
+                                    <div style={{float: 'left'}}>
+                                        <OptionsContainer
+                                            isDisabled={payload_id ? false : true}
+                                            {...this.props}
+                                        />
+                                    </div>
+                                    <div style={{float: 'left', paddingLeft: '10px'}}>
+                                        <ExportsDropdown data={this.props.payloads}/>
+                                    </div>
+                                </CardHeader>
+                                <CardBody>
+                                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                                        <SphereSpinner loading={this.props.loading} color='#000000' size={70}/>
+                                    </div>
+                                    <TrackTable
+                                        isDisabled={payload_id ? false : true}
+                                        sort_dir={sort_dir}
+                                        sort_by={sort_by}
+                                        {...this.props}
+                                    />
+                                </CardBody>
+                            </Card>
+                        </Tab>
+                        <Tab eventKey={1} title='Graphical View'>
+                            <Card>
+                                <CardHeader>
+                                    {payload_id ? `payload_id: ${payload_id}` : ''}
+                                </CardHeader>
+                                <CardBody>
+                                    <TrackGraphic 
+                                        payloads={this.props.payloads}
+                                    />
+                                </CardBody>
+                            </Card>
+                        </Tab>
+                    </Tabs>
                 </PageSection>
             </Page>
         )

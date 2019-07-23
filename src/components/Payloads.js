@@ -53,7 +53,11 @@ class Payloads extends Component {
                         dispatch={this.props.dispatch}
                     />
                 </PageSection>
-                <PageSection variant={PageSectionVariants.light} style={{height:'80vh', maxWidth:'100vw', overflow:'auto'}}>
+                <PageSection 
+                    id='payloads_page'
+                    variant={PageSectionVariants.light}
+                    style={{height:'80vh', maxWidth:'100vw', overflow:'auto'}}
+                >
                     <PayloadsPagination
                         page={this.props.payloadsParams.page}
                         page_size={this.props.payloadsParams.page_size}

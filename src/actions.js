@@ -269,3 +269,10 @@ export function removeTrackSortDir() {
         }
     }
 };
+
+export function setActiveTabKey(key) {
+    return {
+        type: ActionTypes.SET_ACTIVE_TAB_KEY,
+        payload: key
+    }
+}

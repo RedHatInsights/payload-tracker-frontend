@@ -9765,7 +9765,7 @@ prompts@^2.0.1:
     kleur "^3.0.2"
     sisteransi "^1.0.0"
 
-prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -10295,6 +10295,13 @@ react-spinners-kit@^1.9.0:
     prop-types "^15.6.2"
     react "^16.5.2"
     react-dom "^16.5.1"
+
+react-timezone@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-timezone/-/react-timezone-2.4.0.tgz#abdc57d4075dd5cda09db155967f64f65af598cb"
+  integrity sha512-8s1lcqN0npbo7qDheCeNym6sCraMyEKeusdHl0//CDbRv+g3Iip9ceseAGM+ZuxsGQtN8h37GRmKI37PpSNy5g==
+  dependencies:
+    prop-types "^15.6.1"
 
 react-tinymce@^0.4.0:
   version "0.4.0"

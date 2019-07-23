@@ -7,10 +7,14 @@ import {
 } from '@patternfly/react-table';
 import HoverableAttribute from './HoverableAttribute'
 import Moment from 'react-moment';
+import 'moment-timezone';
 import { 
     setPayloadsSortBy, setPayloadsSortDir,
     removePayloadsSortDir, removePayloadsSortBy 
 } from '../actions';
+
+Moment.globalTimezone = 'America/New_York';
+Moment.globalFormat = 'LLLL z';
 
 const generateRows = props => {
     var rows = [];
@@ -45,9 +49,9 @@ const generateRows = props => {
                             }})
                         } else if (cellValue.isDate) {
                             row.push({
-                                title: <Moment local format='LLLL'>
-                                { payloadValue }
-                                </Moment>
+                                title: <Moment>
+                                { `${payloadValue}-0000` }
+                                </Moment> 
                             })
                         } else {
                             row.push({ title: payloadValue })
