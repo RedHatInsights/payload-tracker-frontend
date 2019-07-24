@@ -70,7 +70,19 @@ class Track extends Component {
                     style={{height:'80vh', overflow:'auto'}}
                 >
                     <Tabs activeKey={activeTabKey} onSelect={ (e, index) => this.props.dispatch(setActiveTabKey(index)) }>
-                        <Tab eventKey={0} title='Table View'>
+                        <Tab eventKey={0} title='Graphical View'>
+                            <Card>
+                                <CardHeader>
+                                    {payload_id ? `payload_id: ${payload_id}` : ''}
+                                </CardHeader>
+                                <CardBody>
+                                    <TrackGraphic 
+                                        payloads={this.props.payloads}
+                                    />
+                                </CardBody>
+                            </Card>
+                        </Tab>
+                        <Tab eventKey={1} title='Table View'>
                             <Card>
                                 <CardHeader>
                                     <div style={{float: 'left'}}>
@@ -87,24 +99,14 @@ class Track extends Component {
                                     <div style={{display: 'flex', justifyContent: 'center'}}>
                                         <SphereSpinner loading={this.props.loading} color='#000000' size={70}/>
                                     </div>
-                                    <TrackTable
-                                        isDisabled={payload_id ? false : true}
-                                        sort_dir={sort_dir}
-                                        sort_by={sort_by}
-                                        {...this.props}
-                                    />
-                                </CardBody>
-                            </Card>
-                        </Tab>
-                        <Tab eventKey={1} title='Graphical View'>
-                            <Card>
-                                <CardHeader>
-                                    {payload_id ? `payload_id: ${payload_id}` : ''}
-                                </CardHeader>
-                                <CardBody>
-                                    <TrackGraphic 
-                                        payloads={this.props.payloads}
-                                    />
+                                    <div style={{maxWidth: '100vw', overflow: 'auto'}}>
+                                        <TrackTable
+                                            isDisabled={payload_id ? false : true}
+                                            sort_dir={sort_dir}
+                                            sort_by={sort_by}
+                                            {...this.props}
+                                        />
+                                    </div>
                                 </CardBody>
                             </Card>
                         </Tab>

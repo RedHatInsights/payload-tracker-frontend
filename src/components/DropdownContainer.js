@@ -1,70 +1,39 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Dropdown,
     DropdownToggle, 
     DropdownItem, 
 } from '@patternfly/react-core';
-import PropTypes from 'prop-types';
 
-class DropdownContainer extends Component {
+export default props => {
 
-    constructor(){
-        super()
-        this.state = {
-            isOpen: false,
-        };
-        this.onToggle = isOpen => {
-            this.setState({
-              isOpen
-            });
-        };
-        this.onSelect = event => {
-            this.setState({
-              isOpen: !this.state.isOpen,
-            });
-        };
-        this.dropdownItems = []
-    }
+    const [isOpen, setOpen] = useState(false);
+    const [dropdownItems, setItems] = useState([]);
 
-    componentWillMount = () => {
-        this.generateItems(this.props.items)
-    }
+    useEffect(() => {
+        generateItems()
+    })
 
-    setSelected = (item) => {
-        this.props.setSelected(this.props.type, item);
-    }
-
-    generateItems = (items) => {
-        items.map(item => {
-            this.dropdownItems.push(
-                <DropdownItem
+    function generateItems() {
+        var items = props.items.map(function(item) {
+            return (
+                <DropdownItem 
                     key={item}
                     component='button'
-                    onClick={e => this.setSelected(item)}
-                > {item} </DropdownItem>
+                    onClick={ () => props.setSelected(props.type, item) }
+                >
+                    {item}
+                </DropdownItem>
             )
-        });
-        this.setState({isInit: true});
+        })
+        setItems(items)
     }
 
-    render(){ 
-        const { type } = this.props
-        return (
-            <Dropdown
-                onSelect={this.onSelect}
-                toggle={<DropdownToggle onToggle={this.onToggle}>{type}</DropdownToggle>}
-                isOpen={this.state.isOpen}
-                dropdownItems={this.dropdownItems}
-            />
-        )
-    }
-
+    return (
+        <Dropdown
+            toggle={<DropdownToggle onToggle={() => setOpen(!isOpen)}>{props.type}</DropdownToggle>}
+            isOpen={isOpen}
+            dropdownItems={dropdownItems}
+        />
+    )
 }
-
-DropdownContainer.propTypes = {
-    items: PropTypes.array.isRequired,
-    type: PropTypes.string.isRequired,
-    setSelected: PropTypes.func.isRequired,
-}
-
-export default DropdownContainer;
