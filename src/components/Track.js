@@ -70,7 +70,19 @@ class Track extends Component {
                     style={{height:'80vh', overflow:'auto'}}
                 >
                     <Tabs activeKey={activeTabKey} onSelect={ (e, index) => this.props.dispatch(setActiveTabKey(index)) }>
-                        <Tab eventKey={0} title='Table View'>
+                        <Tab eventKey={0} title='Graphical View'>
+                            <Card>
+                                <CardHeader>
+                                    {payload_id ? `payload_id: ${payload_id}` : ''}
+                                </CardHeader>
+                                <CardBody>
+                                    <TrackGraphic 
+                                        payloads={this.props.payloads}
+                                    />
+                                </CardBody>
+                            </Card>
+                        </Tab>
+                        <Tab eventKey={1} title='Table View'>
                             <Card>
                                 <CardHeader>
                                     <div style={{float: 'left'}}>
@@ -95,18 +107,6 @@ class Track extends Component {
                                             {...this.props}
                                         />
                                     </div>
-                                </CardBody>
-                            </Card>
-                        </Tab>
-                        <Tab eventKey={1} title='Graphical View'>
-                            <Card>
-                                <CardHeader>
-                                    {payload_id ? `payload_id: ${payload_id}` : ''}
-                                </CardHeader>
-                                <CardBody>
-                                    <TrackGraphic 
-                                        payloads={this.props.payloads}
-                                    />
                                 </CardBody>
                             </Card>
                         </Tab>

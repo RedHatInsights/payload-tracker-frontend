@@ -1,5 +1,6 @@
 import React from 'react';
 import TrackGraphic from './TrackGraphic';
+import { Accordion } from '@patternfly/react-core';
 
 function generateUniqueServices(payloads) {
     var servicesSet = new Set()
@@ -30,7 +31,8 @@ function getMessagesFromService(payloads, services) {
             if (payload.service === service) {
                 servicesToMessages[service].push({
                     'message': payload.status_msg,
-                    'status': payload.status
+                    'status': payload.status,
+                    'date': payload.date
                 })
             }
         })
@@ -38,17 +40,29 @@ function getMessagesFromService(payloads, services) {
     return (servicesToMessages);
 }
 
+const TrackGraphicContainer = props => {
+    return props.services.map(service =>
+        <div style={{padding: '10px'}}>
+            <TrackGraphic 
+                service={service} 
+                statuses={props.statuses[service]}
+                messages={props.messages[service]}
+            />
+        </div>
+    )
+}
+
 export default props => {
     var services = generateUniqueServices(props.payloads)
     var statuses = getStatusesByService(props.payloads, services)
     var messages = getMessagesFromService(props.payloads, services)
-    return services.map(service => 
-        <div style={{padding: '10px'}}>
-            <TrackGraphic 
-                service={service} 
-                statuses={statuses[service]}
-                messages={messages[service]}
+    return (
+        <Accordion>
+            <TrackGraphicContainer
+                services={services} 
+                statuses={statuses}
+                messages={messages}
             />
-        </div>
+        </Accordion>
     )
 };
