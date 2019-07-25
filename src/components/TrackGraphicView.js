@@ -4,30 +4,34 @@ import { Accordion } from '@patternfly/react-core';
 
 function generateUniqueServices(payloads) {
     var servicesSet = new Set()
-    payloads.map(payload => {
+    payloads.map(payload => 
         servicesSet.add(payload.service)
-    });
+    );
     return (Array.from(servicesSet));
 }
 
 function getStatusesByService(payloads, services) {
     var servicesToStatuses = {}
-    services.map(service => {
+    for (var i = 0; i < services.length; i++) {
+        var service = services[i];
         servicesToStatuses[service] = []
-        payloads.map(payload => {
+        for (var j = 0; j < payloads.length; j++) {
+            var payload = payloads[j];
             if (payload.service === service) {
                 servicesToStatuses[service].push(payload.status)
             }
-        })
-    })
+        }
+    }
     return (servicesToStatuses);
 }
 
 function getMessagesFromService(payloads, services) {
     var servicesToMessages = {}
-    services.map(service => {
+    for (var i = 0; i < services.length; i++) {
+        var service = services[i];
         servicesToMessages[service] = []
-        payloads.map(payload => {
+        for (var j = 0; j < payloads.length; j++) {
+            var payload = payloads[j];
             if (payload.service === service) {
                 servicesToMessages[service].push({
                     'message': payload.status_msg,
@@ -35,8 +39,8 @@ function getMessagesFromService(payloads, services) {
                     'date': payload.date
                 })
             }
-        })
-    })
+        }
+    }
     return (servicesToMessages);
 }
 

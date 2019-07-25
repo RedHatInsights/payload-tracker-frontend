@@ -49,7 +49,7 @@ class SuccessRate extends Component {
     createDataList() {
         var data = [];
         Object.entries(this.state.result).forEach(([service, value]) => {
-            const { success, failure, successPercent, failPercent } = value;
+            const { success, failure } = value;
             data.push([service, success, failure]);
         })
         return data;

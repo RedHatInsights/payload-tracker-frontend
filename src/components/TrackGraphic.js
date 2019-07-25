@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Progress, ProgressMeasureLocation, ProgressVariant, Tooltip,
     AccordionItem, AccordionToggle, AccordionContent
@@ -25,12 +25,13 @@ function truncateString(string) {
     } else {
         return string
     }
-}
+};
 
 function generateTableRows(messages) {
-    var rows = []
-    var parentIndex = 0
-    messages.map(message => {
+    var rows = [];
+    var parentIndex = 0;
+    for (var i = 0; i < messages.length; i++) {
+        var message = messages[i];
         var row = {
             cells: [
                 {
@@ -64,15 +65,19 @@ function generateTableRows(messages) {
         }
         rows.push(expandablerow)
         parentIndex += 2;
-    });
-    return rows
+    };
+    return (rows);
 };
 
 export default props => {
 
     const [isOpen, toggleOpen] = useState(false);
-    const [rows, setRows] = useState(generateTableRows(props.messages))
-    const [cells, setCells] = useState(default_cells)
+    const [rows, setRows] = useState(generateTableRows(props.messages));
+    const [cells, setCells] = useState([]);
+
+    useEffect(() => {
+        setCells(default_cells);
+    }, [])
 
     var errorMessage = props.messages.filter(message => (
         message.status === 'error' ||
