@@ -3,7 +3,7 @@ import DropdownContainer from './DropdownContainer';
 import { Chip, Button, TextInput } from '@patternfly/react-core';
 import {
   removeStartDate, removeEndDate, addPayloadsFilter, 
-  setPayloadsPage, removePayloadsFilter 
+  setPayloadsPage, removePayloadsFilter, removePayloadsPage 
 } from '../actions';
 import { FILTER_TYPES } from '../AppConstants';
 
@@ -48,7 +48,10 @@ class SearchBar extends Component {
         newFilter: '',
         newValue: '',
       })
-      this.props.dispatch(setPayloadsPage(1));
+      this.props.dispatch([
+        removePayloadsPage(),
+        setPayloadsPage(1)
+      ]);
     }
   }
 
@@ -62,6 +65,7 @@ class SearchBar extends Component {
         }
         this.props.dispatch([
           removePayloadsFilter(id),
+          removePayloadsPage(),
           setPayloadsPage(1)
         ])
       }
