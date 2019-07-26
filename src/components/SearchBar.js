@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import DropdownContainer from './DropdownContainer';
 import { Chip, Button, TextInput } from '@patternfly/react-core';
 import {
@@ -21,104 +21,81 @@ const ChipContainer = props => {
   )
 }
 
-class SearchBar extends Component {
+export default props => {
 
-  constructor(){
-    super()
-    this.state = {
-      filterInputOpen: false,
-      newValue: '',
-      isOpen: false,
-    }
-  }
+  const [isFilterInOpen, setFilterIn] = useState(false);
+  const [newValue, setValue] = useState('');
+  const [newFilter, setFilter] = useState('');
 
-  openFilterInput = (type, item) => {
-    this.setState({
-      filterInputOpen: true,
-      newFilter: item,
-    })
-  }
+  function openFilterInput(type, item) {
+    setFilterIn(true);
+    setFilter(item);
+  };
 
-  createChip = () => {
-    var {newFilter, newValue} = this.state
+  function createChip() {
     if (newValue !== '' && newFilter !== ''){
-      this.props.dispatch(addPayloadsFilter(newFilter, newValue));
-      this.setState({
-        filterInputOpen: false,
-        newFilter: '',
-        newValue: '',
-      })
-      this.props.dispatch([
+      props.dispatch(addPayloadsFilter(newFilter, newValue));
+      setFilterIn(false);
+      setFilter('');
+      setValue('');
+      props.dispatch([
         removePayloadsPage(),
         setPayloadsPage(1)
       ]);
     }
-  }
+  };
 
-  closeChip = (id) => {
-    for(var i = 0; i < this.props.filters.length; i++) {
-      if(this.props.filters[i].id === id){
-        if(this.props.filters[i].type === 'date_gte') {
-          this.props.dispatch(removeStartDate())
-        } else if (this.props.filters[i].type === 'date_lte') {
-          this.props.dispatch(removeEndDate())
+  function closeChip(id) {
+    for(var i = 0; i < props.filters.length; i++) {
+      if(props.filters[i].id === id){
+        if(props.filters[i].type === 'date_gte') {
+          props.dispatch(removeStartDate())
+        } else if (props.filters[i].type === 'date_lte') {
+          props.dispatch(removeEndDate())
         }
-        this.props.dispatch([
+        props.dispatch([
           removePayloadsFilter(id),
           removePayloadsPage(),
           setPayloadsPage(1)
-        ])
+        ]);
       }
     }
-  }
+  };
 
-  handleNewValueInputChange = newValue => {
-    this.setState({
-        newValue
-    })
-  }
-
-  render() {
   return (
     <div style={{margin: '10px'}}>
-
       <DropdownContainer
         items={ FILTER_TYPES }
         type="Add Filter"
-        setSelected={this.openFilterInput}
+        setSelected={openFilterInput}
       />
-
       <TextInput
         isRequired
         id='newValue'
         type='text'
         name='newValue'
-        onChange={this.handleNewValueInputChange}
-        style={this.state.filterInputOpen ? {
+        onChange={(newValue) => setValue(newValue)}
+        style={isFilterInOpen ? {
           width: '150px',
           marginLeft: '10px',
           marginRight: '10px'
         } : { display: 'none' }}
-        placeholder={this.state.newFilter + '...'}
-        value={this.state.newValue}
+        placeholder={newFilter + '...'}
+        value={newValue}
       />
       
       <Button
         variant='secondary'
-        style={this.state.filterInputOpen ? {} : { display: 'none' }} 
-        onClick={(e) => {this.createChip()}}>
+        style={isFilterInOpen ? {} : { display: 'none' }} 
+        onClick={(e) => {createChip()}}>
         Enter
       </Button>
 
       <ChipContainer 
-        filters={this.props.filters}
-        closeChip={this.closeChip}
+        filters={props.filters}
+        closeChip={closeChip}
       />
 
     </div>
   );
-  }
-
-}
-
-export default SearchBar;
+};
