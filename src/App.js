@@ -4,7 +4,6 @@ import { Route, Switch } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import Track from './components/Track';
 import Payloads from './components/Payloads';
-import SuccessRate from './components/SuccessRate';
 
 class App extends Component {
   render() {

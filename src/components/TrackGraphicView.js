@@ -1,33 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TrackGraphic from './TrackGraphic';
 import { Accordion } from '@patternfly/react-core';
 
 function generateUniqueServices(payloads) {
     var servicesSet = new Set()
-    payloads.map(payload => {
+    payloads.map(payload => 
         servicesSet.add(payload.service)
-    });
+    );
     return (Array.from(servicesSet));
 }
 
 function getStatusesByService(payloads, services) {
     var servicesToStatuses = {}
-    services.map(service => {
+    for (var i = 0; i < services.length; i++) {
+        var service = services[i];
         servicesToStatuses[service] = []
-        payloads.map(payload => {
+        for (var j = 0; j < payloads.length; j++) {
+            var payload = payloads[j];
             if (payload.service === service) {
                 servicesToStatuses[service].push(payload.status)
             }
-        })
-    })
+        }
+    }
     return (servicesToStatuses);
 }
 
 function getMessagesFromService(payloads, services) {
     var servicesToMessages = {}
-    services.map(service => {
+    for (var i = 0; i < services.length; i++) {
+        var service = services[i];
         servicesToMessages[service] = []
-        payloads.map(payload => {
+        for (var j = 0; j < payloads.length; j++) {
+            var payload = payloads[j];
             if (payload.service === service) {
                 servicesToMessages[service].push({
                     'message': payload.status_msg,
@@ -35,8 +39,8 @@ function getMessagesFromService(payloads, services) {
                     'date': payload.date
                 })
             }
-        })
-    })
+        }
+    }
     return (servicesToMessages);
 }
 
@@ -53,9 +57,22 @@ const TrackGraphicContainer = props => {
 }
 
 export default props => {
-    var services = generateUniqueServices(props.payloads)
-    var statuses = getStatusesByService(props.payloads, services)
-    var messages = getMessagesFromService(props.payloads, services)
+
+    const [payloads, setPayloads] = useState([]);
+    const mounted = useRef();
+
+    useEffect(() => {
+        if (!mounted.current) {
+            mounted.current = true;
+        } else {
+            setPayloads(props.payloads);
+        };
+    }, [props.payloads]);
+
+    var services = generateUniqueServices(payloads);
+    var statuses = getStatusesByService(payloads, services);
+    var messages = getMessagesFromService(payloads, services);
+
     return (
         <Accordion>
             <TrackGraphicContainer

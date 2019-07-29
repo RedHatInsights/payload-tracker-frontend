@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, TextInput } from '@patternfly/react-core';
 import { setTrackPayloadID } from '../actions';
-import { push } from 'connected-react-router';
 
 const TrackSearchBar = props => {
 
@@ -13,8 +12,6 @@ const TrackSearchBar = props => {
 
     const submitQuery = () => {
         props.dispatch(setTrackPayloadID(payload_id));
-        props.dispatch(push(`${props.history.location.pathname}/${payload_id}`));
-        props.history.push(`${props.history.location.pathname}/${payload_id}`);
     }
 
     return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Progress, ProgressMeasureLocation, ProgressVariant, Tooltip,
     AccordionItem, AccordionToggle, AccordionContent
@@ -19,25 +19,26 @@ const default_cells = [
     'date'
 ]
 
-function truncateString(string) {
-    if (string.length > 80) {
-        return string.substring(0,80) + '...'
+function truncateString(string, chars) {
+    if (string.length > chars) {
+        return string.substring(0, chars) + '...'
     } else {
         return string
     }
-}
+};
 
 function generateTableRows(messages) {
-    var rows = []
-    var parentIndex = 0
-    messages.map(message => {
+    var rows = [];
+    var parentIndex = 0;
+    for (var i = 0; i < messages.length; i++) {
+        var message = messages[i];
         var row = {
             cells: [
                 {
                     title: message.status
                 },
                 {
-                    title: truncateString(message.message),
+                    title: message.message ? truncateString(message.message, 80) : '',
                     props: {isOpen: false, ariaControls : 'compound-expansion-table-1'}
                 },
                 {
@@ -64,15 +65,20 @@ function generateTableRows(messages) {
         }
         rows.push(expandablerow)
         parentIndex += 2;
-    });
-    return rows
+    };
+    return (rows);
 };
 
 export default props => {
 
     const [isOpen, toggleOpen] = useState(false);
-    const [rows, setRows] = useState(generateTableRows(props.messages))
-    const [cells, setCells] = useState(default_cells)
+    const [rows, setRows] = useState([]);
+    const [cells, setCells] = useState([]);
+
+    useEffect(() => {
+        setRows(generateTableRows(props.messages));
+        setCells(default_cells);
+    }, [props.messages])
 
     var errorMessage = props.messages.filter(message => (
         message.status === 'error' ||
@@ -86,11 +92,12 @@ export default props => {
     }
 
     function onExpand(e, rowIndex, colIndex) {
-        console.log(rowIndex, colIndex)
-        rows[rowIndex].cells[colIndex].props.isOpen ?
-            rows[rowIndex].cells[colIndex].props.isOpen = false :
-            rows[rowIndex].cells[colIndex].props.isOpen = true
-        setRows([...rows]);
+        if (rows[rowIndex].cells[colIndex].title !== '') {
+            rows[rowIndex].cells[colIndex].props.isOpen ?
+                rows[rowIndex].cells[colIndex].props.isOpen = false :
+                rows[rowIndex].cells[colIndex].props.isOpen = true
+            setRows([...rows]);
+        };
     }
 
     return (
@@ -102,7 +109,7 @@ export default props => {
             >
                 <Tooltip
                     position='bottom'
-                    content={ errorMessage ? truncateString(errorMessage) : '' }
+                    content={ errorMessage ? truncateString(errorMessage, 80) : '' }
                     style={ errorMessage ? {} : {display: 'none'} }
                     entryDelay={0}
                 >

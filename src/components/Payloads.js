@@ -32,9 +32,9 @@ class Payloads extends Component {
         query += `sort_by=${sort_by}&sort_dir=${sort_dir}&page=${page - 1}&page_size=${page_size}`
 
         if(filters) {
-            filters.map(filter => {
+            filters.map(filter => 
                 query += `&${filter.type}=${filter.value}`
-            })
+            )
         }
  
         this.props.dispatch(getPayloads(query));
