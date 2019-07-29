@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TrackGraphic from './TrackGraphic';
 import { Accordion } from '@patternfly/react-core';
 
@@ -57,9 +57,22 @@ const TrackGraphicContainer = props => {
 }
 
 export default props => {
-    var services = generateUniqueServices(props.payloads)
-    var statuses = getStatusesByService(props.payloads, services)
-    var messages = getMessagesFromService(props.payloads, services)
+
+    const [payloads, setPayloads] = useState([]);
+    const mounted = useRef();
+
+    useEffect(() => {
+        if (!mounted.current) {
+            mounted.current = true;
+        } else {
+            setPayloads(props.payloads);
+        };
+    }, [props.payloads]);
+
+    var services = generateUniqueServices(payloads);
+    var statuses = getStatusesByService(payloads, services);
+    var messages = getMessagesFromService(payloads, services);
+
     return (
         <Accordion>
             <TrackGraphicContainer

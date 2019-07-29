@@ -24,7 +24,7 @@ class Track extends Component {
 
     componentWillMount() {
         socket.on('payload', (data) => {
-            if(data.payload_id === this.props.payload_id){
+            if(data.payload_id === this.props.trackParams.payload_id){
                 this.props.payloads.unshift(data);
                 this.forceUpdate();
             }

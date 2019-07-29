@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, TextInput } from '@patternfly/react-core';
 import { setTrackPayloadID } from '../actions';
-import { push } from 'connected-react-router';
 
 const TrackSearchBar = props => {
 
