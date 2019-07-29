@@ -15,7 +15,7 @@ import OptionsContainer from './OptionsContainer';
 import TrackGraphic from './TrackGraphicView';
 import { connect } from 'react-redux';
 import ExportsDropdown from './ExportsDropdown';
-import { getPayloadTrack, setActiveTabKey } from '../actions'; 
+import { getPayloadTrack, setActiveTabKey, setTrackPayloadID } from '../actions'; 
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -25,8 +25,8 @@ class Track extends Component {
     componentWillMount() {
         socket.on('payload', (data) => {
             if(data.payload_id === this.props.payload_id){
-                this.props.payloads.unshift(data)
-                this.forceUpdate()
+                this.props.payloads.unshift(data);
+                this.forceUpdate();
             }
         });
     }
@@ -47,7 +47,10 @@ class Track extends Component {
 
         if (payload_id) {
             query += `${payload_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`
-            this.props.dispatch(getPayloadTrack(query));
+            this.props.dispatch([
+                getPayloadTrack(query),
+                setTrackPayloadID(payload_id)
+            ]);
         }
     }
 

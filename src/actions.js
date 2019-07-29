@@ -226,7 +226,10 @@ export function removePayloadsFilter(id) {
 export function setTrackPayloadID(payload_id) {
     return {
         type: ActionTypes.SET_TRACK_PAYLOAD_ID,
-        payload: payload_id
+        payload: payload_id,
+        pushIDToUrl: {
+            id: payload_id
+        }
     }
 };
 

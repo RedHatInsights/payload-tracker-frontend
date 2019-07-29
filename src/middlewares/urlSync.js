@@ -15,6 +15,38 @@ export default store => next => action => {
   const { cells } = state.cell
   const { filters } = state.payloads;
 
+  if (action.pushIDToUrl) {
+
+    if (query) {
+      Object.entries(query).forEach(([type, filter]) => {
+        newSearch += `${type}=${filter}&`
+      })
+    }
+
+    if (filters) {
+      filters.map((filter) => 
+        newSearch += `${filter.type}=${filter.value}&`
+      )
+    };
+
+    if (cells) {
+      for (var i = 0; i < cells.length; i++) {
+        var cell = cells[i];
+        if(!cell.isActive) {
+          newSearch += `${cell.title}Cell=inactive&`
+        }
+      }
+    }
+
+    store.dispatch(replace({
+      search: newSearch,
+      query: {
+        ...query
+      },
+      pathname: `/home/track/${action.pushIDToUrl.id}`
+    }));
+  }
+
   /* Adds data to url of the following type:
   * {type: filter} */
   if (action.pushToUrl) {
@@ -32,8 +64,8 @@ export default store => next => action => {
     };
 
     if (cells) {
-      for (var i = 0; i < cells.length; i++) {
-        var cell = cells[i];
+      for (i = 0; i < cells.length; i++) {
+        cell = cells[i];
         if(!cell.isActive) {
           newSearch += `${cell.title}Cell=inactive&`
         }

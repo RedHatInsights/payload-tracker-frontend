@@ -13,8 +13,6 @@ const TrackSearchBar = props => {
 
     const submitQuery = () => {
         props.dispatch(setTrackPayloadID(payload_id));
-        props.dispatch(push(`${props.history.location.pathname}/${payload_id}`));
-        props.history.push(`${props.history.location.pathname}/${payload_id}`);
     }
 
     return (
