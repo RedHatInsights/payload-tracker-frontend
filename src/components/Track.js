@@ -13,6 +13,7 @@ import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import OptionsContainer from './OptionsContainer';
 import TrackGraphic from './TrackGraphicView';
+import TrackDuration from './TrackDurationView';
 import { connect } from 'react-redux';
 import ExportsDropdown from './ExportsDropdown';
 import { getPayloadTrack, setActiveTabKey, setTrackPayloadID } from '../actions'; 
@@ -56,6 +57,7 @@ class Track extends Component {
 
     render() {
         const { payload_id, sort_by, sort_dir, activeTabKey } = this.props.trackParams;
+        const { durations, payloads } = this.props
         return(
             <Page 
                 header={<MainHeader {...this.props} />} 
@@ -73,7 +75,7 @@ class Track extends Component {
                     style={{height:'80vh', overflow:'auto'}}
                 >
                     <Tabs activeKey={activeTabKey} onSelect={ (e, index) => this.props.dispatch(setActiveTabKey(index)) }>
-                        <Tab eventKey={0} title='Graphical View'>
+                        <Tab eventKey={0} title='Status'>
                             <Card>
                                 <CardHeader>
                                     {payload_id ? `payload_id: ${payload_id}` : ''}
@@ -85,7 +87,26 @@ class Track extends Component {
                                 </CardBody>
                             </Card>
                         </Tab>
-                        <Tab eventKey={1} title='Table View'>
+                        <Tab eventKey={1} title='Duration'>
+                            <Card>
+                                <CardHeader>
+                                    <p> {payload_id ? `payload_id: ${payload_id}` : ''} </p>
+                                    <p> 
+                                        { durations ?
+                                            (durations.hasOwnProperty('total') ? `Total Duration: ${durations.total}` : '')
+                                            : '' 
+                                        } 
+                                    </p>
+                                </CardHeader>
+                                <CardBody>
+                                    <TrackDuration
+                                        durations={durations ? durations: {}}
+                                        payloads={payloads}
+                                    />
+                                </CardBody>
+                            </Card>
+                        </Tab>
+                        <Tab eventKey={2} title='Table'>
                             <Card>
                                 <CardHeader>
                                     <div style={{float: 'left'}}>

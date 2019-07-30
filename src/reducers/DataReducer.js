@@ -8,6 +8,7 @@ const initialState = {
     error: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.error,
     payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
     count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
+    durations: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.durations,
     cellPath: `${history.location.pathname}`
 }
 
@@ -48,7 +49,8 @@ const DataReducer = (state=initialState, action) => {
                 ...state,
                 loading: false,
                 loaded: true,
-                payloads: action.payload
+                payloads: action.payload.data,
+                durations: action.payload.duration
             }
         case LOCATION_CHANGE:
             return action.payload.location.pathname === state.cellPath ? state : {
@@ -58,6 +60,7 @@ const DataReducer = (state=initialState, action) => {
                 error: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.error,
                 payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
                 count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
+                durations: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.durations,
                 cellPath: action.payload.location.pathname
             }
         default: {

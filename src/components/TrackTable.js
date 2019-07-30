@@ -10,30 +10,32 @@ import { setTrackSortBy, setTrackSortDir, removeTrackSortBy, removeTrackSortDir 
 
 const generateRows = (props) => {
     var rows = [];
-    Object.values(props.payloads).forEach(payload => {
-        var row = [];
-        Object.entries(props.cells).forEach(([cellKey, cellValue]) => {
-            var valueWasFound = false;
-            if (cellValue.isActive) {
-                Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
-                    if (cellValue.title === payloadKey) {
-                        cellValue.isDate ?
-                            row.push({
-                                title: <Moment local format='LLLL'>
-                                { payloadValue }
-                                </Moment>
-                            }) :
-                            row.push({ title: payloadValue } )
-                        valueWasFound = true;
+    if (props.payloads) {
+        Object.values(props.payloads).forEach(payload => {
+            var row = [];
+            Object.entries(props.cells).forEach(([cellKey, cellValue]) => {
+                var valueWasFound = false;
+                if (cellValue.isActive) {
+                    Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
+                        if (cellValue.title === payloadKey) {
+                            cellValue.isDate ?
+                                row.push({
+                                    title: <Moment local format='LLLL'>
+                                    { payloadValue }
+                                    </Moment>
+                                }) :
+                                row.push({ title: payloadValue } )
+                            valueWasFound = true;
+                        }
+                    })
+                    if(!valueWasFound){
+                        row.push("")
                     }
-                })
-                if(!valueWasFound){
-                    row.push("")
                 }
-            }
+            })
+            rows.push({ cells: row })
         })
-        rows.push({ cells: row })
-    })
+    }
     return (rows);
 }
 

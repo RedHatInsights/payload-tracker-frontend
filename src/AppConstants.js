@@ -39,6 +39,7 @@ export function MAP_STATE_TO_PROPS(state) {
         loaded: state.data.loaded,
         error: state.data.error,
         count: state.data.count,
+        durations: state.data.durations,
         payloadsParams: {
             startDate: state.payloads.startDate,
             endDate: state.payloads.endDate,
@@ -113,6 +114,7 @@ export const DEFAULT_DATA_REDUCER_STATE = {
     error: null,
     payloads: [],
     count: 0,
+    durations: {},
 }
 
 export const DEFAULT_CELL_STATE = [
