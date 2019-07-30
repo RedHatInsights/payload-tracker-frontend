@@ -16,6 +16,7 @@ import TrackGraphic from './TrackGraphicView';
 import { connect } from 'react-redux';
 import ExportsDropdown from './ExportsDropdown';
 import { getPayloadTrack, setActiveTabKey, setTrackPayloadID } from '../actions'; 
+import TrackDuration from './TrackDurationView';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -41,6 +42,14 @@ class Track extends Component {
         }
     }
 
+    generateUniqueServices(payloads) {
+        var servicesSet = new Set()
+        payloads.map(payload => 
+            servicesSet.add(payload.service)
+        );
+        return (Array.from(servicesSet));
+    }
+
     search = () => {
         var query = queryBase;
         const { sort_by, sort_dir, payload_id } = this.props.trackParams
@@ -55,7 +64,7 @@ class Track extends Component {
     }
 
     render() {
-        const { payload_id, sort_by, sort_dir, activeTabKey } = this.props.trackParams;
+        const { payload_id, sort_by, sort_dir, activeTabKey, duration } = this.props.trackParams;
         return(
             <Page 
                 header={<MainHeader {...this.props} />} 
@@ -73,7 +82,7 @@ class Track extends Component {
                     style={{height:'80vh', overflow:'auto'}}
                 >
                     <Tabs activeKey={activeTabKey} onSelect={ (e, index) => this.props.dispatch(setActiveTabKey(index)) }>
-                        <Tab eventKey={0} title='Graphical View'>
+                        <Tab eventKey={0} title='Status'>
                             <Card>
                                 <CardHeader>
                                     {payload_id ? `payload_id: ${payload_id}` : ''}
@@ -81,11 +90,27 @@ class Track extends Component {
                                 <CardBody>
                                     <TrackGraphic 
                                         payloads={this.props.payloads}
+                                        services={this.generateUniqueServices(this.props.payloads)}
                                     />
                                 </CardBody>
                             </Card>
                         </Tab>
-                        <Tab eventKey={1} title='Table View'>
+                        <Tab eventKey={1} title='Duration'>
+                            <Card>
+                                <CardHeader>
+                                    <p> {`${payload_id ? `payload_id: ${payload_id}` : ''}`} </p>
+                                    <p> { duration !== 0 ? `Total Time: ${duration.toFixed(2)}s` : ''} </p>
+                                </CardHeader>
+                                <CardBody>
+                                    <TrackDuration
+                                        payloads={this.props.payloads}
+                                        services={this.generateUniqueServices(this.props.payloads)}
+                                        {...this.props}
+                                    />
+                                </CardBody>
+                            </Card>
+                        </Tab>
+                        <Tab eventKey={2} title='Table'>
                             <Card>
                                 <CardHeader>
                                     <div style={{float: 'left'}}>

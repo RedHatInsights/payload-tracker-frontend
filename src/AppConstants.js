@@ -19,6 +19,8 @@ export const REMOVE_PAYLOADS_FILTER = 'REMOVE_PAYLOADS_FILTER';
 export const SET_TRACK_PAYLOAD_ID = 'SET_TRACK_PAYLOAD_ID';
 export const SET_TRACK_SORT_DIR = 'SET_TRACK_SORT_DIR';
 export const SET_TRACK_SORT_BY = 'SET_TRACK_SORT_BY';
+export const UPDATE_TRACK_DURATION = 'UPDATE_TRACK_DURATION';
+export const RESET_TRACK_DURATION = 'RESET_TRACK_DURATION';
 export const SET_ACTIVE_TAB_KEY = 'SET_ACTIVE_TAB_KEY';
 
 export const FILTER_TYPES = [
@@ -52,7 +54,8 @@ export function MAP_STATE_TO_PROPS(state) {
             payload_id: state.track.payload_id,
             sort_by: state.track.sort_by,
             sort_dir: state.track.sort_dir,
-            activeTabKey: state.track.activeTabKey
+            activeTabKey: state.track.activeTabKey,
+            duration: state.track.duration
         }
     }
 }
@@ -106,6 +109,7 @@ export const DEFAULT_TRACK_PAGE_STATE = {
     sort_by: 'date',
     sort_dir: 'desc',
     activeTabKey: 0,
+    duration: 0,
 }
 export const DEFAULT_DATA_REDUCER_STATE = {
     loading: false,
