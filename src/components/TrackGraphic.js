@@ -118,7 +118,8 @@ export default props => {
                             (props.statuses.includes('success') ||
                             props.statuses.includes('202') || 
                             props.statuses.includes('error') ||
-                            props.statuses.includes('failure')) ?
+                            props.statuses.includes('failure') ||
+                            props.statuses.includes('announced')) ?
                             100 : (
                                 props.statuses.includes('processing') ?
                                 50:
@@ -129,7 +130,8 @@ export default props => {
                         measureLocation={ProgressMeasureLocation.none}
                         variant={
                             (props.statuses.includes('success') || 
-                            props.statuses.includes('202')) ?
+                            props.statuses.includes('202') ||
+                            props.statuses.includes('announced')) ?
                             ProgressVariant.success : (
                                 (props.statuses.includes('error') ||
                                 props.statuses.includes('failure')) ?
