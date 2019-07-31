@@ -5,7 +5,7 @@ function getStatus(service, payloads) {
     for (var i = 0; i < payloads.length; i++) {
         var payload = payloads[i];
         if (service === payload.service) {
-            if (payload.status === 'success' || payload.status === '202') {
+            if (payload.status === 'success' || payload.status === '202' || payload.status === "announced") {
                 return true;
             }
         }
