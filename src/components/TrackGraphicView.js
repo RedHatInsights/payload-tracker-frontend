@@ -1,14 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import TrackGraphic from './TrackGraphic';
 import { Accordion } from '@patternfly/react-core';
-
-function generateUniqueServices(payloads) {
-    var servicesSet = new Set()
-    payloads.map(payload => 
-        servicesSet.add(payload.service)
-    );
-    return (Array.from(servicesSet));
-}
 
 function getStatusesByService(payloads, services) {
     var servicesToStatuses = {}
@@ -58,25 +50,13 @@ const TrackGraphicContainer = props => {
 
 export default props => {
 
-    const [payloads, setPayloads] = useState([]);
-    const mounted = useRef();
-
-    useEffect(() => {
-        if (!mounted.current) {
-            mounted.current = true;
-        } else {
-            setPayloads(props.payloads);
-        };
-    }, [props.payloads]);
-
-    var services = generateUniqueServices(payloads);
-    var statuses = getStatusesByService(payloads, services);
-    var messages = getMessagesFromService(payloads, services);
+    var statuses = getStatusesByService(props.payloads, props.services);
+    var messages = getMessagesFromService(props.payloads, props.services);
 
     return (
         <Accordion>
             <TrackGraphicContainer
-                services={services} 
+                services={props.services} 
                 statuses={statuses}
                 messages={messages}
             />

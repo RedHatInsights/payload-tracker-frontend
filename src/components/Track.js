@@ -17,6 +17,7 @@ import TrackDuration from './TrackDurationView';
 import { connect } from 'react-redux';
 import ExportsDropdown from './ExportsDropdown';
 import { getPayloadTrack, setActiveTabKey, setTrackPayloadID } from '../actions'; 
+import TrackDuration from './TrackDurationView';
 
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
@@ -40,6 +41,14 @@ class Track extends Component {
         if (!CHECK_OBJECT_EQUIVALENCE(prevProps.trackParams, this.props.trackParams)) {
             this.search();
         }
+    }
+
+    generateUniqueServices(payloads) {
+        var servicesSet = new Set()
+        payloads.map(payload => 
+            servicesSet.add(payload.service)
+        );
+        return (Array.from(servicesSet));
     }
 
     search = () => {
@@ -83,6 +92,7 @@ class Track extends Component {
                                 <CardBody>
                                     <TrackGraphic 
                                         payloads={this.props.payloads}
+                                        services={this.generateUniqueServices(this.props.payloads)}
                                     />
                                 </CardBody>
                             </Card>

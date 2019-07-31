@@ -273,6 +273,17 @@ export function removeTrackSortDir() {
     }
 };
 
+export function updateTrackDuration(duration) {
+    return { type: ActionTypes.UPDATE_TRACK_DURATION, payload: duration }
+};
+
+export function resetTrackDuration() {
+    return { 
+        type: ActionTypes.RESET_TRACK_DURATION, 
+        payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.duration
+    }
+};
+
 export function setActiveTabKey(key) {
     return {
         type: ActionTypes.SET_ACTIVE_TAB_KEY,

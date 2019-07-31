@@ -11,7 +11,8 @@ const initialState = {
     activeTabKey: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.activeTabKey,
     payload_id: history.location.pathname === '/home/track' ?
         ConstantTypes.DEFAULT_TRACK_PAGE_STATE.payload_id : 
-        history.location.pathname.split('/')[3]
+        history.location.pathname.split('/')[3],
+    duration: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.duration,
 };
 
 const TrackReducer = (state=initialState, action) => {
@@ -36,13 +37,25 @@ const TrackReducer = (state=initialState, action) => {
                 ...state,
                 activeTabKey: action.payload
             }
+        case ConstantTypes.UPDATE_TRACK_DURATION: {
+            return {
+                ...state,
+                duration: state.duration + Number(action.payload)
+            }
+        }
+        case ConstantTypes.RESET_TRACK_DURATION:
+            return {
+                ...state,
+                duration: action.payload
+            }
         case LOCATION_CHANGE:
             return action.payload.location.pathname.indexOf('/home/track') >= 0 ? state : {
                 ...state,
                 sort_dir: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir,
                 sort_by: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by,
                 activeTabKey: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.activeTabKey,
-                payload_id: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.payload_id
+                payload_id: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.payload_id,
+                duration: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.duration,
             }
         default:
             return state;
