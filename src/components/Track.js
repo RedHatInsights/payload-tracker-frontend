@@ -92,10 +92,11 @@ class Track extends Component {
                                 <CardHeader>
                                     <p> {payload_id ? `payload_id: ${payload_id}` : ''} </p>
                                     <p> 
-                                        { durations ?
-                                            (durations.hasOwnProperty('total') ? `Total Duration: ${durations.total}` : '')
-                                            : '' 
-                                        } 
+                                        {durations.hasOwnProperty('total_time') ? `Total Time: ${durations.total_time}` : ''}
+                                    </p>
+                                    <p>
+                                        {durations.hasOwnProperty('total_time_in_services') ? 
+                                            `Total Time in Services: ${durations.total_time_in_services}` : ''}
                                     </p>
                                 </CardHeader>
                                 <CardBody>

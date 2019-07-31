@@ -41,7 +41,7 @@ export default props => {
     return (
         <Gallery gutter='md'>
             {Object.entries(props.durations).map(([service, duration]) =>
-                service !== 'total' ?
+                service !== 'total_time' && service !== 'total_time_in_services' ?
                 <GalleryItem>
                     <Card>
                         <CardHeader>
