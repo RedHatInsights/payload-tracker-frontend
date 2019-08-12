@@ -30,6 +30,11 @@ class Track extends Component {
                 this.forceUpdate();
             }
         });
+        socket.on('duration', (data) => {
+            if (data[0] === this.props.trackParams.payload_id) {
+                this.props.durations[data[1]] = data[2]
+            }
+        })
     }
 
     componentDidMount() {
