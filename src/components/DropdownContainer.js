@@ -12,7 +12,7 @@ export default props => {
 
     useEffect(() => {
         generateItems()
-    })
+    }, [setItems])
 
     function generateItems() {
         var items = props.items.map(function(item) {
