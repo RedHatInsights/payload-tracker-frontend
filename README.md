@@ -1,5 +1,4 @@
-# payload-tracker-frontend
-Frontend for the Payload Tracker
+Payload Tracker Frontend
 ===========================================
 
 
