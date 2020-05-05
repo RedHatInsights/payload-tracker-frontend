@@ -1,17 +1,8 @@
-import React from 'react';
-import { Gallery, GalleryItem, Card, CardBody, CardHeader } from '@patternfly/react-core';
+import { Card, CardBody, CardHeader, Gallery, GalleryItem } from '@patternfly/react-core';
 
-function getStatus(service, payloads) {
-    for (var i = 0; i < payloads.length; i++) {
-        var payload = payloads[i];
-        if (service === payload.service) {
-            if (payload.status === 'success' || payload.status === '202' || payload.status === "announced") {
-                return true;
-            }
-        }
-    }
-    return false;
-};
+import PropTypes from 'prop-types';
+import React from 'react';
+import { connect } from 'react-redux';
 
 const DurationGraphic = props => {
     return (
@@ -37,10 +28,23 @@ const DurationGraphic = props => {
     )
 }
 
-export default props => {
+const DurationView = ({ payloads, durations }) => {
+
+    const getStatus = (service, payloads) => {
+        for (var i = 0; i < payloads.length; i++) {
+            var payload = payloads[i];
+            if (service === payload.service) {
+                if (payload.status === 'success' || payload.status === '202' || payload.status === "announced") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
     return (
         <Gallery gutter='md'>
-            {Object.entries(props.durations).map(([service, duration]) =>
+            {Object.entries(durations).map(([service, duration]) =>
                 service !== 'total_time' && service !== 'total_time_in_services' ?
                 <GalleryItem>
                     <Card>
@@ -50,7 +54,7 @@ export default props => {
                         <CardBody>
                             <DurationGraphic
                                 duration={duration}
-                                status={getStatus(service, props.payloads)}
+                                status={getStatus(service, payloads)}
                             />
                         </CardBody>
                     </Card>
@@ -59,3 +63,15 @@ export default props => {
         </Gallery>
     )
 };
+
+DurationView.propTypes = {
+    payloads: PropTypes.array,
+    durations: PropTypes.array
+};
+
+const mapStateToProps = state => ({
+    payloads: state.data.payloads,
+    durations: state.data.durations
+});
+
+export default connect(mapStateToProps, null)(DurationView);

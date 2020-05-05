@@ -1,6 +1,6 @@
-import { sortable } from '@patternfly/react-table';
 import history from './history';
 import queryString from 'query-string';
+import { sortable } from '@patternfly/react-table';
 
 export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
 export const SET_ACTIVE_GROUP = 'SET_ACTIVE_GROUP';
@@ -16,7 +16,7 @@ export const SET_PAYLOADS_SORT_DIR = 'SET_PAYLOADS_SORT_DIR';
 export const SET_PAYLOADS_SORT_BY = 'SET_PAYLOADS_SORT_BY';
 export const ADD_PAYLOADS_FILTER = 'ADD_PAYLOADS_FILTER';
 export const REMOVE_PAYLOADS_FILTER = 'REMOVE_PAYLOADS_FILTER';
-export const SET_TRACK_PAYLOAD_ID = 'SET_TRACK_PAYLOAD_ID';
+export const SET_TRACK_REQUEST_ID = 'SET_TRACK_REQUEST_ID';
 export const SET_TRACK_SORT_DIR = 'SET_TRACK_SORT_DIR';
 export const SET_TRACK_SORT_BY = 'SET_TRACK_SORT_BY';
 export const SET_ACTIVE_TAB_KEY = 'SET_ACTIVE_TAB_KEY';
@@ -27,36 +27,6 @@ export const FILTER_TYPES = [
     'date_gt', 'date_lte', 'date_gte', 'created_at_lt',
     'created_at_gt', 'created_at_lte', 'created_at_gte'
 ];
-
-export function MAP_STATE_TO_PROPS(state) {
-    return { 
-        cells: state.cell.cells,
-        activeGroup: state.sidebar.activeGroup,
-        activeItem: state.sidebar.activeItem,
-        isNavigationOpen: state.sidebar.isNavigationOpen,
-        payloads: state.data.payloads,
-        loading: state.data.loading,
-        loaded: state.data.loaded,
-        error: state.data.error,
-        count: state.data.count,
-        durations: state.data.durations,
-        payloadsParams: {
-            startDate: state.payloads.startDate,
-            endDate: state.payloads.endDate,
-            filters: state.payloads.filters,
-            page: state.payloads.page,
-            page_size: state.payloads.page_size,
-            sort_by: state.payloads.sort_by,
-            sort_dir: state.payloads.sort_dir
-        },
-        trackParams: {
-            payload_id: state.track.payload_id,
-            sort_by: state.track.sort_by,
-            sort_dir: state.track.sort_dir,
-            activeTabKey: state.track.activeTabKey
-        }
-    }
-}
 
 export function GET_VALUE_FROM_URL(input) {
     const [pathname, prop] = input.split('.');
@@ -73,22 +43,6 @@ export function GET_VALUE_FROM_URL(input) {
     return targetProp === undefined ? null : targetProp;
 }
 
-export function CHECK_OBJECT_EQUIVALENCE(a, b) {
-    var aProps = Object.getOwnPropertyNames(a);
-    var bProps = Object.getOwnPropertyNames(b);
-
-    if (aProps.length !== bProps.length) {
-        return false;
-    }
-
-    for (var i = 0; i < aProps.length; i++) {
-        var propName = aProps[i];
-        if (a[propName] !== b[propName]) {
-            return false;
-        }
-    }
-    return true;
-}
 
 export const HOME_GROUP = 'grp1';
 export const PAYLOADS_ITEM = `${HOME_GROUP}_itm1`;
@@ -103,7 +57,7 @@ export const DEFAULT_PAYLOADS_PAGE_STATE = {
     endDate: null
 }
 export const DEFAULT_TRACK_PAGE_STATE = {
-    payload_id: '',
+    request_id: '',
     sort_by: 'date',
     sort_dir: 'desc',
     activeTabKey: 0,
@@ -145,7 +99,7 @@ export const DEFAULT_CELL_STATE = [
         isTrackable: false,
         transforms: [sortable],
     },{
-        title: 'payload_id',
+        title: 'request_id',
         isActive: true,
         isFilterable: false,
         isTrackable: true,

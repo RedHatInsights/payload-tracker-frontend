@@ -1,74 +1,75 @@
-import React, { Component } from 'react';
+import * as AppActions from '../actions';
+
 import {
     Page,
     PageSection,
     PageSectionVariants,
 } from '@patternfly/react-core';
-import { MAP_STATE_TO_PROPS, CHECK_OBJECT_EQUIVALENCE } from '../AppConstants';
-import SearchBar from './SearchBar';
-import PayloadsPagination from './PayloadsPagination';
+import React, { useEffect } from 'react';
+
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
+import PayloadsPagination from './PayloadsPagination';
+import PropTypes from 'prop-types';
+import SearchBar from './SearchBar';
 import { connect } from 'react-redux';
-import { getPayloads } from '../actions';
 
 const queryBase = '/v1/payloads?';
 
-class Payloads extends Component {
+const Payloads = ({ getPayloads, sort_dir, sort_by, page, page_size, filters }) => {
 
-    componentDidMount() {
-        this.search(); 
-    }
-
-    componentDidUpdate(prevProps) {
-        if (!CHECK_OBJECT_EQUIVALENCE(prevProps.payloadsParams, this.props.payloadsParams)) {
-            this.search();
-        }
-    }
-
-    search = () => {
+    const search = () => {
         var query = queryBase;
-        const { sort_by, sort_dir, page, page_size, filters } = this.props.payloadsParams
         query += `sort_by=${sort_by}&sort_dir=${sort_dir}&page=${page - 1}&page_size=${page_size}`
-
-        if(filters) {
-            filters.map(filter => 
-                query += `&${filter.type}=${filter.value}`
-            )
-        }
- 
-        this.props.dispatch(getPayloads(query));
-    }
-
-    render() {
-        return(
-            <Page 
-                header={<MainHeader {...this.props} />} 
-                sidebar={<MainSidebar {...this.props} />} 
-                isManagedSidebar
-            >
-                <PageSection variant={PageSectionVariants.dark}>
-                    <SearchBar
-                        filters={this.props.payloadsParams.filters}
-                        dispatch={this.props.dispatch}
-                    />
-                </PageSection>
-                <PageSection 
-                    id='payloads_page'
-                    variant={PageSectionVariants.light}
-                    style={{height:'80vh', overflow:'auto'}}
-                >
-                    <PayloadsPagination
-                        page={this.props.payloadsParams.page}
-                        page_size={this.props.payloadsParams.page_size}
-                        sort_by={this.props.payloadsParams.sort_by}
-                        sort_dir={this.props.payloadsParams.sort_dir}
-                        {...this.props}
-                    />
-                </PageSection>
-            </Page>
+        filters && filters.map(filter => 
+            query += `&${filter.type}=${filter.value}`
         )
+        getPayloads(query)
     }
-}
 
-export default connect(MAP_STATE_TO_PROPS)(Payloads);
+    useEffect(() => {
+        search();
+    });
+    
+    return(
+        <Page 
+            header={<MainHeader />} 
+            sidebar={<MainSidebar />} 
+            isManagedSidebar
+        >
+            <PageSection variant={PageSectionVariants.dark}>
+                <SearchBar/>
+            </PageSection>
+            <PageSection 
+                id='payloads_page'
+                variant={PageSectionVariants.light}
+                style={{height:'80vh', overflow:'auto'}}
+            >
+                <PayloadsPagination/>
+            </PageSection>
+        </Page>
+    )
+};
+
+Payloads.propTypes = {
+    getPayloads: PropTypes.func,
+    sort_dir: PropTypes.string,
+    sort_by: PropTypes.string,
+    page: PropTypes.number,
+    page_size: PropTypes.number,
+    filters: PropTypes.array
+};
+
+const mapStateToProps = state => ({
+    sort_dir: state.payloads.sort_dir,
+    sort_by: state.payloads.sort_by,
+    page: state.payloads.page,
+    page_size: state.payloads.page_size,
+    filters: state.payloads.filters,
+});
+
+const mapDispatchToProps = dispatch => ({
+    getPayloads: (url) => dispatch(AppActions.getPayloads(url))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Payloads);

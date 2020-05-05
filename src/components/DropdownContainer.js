@@ -1,39 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { 
+import {
     Dropdown,
-    DropdownToggle, 
-    DropdownItem, 
+    DropdownItem,
+    DropdownToggle,
 } from '@patternfly/react-core';
+import React, { useEffect, useState } from 'react';
 
-export default props => {
+import PropTypes from 'prop-types';
+
+const DropdownContainer = ({ items, type, setSelected }) => {
 
     const [isOpen, setOpen] = useState(false);
     const [dropdownItems, setItems] = useState([]);
 
     useEffect(() => {
-        generateItems()
-    }, [setItems])
-
-    function generateItems() {
-        var items = props.items.map(function(item) {
+        var mapped = items.map(function(item) {
             return (
-                <DropdownItem 
+            <DropdownItem
                     key={item}
                     component='button'
-                    onClick={ () => props.setSelected(props.type, item) }
+                    onClick={ () => setSelected(type, item) }
                 >
                     {item}
                 </DropdownItem>
             )
-        })
-        setItems(items)
-    }
+        });
+        setItems(mapped);
+    }, [setItems, items, type, setSelected]);
 
     return (
         <Dropdown
-            toggle={<DropdownToggle onToggle={() => setOpen(!isOpen)}>{props.type}</DropdownToggle>}
+            toggle={<DropdownToggle onToggle={() => setOpen(!isOpen)}>{type}</DropdownToggle>}
             isOpen={isOpen}
             dropdownItems={dropdownItems}
         />
     )
 }
+
+DropdownContainer.propTypes = {
+    items: PropTypes.array,
+    type: PropTypes.string,
+    setSelected: PropTypes.func
+};
+
+export default DropdownContainer;

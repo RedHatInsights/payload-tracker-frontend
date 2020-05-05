@@ -1,39 +1,37 @@
-import React, { useState } from 'react';
+import * as AppActions from '../actions';
+
 import { Button, TextInput } from '@patternfly/react-core';
-import { setTrackPayloadID } from '../actions';
+import React, { useEffect, useState } from 'react';
 
-const TrackSearchBar = props => {
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-    const [payload_id, setPayloadID] = useState(props.payload_id)
+const TrackSearchBar = ({ request_id, setRequestID }) => {
 
-    const handlePayloadIDInputChange = payload_id => {
-        setPayloadID(payload_id)
-    }
+    const [id, updateID] = useState();
 
-    const submitQuery = () => {
-        props.dispatch(setTrackPayloadID(payload_id));
-    }
+    useEffect(() => {
+        updateID(request_id);
+    }, [request_id]);
 
-    return (
-        <div>
+    return <React.Fragment>
             <TextInput
                 isRequired
                 id='payload_id'
                 type="text"
                 name="payload_id"
-                value={payload_id}
-                onChange={handlePayloadIDInputChange}
+                value={id}
+                onChange={(id) => updateID(id)}
                 style={inputStyle}
                 placeholder='Enter Payload ID...'
             />
-            <Button 
-                variant='primary' 
-                onClick={(e) => submitQuery()} 
-                isDisabled={payload_id === ""}> 
+            <Button
+                variant='primary'
+                onClick={() => setRequestID(id)}
+                isDisabled={id === ""}>
                     Submit
             </Button>
-        </div>
-    )
+    </React.Fragment>;
 };
 
 const inputStyle = {
@@ -43,4 +41,17 @@ const inputStyle = {
     boxSizing: 'border-box',
 }
 
-export default TrackSearchBar;
+TrackSearchBar.propTypes = {
+    request_id: PropTypes.string,
+    setPayloadID: PropTypes.func
+};
+
+const mapStateToProps = state => ({
+    request_id: state.track.request_id
+});
+
+const mapDispatchToProps = dispatch => ({
+    setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrackSearchBar);
