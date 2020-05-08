@@ -1,92 +1,90 @@
-import React from 'react';
+import * as AppActions from '../actions';
+
+import { HOME_GROUP, PAYLOADS_ITEM, TRACK_ITEM } from '../AppConstants'
 import {
-    PageSidebar,
     Nav,
-    NavList,
     NavExpandable,
     NavItem,
-    NavItemSeparator
+    NavItemSeparator,
+    NavList,
+    PageSidebar
 } from '@patternfly/react-core';
-import { setActiveGroup, setActiveItem } from '../actions';
-import { HOME_GROUP, TRACK_ITEM, PAYLOADS_ITEM } from '../AppConstants'
-import { push } from 'connected-react-router';
+import React, { useState } from 'react';
 
-const MainSidebar = props => {
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
+const MainSidebar = ({ activeGroup, activeItem, isNavigationOpen, updateNav }) => {
+
+    const [isExpanded, setExpanded] = useState(false);
+    let history = useHistory();
+
+    const clickHandler = (group, item, url) => {
+        updateNav(group, item);
+        history.push(url);
+    };
+
     return (
         <PageSidebar
-            nav = {
-                <Navigation {...props}/>
-            }
-            isNavOpen={props.isNavigationOpen}
+            nav = {<Nav>
+                <NavList>
+                    <NavExpandable 
+                        title="Home" 
+                        groupId={ HOME_GROUP }
+                        isActive={ activeGroup === HOME_GROUP }
+                        isExpanded={ isExpanded }
+                        onExpand={ () => setExpanded(!isExpanded) }
+                    >
+                        <NavItem
+                            to='/home/payloads'
+                            groupId={ HOME_GROUP }
+                            itemId={ PAYLOADS_ITEM }
+                            preventDefault
+                            isActive={ activeItem === PAYLOADS_ITEM }
+                            onClick={ () => clickHandler(HOME_GROUP, PAYLOADS_ITEM, '/home/payloads') }
+                        >
+                            Payloads
+                        </NavItem>
+                        <NavItemSeparator/>
+                        <NavItem
+                            to='/home/track'
+                            groupId={ HOME_GROUP }
+                            itemId={ TRACK_ITEM }
+                            preventDefault
+                            isActive={ activeItem === TRACK_ITEM }
+                            onClick={ () => clickHandler(HOME_GROUP, TRACK_ITEM, '/home/track') }
+                        >
+                            Track
+                        </NavItem>
+                    </NavExpandable>
+                </NavList>
+            </Nav>}
+            isNavOpen={ isNavigationOpen }
         />
-    )
-}
+    );
+};
 
-const clickHandler = (props, group, item, url)  => {
-    return function () {
-        props.dispatch([
-            setActiveGroup(group),
-            setActiveItem(item),
-            push(url)
-        ]);
-        props.history.push(url);
-    }
-}
+MainSidebar.propTypes = {
+    activeGroup: PropTypes.string,
+    activeItem: PropTypes.string,
+    isNavigationOpen: PropTypes.bool,
+    setActiveGroup: PropTypes.func,
+    updateNav: PropTypes.func
+};
 
-const Navigation = (props) => {
-    return (
-        <Nav>
-            <NavList>
-                <NavExpandable 
-                    title="Home" 
-                    groupId={HOME_GROUP}
-                    isActive={props.activeGroup === HOME_GROUP}
-                    isExpanded={props.activeGroup === HOME_GROUP}
-                    onExpand={ () => props.dispatch(setActiveGroup(HOME_GROUP)) }
-                >
-                    <NavItem
-                        to='/home/payloads'
-                        groupId={HOME_GROUP}
-                        itemId={PAYLOADS_ITEM}
-                        preventDefault
-                        isActive={props.activeItem === PAYLOADS_ITEM}
-                        onClick={ clickHandler(props, HOME_GROUP, PAYLOADS_ITEM, '/home/payloads') }
-                    >
-                        Payloads
-                    </NavItem>
-                    <NavItemSeparator/>
-                    <NavItem
-                        to='/home/track'
-                        groupId={HOME_GROUP}
-                        itemId={TRACK_ITEM}
-                        preventDefault
-                        isActive={props.activeItem === TRACK_ITEM}
-                        onClick={ clickHandler(props, HOME_GROUP, TRACK_ITEM, '/home/track') }
-                    >
-                        Track
-                    </NavItem>
-                </NavExpandable>
-                {/* <NavExpandable 
-                    title="Stats" 
-                    groupId="grp2" 
-                    isActive={props.activeGroup === 'grp2'}
-                    isExpanded={props.activeGroup === 'grp2'}
-                    onExpand={ () => props.dispatch(setActiveGroup('grp2')) }
-                >
-                    <NavItem 
-                        to='/stats/successrates'
-                        groupId="grp2"
-                        itemId="grp2_itm1"
-                        preventDefault
-                        isActive={props.activeItem === 'grp2_itm1'}
-                        onClick={ clickHandler(props, 'grp2', 'itm1', '/stats/successrates') }
-                    > 
-                        Success Rates
-                    </NavItem>
-                </NavExpandable> */}
-            </NavList>
-        </Nav>
-    )
-}
+const mapStateToProps = state => ({
+    activeGroup: state.sidebar.activeGroup,
+    activeItem: state.sidebar.activeItem,
+    isNavigationOpen: state.sidebar.isNavigationOpen
+});
 
-export default MainSidebar;
+const mapDispatchToProps = dispatch => ({
+    setActiveGroup: (group) => dispatch(AppActions.setActiveGroup(group)),
+    updateNav: (group, item) => dispatch([
+        AppActions.setActiveGroup(group),
+        AppActions.setActiveItem(item)
+    ])
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainSidebar);

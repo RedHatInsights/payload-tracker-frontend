@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import TrackGraphic from './TrackGraphic';
 import { Accordion } from '@patternfly/react-core';
+import PropTypes from 'prop-types';
+import React from 'react';
+import TrackGraphic from './TrackGraphic';
+import { connect } from 'react-redux';
 
 function generateUniqueServices(payloads) {
     var servicesSet = new Set()
@@ -44,42 +46,32 @@ function getMessagesFromService(payloads, services) {
     return (servicesToMessages);
 }
 
-const TrackGraphicContainer = props => {
-    return props.services.map(service =>
-        <div style={{padding: '10px'}}>
-            <TrackGraphic 
-                service={service} 
-                statuses={props.statuses[service]}
-                messages={props.messages[service]}
-            />
-        </div>
-    )
-}
+const TrackGraphicView = ({ payloads }) => {
 
-export default props => {
+    var services = (payloads && generateUniqueServices(payloads)) || [];
+    var statuses = (payloads && getStatusesByService(payloads, services)) || [];
+    var messages = (payloads && getMessagesFromService(payloads, services)) || [];
 
-    const [payloads, setPayloads] = useState([]);
-    const mounted = useRef();
-
-    useEffect(() => {
-        if (!mounted.current) {
-            mounted.current = true;
-        } else {
-            setPayloads(props.payloads);
-        };
-    }, [props.payloads]);
-
-    var services = generateUniqueServices(payloads);
-    var statuses = getStatusesByService(payloads, services);
-    var messages = getMessagesFromService(payloads, services);
-
-    return (
-        <Accordion>
-            <TrackGraphicContainer
-                services={services} 
-                statuses={statuses}
-                messages={messages}
-            />
-        </Accordion>
-    )
+    return <Accordion>
+        <React.Fragment>
+        {services.map(service =>
+            <div style={{padding: '10px'}}>
+                <TrackGraphic
+                    service={service}
+                    statuses={statuses[service]}
+                    messages={messages[service]}
+                />
+            </div>)}
+        </React.Fragment>
+    </Accordion>
 };
+
+TrackGraphicView.propTypes = {
+    payloads: PropTypes.array
+};
+
+const mapStateToProps = state => ({
+    payloads: state.data.payloads
+});
+
+export default connect(mapStateToProps, null)(TrackGraphicView);

@@ -1,5 +1,6 @@
 import * as ActionTypes from './AppConstants';
 import * as ConstantTypes from './AppConstants';
+
 import axios from 'axios';
 
 var filterIndex = 0;
@@ -223,12 +224,12 @@ export function removePayloadsFilter(id) {
     }
 }
 
-export function setTrackPayloadID(payload_id) {
+export function setTrackRequestID(request_id) {
     return {
-        type: ActionTypes.SET_TRACK_PAYLOAD_ID,
-        payload: payload_id,
+        type: ActionTypes.SET_TRACK_REQUEST_ID,
+        payload: request_id,
         pushIDToUrl: {
-            id: payload_id
+            id: request_id
         }
     }
 };

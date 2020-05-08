@@ -1,19 +1,32 @@
-import React, { useRef } from 'react';
 import '@patternfly/react-core/dist/styles/base.css';
-import PayloadsTable from './PayloadsTable'
-import {
-    Pagination, CardBody, Card, CardHeader, CardFooter, SplitItem, Split, Button
-} from '@patternfly/react-core';
-import {
-    ArrowDownIcon, ArrowUpIcon
-} from '@patternfly/react-icons'
-import { SphereSpinner } from 'react-spinners-kit';
-import { setPayloadsPage, setPayloadsPageSize, removePayloadsPage, removePayloadsPageSize } from '../actions';
-import OptionsContainer from './OptionsContainer';
-import ExportsDropdown from './ExportsDropdown';
-import DateRangeFilter from './DateRangeFilter';
 
-const PayloadsPagination = props => {
+import * as AppActions from '../actions';
+
+import {
+    ArrowDownIcon,
+    ArrowUpIcon
+} from '@patternfly/react-icons'
+import {
+    Button,
+    Card,
+    CardBody,
+    CardFooter,
+    CardHeader,
+    Pagination,
+    Split,
+    SplitItem
+} from '@patternfly/react-core';
+import React, { useRef } from 'react';
+
+import DateRangeFilter from './DateRangeFilter';
+import ExportsDropdown from './ExportsDropdown';
+import OptionsContainer from './OptionsContainer';
+import PayloadsTable from './PayloadsTable'
+import PropTypes from 'prop-types';
+import { SphereSpinner } from 'react-spinners-kit';
+import { connect } from 'react-redux';
+
+const PayloadsPagination = ({ count, page_size, page, loading, updatePageSize, updatePageNumber }) => {
 
     const footerRef = useRef(null);
     const headerRef = useRef(null);
@@ -25,20 +38,13 @@ const PayloadsPagination = props => {
                 <CardHeader>
                     <Split gutter='md'>
                         <SplitItem>
-                            <OptionsContainer
-                                {...props}
-                            />
+                            <OptionsContainer/>
                         </SplitItem>
                         <SplitItem>
-                            <ExportsDropdown data={props.payloads}/>
+                            <ExportsDropdown/>
                         </SplitItem>
                         <SplitItem>
-                            <DateRangeFilter
-                                filters={props.payloadsParams.filters}
-                                start={props.payloadsParams.startDate}
-                                end={props.payloadsParams.endDate}
-                                {...props}
-                            />
+                            <DateRangeFilter/>
                         </SplitItem>
                         <SplitItem isFilled/>
                         <SplitItem>
@@ -50,26 +56,12 @@ const PayloadsPagination = props => {
                         </SplitItem>
                         <SplitItem>
                             <Pagination 
-                                itemCount={props.count}
-                                perPage={props.page_size}
-                                page={props.page}
-                                onSetPage={
-                                    (_event, pageNumber) => {
-                                        props.dispatch([
-                                            removePayloadsPage(),
-                                            setPayloadsPage(pageNumber)
-                                        ])
-                                    }
-                                }
+                                itemCount={count}
+                                perPage={page_size}
+                                page={page}
+                                onSetPage={(_event, pageNumber) => updatePageNumber(pageNumber)}
                                 widgetId="pagination-options-menu-top"
-                                onPerPageSelect={
-                                    (_event, perPage) => {
-                                        props.dispatch([
-                                            removePayloadsPageSize(),
-                                            setPayloadsPageSize(perPage)
-                                        ])
-                                    }
-                                }
+                                onPerPageSelect={(_event, perPage) => updatePageSize(perPage)}
                             />
                         </SplitItem>
                     </Split>
@@ -77,12 +69,10 @@ const PayloadsPagination = props => {
             </div>
             <CardBody>
                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <SphereSpinner loading={props.loading} color='#000000' size={70}/>
+                    <SphereSpinner loading={loading} color='#000000' size={70}/>
                 </div>
                 <div style={{maxWidth:'100vw', overflow:'auto'}}>
-                    <PayloadsTable 
-                        {...props}
-                    />
+                    <PayloadsTable/>
                 </div>
             </CardBody>
             <div ref={footerRef}>
@@ -99,26 +89,12 @@ const PayloadsPagination = props => {
                         </SplitItem>
                         <SplitItem>
                             <Pagination 
-                                itemCount={props.count}
-                                perPage={props.page_size}
-                                page={props.page}
-                                onSetPage={
-                                    (_event, pageNumber) => {
-                                        props.dispatch([
-                                            removePayloadsPage(),
-                                            setPayloadsPage(pageNumber)
-                                        ])
-                                    }
-                                }
+                                itemCount={count}
+                                perPage={page_size}
+                                page={page}
+                                onSetPage={(_event, pageNumber) => updatePageNumber(pageNumber)}
                                 widgetId="pagination-options-menu-top"
-                                onPerPageSelect={
-                                    (_event, perPage) => {
-                                        props.dispatch([
-                                            removePayloadsPageSize(),
-                                            setPayloadsPageSize(perPage)
-                                        ])
-                                    }
-                                }
+                                onPerPageSelect={(_event, perPage) => updatePageSize(perPage)}
                             />
                         </SplitItem>
                     </Split>
@@ -126,6 +102,33 @@ const PayloadsPagination = props => {
             </div>
         </Card>
     )
-}
+};
 
-export default PayloadsPagination;
+PayloadsPagination.propTypes = {
+    count: PropTypes.number,
+    page_size: PropTypes.number,
+    page: PropTypes.number,
+    loading: PropTypes.bool,
+    updatePageSize: PropTypes.func,
+    updatePageNumber: PropTypes.func,
+};
+
+const mapStateToProps = state => ({
+    count: state.data.count,
+    page: state.payloads.page,
+    page_size: state.payloads.page_size,
+    loading: state.data.loading
+});
+
+const mapDispatchToProps = dispatch => ({
+    updatePageSize: (perPage) => dispatch([
+        AppActions.removePayloadsPageSize(),
+        AppActions.setPayloadsPageSize(perPage)
+    ]),
+    updatePageNumber: (pageNumber) => dispatch([
+        AppActions.removePayloadsPage(),
+        AppActions.setPayloadsPage(pageNumber)
+    ])
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PayloadsPagination);

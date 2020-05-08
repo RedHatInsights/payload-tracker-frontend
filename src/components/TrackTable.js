@@ -1,19 +1,23 @@
-import React from 'react';
+import * as AppActions from '../actions';
+
 import {
     Table,
-    TableHeader,
     TableBody,
+    TableHeader,
     TableVariant
 } from '@patternfly/react-table';
-import Moment from 'react-moment';
-import { setTrackSortBy, setTrackSortDir, removeTrackSortBy, removeTrackSortDir } from '../actions';
 
-const generateRows = (props) => {
+import Moment from 'react-moment';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { connect } from 'react-redux';
+
+const generateRows = (payloads, cells) => {
     var rows = [];
-    if (props.payloads) {
-        Object.values(props.payloads).forEach(payload => {
+    if (payloads) {
+        Object.values(payloads).forEach(payload => {
             var row = [];
-            Object.entries(props.cells).forEach(([cellKey, cellValue]) => {
+            Object.entries(cells).forEach(([cellKey, cellValue]) => {
                 var valueWasFound = false;
                 if (cellValue.isActive) {
                     Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
@@ -39,62 +43,55 @@ const generateRows = (props) => {
     return (rows);
 }
 
-const generateCells = (props) => {
-    var cells = [];
-    Object.entries(props.cells).forEach(([key, cell]) => {
+const generateCells = (cells) => {
+    var formattedCells = [];
+    Object.entries(cells).forEach(([key, cell]) => {
         if (cell.isActive) {
-            cells.push(cell);
+            formattedCells.push(cell);
         }
     })
-    return(cells)
+    return(formattedCells)
 }
 
-function onSort(_event, index, direction, props) {
-    props.dispatch([
-        removeTrackSortBy(),
-        removeTrackSortDir(),
-        setTrackSortBy(index),
-        setTrackSortDir(direction)
-    ]);
-}
+const TrackTable = ({ payloads, cells, sort_dir, sort_by, isDisabled, onSort }) => <React.Fragment>
+    <Table
+        cells={generateCells(cells)}
+        rows={generateRows(payloads, cells)}
+        variant={TableVariant.compact}
+        sortBy={isDisabled && {
+            index: cells.findIndex(x => x.title === sort_by),
+            direction: sort_dir
+        }}
+        onSort = {(index, dir) => onSort(index, dir) }
+    >
+        <TableHeader/>
+        <TableBody/>
+    </Table>
+</React.Fragment>;
 
-export default function TrackTable(props) {
+TrackTable.propTypes = {
+    payloads: PropTypes.array,
+    cells: PropTypes.object,
+    sort_by: PropTypes.string,
+    sort_dir: PropTypes.string,
+    isDisabled: PropTypes.bool,
+    onSort: PropTypes.func
+};
 
-    const rows = generateRows(props)
-    const cells = generateCells(props)
+const mapStateToProps = state => ({
+    payloads: state.data.payloads,
+    cells: state.cell.cells,
+    sort_by: state.track.sort_by,
+    sort_dir: state.track.sort_dir,
+});
 
-    const sortBy = {
-        index: cells.findIndex(x => x.title === props.sort_by),
-        direction: props.sort_dir
-    }
+const mapStateToDispatch = dispatch => ({
+    onSort: (index, dir) => dispatch([
+        AppActions.removeTrackSortBy(),
+        AppActions.removeTrackSortDir(),
+        AppActions.setTrackSortBy(index),
+        AppActions.setTrackSortDir(dir)
+    ])
+});
 
-    if (props.isDisabled) {
-        return (
-            <div>
-                <Table
-                    cells={cells} 
-                    rows={rows}
-                    variant={TableVariant.compact}
-                >
-                    <TableHeader/>
-                    <TableBody/>
-                </Table>
-            </div>
-        )
-    } else {
-        return (
-            <div>
-                <Table 
-                    cells={cells} 
-                    rows={rows}
-                    variant={TableVariant.compact}
-                    sortBy={sortBy}
-                    onSort = { (e, index, direction) => onSort(e, cells[index].title, direction, {...props}) }
-                >
-                    <TableHeader/>
-                    <TableBody/>
-                </Table>
-            </div>
-        )
-    }
-}
+export default connect(mapStateToProps, mapStateToDispatch)(TrackTable);

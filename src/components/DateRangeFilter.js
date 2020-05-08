@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import 'react-daterange-picker/dist/css/react-calendar.css'
+
+import * as AppActions from '../actions';
+
 import { Dropdown, DropdownToggle } from '@patternfly/react-core';
+import React, { useState } from 'react';
+
 import { ArrowRightIcon } from '@patternfly/react-icons'
 import DateRangePicker from 'react-daterange-picker'
-import { updateDateRange } from '../actions';
-import 'react-daterange-picker/dist/css/react-calendar.css'
-import originalMoment from "moment";
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { extendMoment } from "moment-range";
+import originalMoment from "moment";
+
 const moment = extendMoment(originalMoment);
 
-const DateRangeFilter = props => {
+const DateRangeFilter = ({ updateDateRange, filters, startDate, endDate }) => {
 
     const [isOpen, setOpen] = useState(null)
 
@@ -21,7 +27,7 @@ const DateRangeFilter = props => {
     }
 
     const setDates = (value, states) => {
-        props.dispatch(updateDateRange(value, _getId(props.filters, 'date_gte'), _getId(props.filters, 'date_lte')));
+        updateDateRange(value, _getId(filters, 'date_gte'), _getId(filters, 'date_lte'));
         setOpen(false);
     }
 
@@ -31,17 +37,17 @@ const DateRangeFilter = props => {
                 <DropdownToggle
                     onToggle={() => setOpen(!isOpen)}
                 >
-                    {props.start !== null ? props.start: "Start Date"} <ArrowRightIcon/> {props.end !== null ? props.end: "End Date"}
+                    {startDate ? startDate: "Start Date"} <ArrowRightIcon/> {endDate ? endDate: "End Date"}
                 </DropdownToggle>
             }
             isOpen={isOpen}
         >
             <DateRangePicker
                 value={
-                    (props.start && props.end) ? 
+                    (startDate && endDate) ? 
                     moment.range(
-                    moment(props.start, 'YYYY-MM-DD'), 
-                    moment(props.end, 'YYYY-MM-DD')) :
+                    moment(startDate, 'YYYY-MM-DD'), 
+                    moment(endDate, 'YYYY-MM-DD')) :
                     null
                 }
                 onSelect={setDates}
@@ -51,4 +57,21 @@ const DateRangeFilter = props => {
     )
 }
 
-export default DateRangeFilter;
+DateRangeFilter.propTypes = {
+    updateDateRange: PropTypes.func,
+    filters: PropTypes.any,
+    startDate: PropTypes.any,
+    endDate: PropTypes.any
+};
+
+const mapStateToProps = state => ({
+    filters: state.payloads.filters,
+    start: state.payloads.startDate,
+    end: state.payloads.endDate
+});
+
+const mapDispatchToProps = dispatch => ({
+    updateDateRange: (value, start, end) => dispatch(AppActions.updateDateRange(value, start, end))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DateRangeFilter);

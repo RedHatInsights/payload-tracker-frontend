@@ -1,31 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { 
-    Progress, ProgressMeasureLocation, ProgressVariant, Tooltip,
-    AccordionItem, AccordionToggle, AccordionContent
-} from '@patternfly/react-core';
 import {
-    Table, TableHeader, TableBody, TableVariant, compoundExpand
+    AccordionContent,
+    AccordionItem,
+    AccordionToggle,
+    Progress,
+    ProgressMeasureLocation,
+    ProgressVariant,
+    Tooltip
+} from '@patternfly/react-core';
+import React, { useEffect, useState } from 'react';
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableVariant,
+    compoundExpand
 } from '@patternfly/react-table';
+
+import PropTypes from 'prop-types';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
-import {CHECK_OBJECT_EQUIVALENCE} from '../AppConstants'
 
-
-const default_cells = [
-    'status',
-    {
-        title: 'message',
-        cellTransforms: [compoundExpand]
-    },
-    'date'
-]
-
-function truncateString(string, chars) {
-    if (string.length > chars) {
-        return string.substring(0, chars) + '...'
-    } else {
-        return string
-    }
-};
+const truncateString = (string, chars) => string.length > chars ? string.substring(0, chars) + '...' : string;
 
 function generateTableRows(messages) {
     var rows = [];
@@ -69,27 +63,28 @@ function generateTableRows(messages) {
     return (rows);
 };
 
-export default props => {
+const TrackGraphic = ({ service, statuses, messages }) => {
 
     const [isOpen, toggleOpen] = useState(false);
     const [rows, setRows] = useState([]);
     const [cells, setCells] = useState([]);
 
     useEffect(() => {
-        setRows(generateTableRows(props.messages));
-        setCells(default_cells);
-    }, [props.messages])
+        setRows(generateTableRows(messages));
+        setCells([
+            'status',
+            {
+                title: 'message',
+                cellTransforms: [compoundExpand]
+            },
+            'date'
+        ]);
+    }, [messages])
 
-    var errorMessage = props.messages.filter(message => (
+    var errorMessage = messages.filter(message => (
         message.status === 'error' ||
         message.status === 'failure'
     ))
-
-    if (!CHECK_OBJECT_EQUIVALENCE(errorMessage, [])) {
-        errorMessage = errorMessage[0].message
-    } else {
-        errorMessage = false
-    }
 
     function onExpand(e, rowIndex, colIndex) {
         if (rows[rowIndex].cells[colIndex].title !== '') {
@@ -103,7 +98,7 @@ export default props => {
     return (
         <AccordionItem>
             <AccordionToggle
-                id={props.service}
+                id={service}
                 onClick={ () => toggleOpen(!isOpen)}
                 isExpanded={isOpen}
             >
@@ -115,26 +110,26 @@ export default props => {
                 >
                     <Progress
                         value={
-                            (props.statuses.includes('success') ||
-                            props.statuses.includes('202') || 
-                            props.statuses.includes('error') ||
-                            props.statuses.includes('failure') ||
-                            props.statuses.includes('announced')) ?
+                            (statuses.includes('success') ||
+                            statuses.includes('202') ||
+                            statuses.includes('error') ||
+                            statuses.includes('failure') ||
+                            statuses.includes('announced')) ?
                             100 : (
-                                props.statuses.includes('processing') ?
+                                statuses.includes('processing') ?
                                 50:
                                 25
                             )
                         }
-                        title={props.service}
+                        title={service}
                         measureLocation={ProgressMeasureLocation.none}
                         variant={
-                            (props.statuses.includes('success') || 
-                            props.statuses.includes('202') ||
-                            props.statuses.includes('announced')) ?
+                            (statuses.includes('success') ||
+                            statuses.includes('202') ||
+                            statuses.includes('announced')) ?
                             ProgressVariant.success : (
-                                (props.statuses.includes('error') ||
-                                props.statuses.includes('failure')) ?
+                                (statuses.includes('error') ||
+                                statuses.includes('failure')) ?
                                 ProgressVariant.danger :
                                 ProgressVariant.info
                             )
@@ -160,3 +155,11 @@ export default props => {
         </AccordionItem>
     )
 };
+
+TrackGraphic.propTypes = {
+    service: PropTypes.string.isRequired,
+    statuses: PropTypes.array.isRequired,
+    messages: PropTypes.array.isRequired
+};
+
+export default TrackGraphic;

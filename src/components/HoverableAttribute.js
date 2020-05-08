@@ -1,42 +1,61 @@
+import * as AppActions from '../actions';
+
+import { HOME_GROUP, TRACK_ITEM } from '../AppConstants'
 import React, { useState } from 'react';
+
 import { Button } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
-import { push } from 'connected-react-router';
-import { setActiveItem, setActiveGroup, addPayloadsFilter, setTrackPayloadID, setPayloadsPage, removePayloadsPage } from '../actions';
-import { TRACK_ITEM, HOME_GROUP } from '../AppConstants'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
-const clickHandler = (props, key, value)  => {
-    if (props.type === 'track') {
-        props.dispatch(setTrackPayloadID(value))
-        props.history.push(`/home/track/${value}`)
-        props.dispatch([
-            push(`/home/track/${value}`),
-            setActiveItem(TRACK_ITEM),
-            setActiveGroup(HOME_GROUP)
-        ]);
-    } else if (props.type === 'filter') {
-        props.dispatch([
-            addPayloadsFilter(key, value),
-            removePayloadsPage(),
-            setPayloadsPage(1)
-        ])
-    } else { return null; }
-}
-
-const HoverableAttribute = props => {
+const HoverableAttribute = ({ type, filter, value, setRequestID, updateFilters, beginTracking }) => {
 
     const [isHovered, setHover] = useState(false);
+    let history = useHistory();
+
+    const clickHandler = ()  => {
+        if (type === 'track') {
+            setRequestID(value);
+            history.push(`/home/track/${value}`);
+            beginTracking(TRACK_ITEM, HOME_GROUP);
+        } else if (type === 'filter') {
+            updateFilters(filter, value)
+        } else { return null; }
+    }
 
     return(
         <Button 
-            onClick={ () => clickHandler(props, props.payloadKey, props.payloadValue) }
+            onClick={clickHandler}
             variant='plain'
             onMouseOver={ () => setHover(true) }
             onMouseOut={ () => setHover(false) }
         >
-            {props.payloadValue} {isHovered ? <PlusCircleIcon/> : null }
+            {value} {isHovered ? <PlusCircleIcon/> : null }
         </Button>
     )
-}
+};
 
-export default HoverableAttribute;
+HoverableAttribute.propTypes = {
+    type: PropTypes.string.isRequired,
+    filter: PropTypes.string,
+    value: PropTypes.string.isRequired,
+    setRequestID: PropTypes.func,
+    updateFilters: PropTypes.func,
+    beginTracking: PropTypes.func
+};
+
+const mapDispatchToProps = dispatch => ({
+    setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id)),
+    updateFilters: (key, value) => dispatch([
+        AppActions.addPayloadsFilter(key, value),
+        AppActions.removePayloadsPage(),
+        AppActions.setPayloadsPage(1)
+    ]),
+    beginTracking: (item, group) => dispatch([
+        AppActions.setActiveItem(item),
+        AppActions.setActiveGroup(group)
+    ])
+});
+
+export default connect(null, mapDispatchToProps)(HoverableAttribute);
