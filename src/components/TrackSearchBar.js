@@ -17,13 +17,13 @@ const TrackSearchBar = ({ request_id, setRequestID }) => {
     return <React.Fragment>
             <TextInput
                 isRequired
-                id='payload_id'
+                id='request_id'
                 type="text"
-                name="payload_id"
+                name="request_id"
                 value={id}
                 onChange={(id) => updateID(id)}
                 style={inputStyle}
-                placeholder='Enter Payload ID...'
+                placeholder='Enter Request ID...'
             />
             <Button
                 variant='primary'
@@ -43,7 +43,7 @@ const inputStyle = {
 
 TrackSearchBar.propTypes = {
     request_id: PropTypes.string,
-    setPayloadID: PropTypes.func
+    setRequestID: PropTypes.func
 };
 
 const mapStateToProps = state => ({

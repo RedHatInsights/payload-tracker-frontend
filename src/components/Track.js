@@ -36,7 +36,7 @@ const Track = ({ request_id, sort_by, sort_dir, activeTabKey, payloads, duration
 
     useEffect(() => {
         socket.on('payload', (data) => {
-            data.payload_id === request_id && payloads.unshift(data)
+            data.request_id === request_id && payloads.unshift(data)
         });
     }, [request_id, payloads]);
 
