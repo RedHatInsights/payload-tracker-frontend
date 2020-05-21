@@ -6,24 +6,32 @@ export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
 export const SET_ACTIVE_GROUP = 'SET_ACTIVE_GROUP';
 export const SET_ACTIVE_ITEM= 'SET_ACTIVE_ITEM';
 export const TOGGLE_NAV = 'TOGGLE_NAV';
-export const GET_PAYLOADS = 'GET_PAYLOADS';
+export const GET_DATA = 'GET_DATA';
 export const GET_PAYLOAD_TRACK = 'GET_PAYLOAD_TRACK';
+
 export const SET_START_DATE = 'SET_START_DATE';
 export const SET_END_DATE = 'SET_END_DATE';
-export const SET_PAYLOADS_PAGE = 'SET_PAYLOADS_PAGE';
-export const SET_PAYLOADS_PAGE_SIZE = 'SET_PAYLOADS_PAGE_SIZE';
-export const SET_PAYLOADS_SORT_DIR = 'SET_PAYLOADS_SORT_DIR';
-export const SET_PAYLOADS_SORT_BY = 'SET_PAYLOADS_SORT_BY';
-export const ADD_PAYLOADS_FILTER = 'ADD_PAYLOADS_FILTER';
-export const REMOVE_PAYLOADS_FILTER = 'REMOVE_PAYLOADS_FILTER';
+export const SET_PAGE = 'SET_PAGE';
+export const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
+export const SET_SORT_DIR = 'SET_SORT_DIR';
+export const SET_SORT_BY = 'SET_SORT_BY';
+
 export const SET_TRACK_REQUEST_ID = 'SET_TRACK_REQUEST_ID';
 export const SET_TRACK_SORT_DIR = 'SET_TRACK_SORT_DIR';
 export const SET_TRACK_SORT_BY = 'SET_TRACK_SORT_BY';
 export const SET_ACTIVE_TAB_KEY = 'SET_ACTIVE_TAB_KEY';
 
-export const FILTER_TYPES = [
-    'service', 'source', 'account', 'inventory_id', 
-    'system_id', 'status', 'status_msg', 'date_lt', 
+export const ADD_FILTER = 'ADD_FILTER';
+
+export const REMOVE_FILTER = 'REMOVE_FILTER';
+
+export const PAYLOAD_FILTER_TYPES = [
+    'account', 'inventory_id', 'system_id', 'created_at_lt',
+    'created_at_gt', 'created_at_lte', 'created_at_gte'
+];
+
+export const STATUS_FILTER_TYPES = [
+    'service', 'source', 'status', 'status_msg', 'date_lt',
     'date_gt', 'date_lte', 'date_gte', 'created_at_lt',
     'created_at_gt', 'created_at_lte', 'created_at_gte'
 ];
@@ -46,22 +54,21 @@ export function GET_VALUE_FROM_URL(input) {
 
 export const HOME_GROUP = 'grp1';
 export const PAYLOADS_ITEM = `${HOME_GROUP}_itm1`;
-export const TRACK_ITEM = `${HOME_GROUP}_itm2`;
-export const DEFAULT_PAYLOADS_PAGE_STATE = {
+export const STATUSES_ITEM = `${HOME_GROUP}_itm2`
+export const TRACK_ITEM = `${HOME_GROUP}_itm3`;
+export const DEFAULT_PAGE_STATE = {
     filters: [],
     page: 1,
     page_size: 10,
-    sort_by: 'date',
-    sort_dir: 'desc',
     startDate: null,
     endDate: null
-}
+};
 export const DEFAULT_TRACK_PAGE_STATE = {
     request_id: '',
     sort_by: 'date',
     sort_dir: 'desc',
     activeTabKey: 0,
-}
+};
 export const DEFAULT_DATA_REDUCER_STATE = {
     loading: false,
     loaded: false,
@@ -69,14 +76,19 @@ export const DEFAULT_DATA_REDUCER_STATE = {
     payloads: [],
     count: 0,
     durations: {},
-}
-
-export const DEFAULT_CELL_STATE = [
+};
+export const DEFAULT_STATUSES_CELL_STATE = [
     {
         title: 'id',
         isActive: true,
         isFilterable: false,
         isTrackable: false,
+        isDate: false,
+    },{
+        title: 'request_id',
+        isActive: true,
+        isFilterable: false,
+        isTrackable: true,
         isDate: false,
     },{
         title: 'service',
@@ -87,32 +99,6 @@ export const DEFAULT_CELL_STATE = [
         transforms: [sortable],
     },{
         title: 'source',
-        isActive: true,
-        isFilterable: true,
-        isTrackable: false,
-        isDate: false,
-        transforms: [sortable],
-    },{
-        title: 'account',
-        isActive: true,
-        isFilterable: true,
-        isTrackable: false,
-        transforms: [sortable],
-    },{
-        title: 'request_id',
-        isActive: true,
-        isFilterable: false,
-        isTrackable: true,
-        isDate: false,
-    },{
-        title: 'inventory_id',
-        isActive: true,
-        isFilterable: true,
-        isTrackable: false,
-        isDate: false,
-        transforms: [sortable],
-    },{
-        title: 'system_id',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
@@ -138,6 +124,42 @@ export const DEFAULT_CELL_STATE = [
         isFilterable: false,
         isTrackable: false,
         isDate: true,
+        transforms: [sortable],
+    },{
+        title: 'created_at',
+        isActive: true,
+        isFilterable: false,
+        isTrackable: false,
+        isDate: true,
+        transforms: [sortable],
+    }
+];
+export const DEFAULT_PAYLOAD_CELL_STATE = [
+    {
+        title: 'request_id',
+        isActive: true,
+        isFilterable: false,
+        isTrackable: true,
+        isDate: false,
+    },{
+        title: 'account',
+        isActive: true,
+        isFilterable: true,
+        isTrackable: false,
+        transforms: [sortable],
+    },{
+        title: 'inventory_id',
+        isActive: true,
+        isFilterable: true,
+        isTrackable: false,
+        isDate: false,
+        transforms: [sortable],
+    },{
+        title: 'system_id',
+        isActive: true,
+        isFilterable: true,
+        isTrackable: false,
+        isDate: false,
         transforms: [sortable],
     },{
         title: 'created_at',

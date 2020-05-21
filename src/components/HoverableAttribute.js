@@ -48,9 +48,9 @@ HoverableAttribute.propTypes = {
 const mapDispatchToProps = dispatch => ({
     setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id)),
     updateFilters: (key, value) => dispatch([
-        AppActions.addPayloadsFilter(key, value),
-        AppActions.removePayloadsPage(),
-        AppActions.setPayloadsPage(1)
+        AppActions.addFilter(key, value),
+        AppActions.removePage(),
+        AppActions.setPage(1)
     ]),
     beginTracking: (item, group) => dispatch([
         AppActions.setActiveItem(item),
