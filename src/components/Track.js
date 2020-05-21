@@ -17,7 +17,6 @@ import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
 import OptionsContainer from './OptionsContainer';
 import PropTypes from 'prop-types';
-import { SphereSpinner } from 'react-spinners-kit';
 import TrackDuration from './TrackDurationView';
 import TrackGraphic from './TrackGraphicView';
 import TrackSearchBar from './TrackSearchBar';
@@ -92,9 +91,6 @@ const Track = ({ request_id, sort_by, sort_dir, activeTabKey, payloads, duration
                                 </div>
                             </CardHeader>
                             <CardBody>
-                                <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    <SphereSpinner loading={loading} color='#000000' size={70}/>
-                                </div>
                                 <div style={{maxWidth: '100vw', overflow: 'auto'}}>
                                     <TrackTable isDisabled={request_id ? false : true}/>
                                 </div>

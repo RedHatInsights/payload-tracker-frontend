@@ -1,7 +1,6 @@
 import 'moment-timezone';
 
-import * as AppActions from '../actions';
-
+import React, { useEffect, useState } from 'react';
 import {
     Table,
     TableBody,
@@ -12,7 +11,7 @@ import {
 import HoverableAttribute from './HoverableAttribute'
 import Moment from 'react-moment';
 import PropTypes from 'prop-types';
-import React from 'react';
+import { Spinner } from '@patternfly/react-core';
 import { connect } from 'react-redux';
 
 Moment.globalTimezone = 'America/New_York';
@@ -66,6 +65,31 @@ const generateRows = (payloads, cells) => {
         rows.push({ cells: row })
     })
     return (rows);
+};
+
+const createSpinner = (cells) => {
+    const center = cells.length / 2;
+    let rows = [];
+    let count = 0;
+    cells.map(cell => {
+        if (count !== center) {
+            rows.push({
+                title: '',
+                props: {
+                    component: 'th'
+                }
+            })
+        } else {
+            rows.push({
+                title: <Spinner size='lg'/>,
+                props: {
+                    component: 'th'
+                }
+            })
+        }
+        count += 1;
+    });
+    return [rows];
 }
 
 const generateCells = (cells) => {
@@ -78,58 +102,52 @@ const generateCells = (cells) => {
     return output;
 };
 
-const PayloadsTable = ({ payloads, cells, sort_by, sort_dir, updateSort }) => {
+const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, setSortBy }) => {
 
-    const formattedRows = generateRows(payloads, cells);
-    const formattedCells = generateCells(cells);
+    const [formattedRows, setFormattedRows] = useState(undefined);
+    const [formattedCells, setFormattedCells] = useState(undefined);
+
+    useEffect(() => {
+        setFormattedRows(generateRows(payloads, cells));
+        setFormattedCells(generateCells(cells));
+    }, [cells, payloads]);
     
     const onSort = (_event, index, direction) => {
-        updateSort(index, direction);
-    }
-    
-    const sortBy = {
-        index: formattedCells.findIndex(x => x.title === sort_by),
-        direction: sort_dir
-    }
+        setSortDir(direction);
+        setSortBy(index)
+    };
 
-    return (
-        <div>
-            <Table 
+    return <React.Fragment>
+        {formattedCells && <Table
                 cells={formattedCells} 
-                rows={formattedRows}
+                rows={loading ? createSpinner(formattedCells) : formattedRows}
                 variant={TableVariant.compact}
-                sortBy={sortBy}
+                sortBy={{
+                    index: formattedCells.findIndex(x => x.title === sortBy),
+                    direction: sortDir
+                }}
                 onSort={(e, index, direction) => onSort(e, formattedCells[index].title, direction)}
             >
                 <TableHeader/>
                 <TableBody/>
-            </Table>
-        </div>
-    )
+        </Table>}
+    </React.Fragment>;
 };
 
 PayloadsTable.propTypes = {
     payloads: PropTypes.array,
-    cells: PropTypes.object,
-    sort_by: PropTypes.any,
-    sort_dir: PropTypes.any,
-    updateSort: PropTypes.func
+    cells: PropTypes.array,
+    sortDir: PropTypes.string,
+    setSortDir: PropTypes.func,
+    sortBy: PropTypes.string,
+    setSortBy: PropTypes.func,
+    loading: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
     payloads: state.data.payloads,
     cells: state.cell.cells,
-    sort_by: state.payloads.sort_by,
-    sort_dir: state.payloads.sort_dir
+    loading: state.data.loading
 });
 
-const mapDispatchToProps = dispatch => ({
-    updateSort: (index, direction) => dispatch([
-        AppActions.removePayloadsSortBy(),
-        AppActions.setPayloadsSortBy(index),
-        AppActions.removePayloadsSortDir(),
-        AppActions.setPayloadsSortDir(direction)
-    ])
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PayloadsTable);
+export default connect(mapStateToProps, null)(PayloadsTable);

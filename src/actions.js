@@ -21,12 +21,7 @@ export function setCellInactive(title) {
     return {
         type: ActionTypes.SET_CELL_ACTIVITY,
         title: title,
-        payload: false,
-        pushVariableDataToUrl: {
-            id: title,
-            type: `${title}Cell`,
-            value: 'inactive',
-        }
+        payload: false
     }
 }
 
@@ -34,10 +29,7 @@ export function setCellActive(title) {
     return {
         type: ActionTypes.SET_CELL_ACTIVITY,
         title: title,
-        payload: true,
-        removeVariableDataFromUrl: {
-            id: title,
-        }
+        payload: true
     }
 }
 
@@ -53,14 +45,14 @@ export function toggleNav(bool=true) {
     return {type: ActionTypes.TOGGLE_NAV, payload: !bool}
 };
 
-export const getPayloads = (url) => dispatch => {
-    dispatch({type: `${ActionTypes.GET_PAYLOADS}_PENDING`})
+export const getData = (url) => dispatch => {
+    dispatch({type: `${ActionTypes.GET_DATA}_PENDING`})
     axios.get(url)
         .then((response) => {
-            dispatch({type: `${ActionTypes.GET_PAYLOADS}_FULFILLED`, payload: response.data})
+            dispatch({type: `${ActionTypes.GET_DATA}_FULFILLED`, payload: response.data})
         })
         .catch((error) => {
-            dispatch({type: `${ActionTypes.GET_PAYLOADS}_REJECTED`, payload: error})
+            dispatch({type: `${ActionTypes.GET_DATA}_REJECTED`, payload: error})
         })
 };
 
@@ -83,10 +75,10 @@ export const updateDateRange = (moment, startId, endId) => dispatch => {
     dispatch([
         setStartDate(startDate),
         setEndDate(endDate),
-        removePayloadsFilter(startId),
-        removePayloadsFilter(endId),
-        addPayloadsFilter('date_gte', startDate),
-        addPayloadsFilter('date_lte', endDate)
+        removeFilter(startId),
+        removeFilter(endId),
+        addFilter('date_gte', startDate),
+        addFilter('date_lte', endDate)
     ]);
 }
 
@@ -100,7 +92,7 @@ export function setStartDate(date) {
 export function removeStartDate() {
     return {
         type: ActionTypes.SET_START_DATE,
-        payload: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.startDate,
+        payload: ConstantTypes.DEFAULT_PAGE_STATE.startDate,
     }
 }
 
@@ -114,113 +106,54 @@ export function setEndDate(date) {
 export function removeEndDate() {
     return {
         type: ActionTypes.SET_END_DATE,
-        payload: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.endDate,
+        payload: ConstantTypes.DEFAULT_PAGE_STATE.endDate,
     }
 }
 
-export function setPayloadsPage(page) {
+export function setPage(page) {
     return {
-        type: ActionTypes.SET_PAYLOADS_PAGE,
-        payload: page,
-        pushToUrl: {
-            page: page
-        }
+        type: ActionTypes.SET_PAGE,
+        payload: page
     }
 }
 
-export function removePayloadsPage() {
+export function removePage() {
     return {
-        type: ActionTypes.SET_PAYLOADS_PAGE,
-        payload: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.page,
-        removeFromUrl: {
-            type: 'page'
-        }
+        type: ActionTypes.SET_PAGE,
+        payload: ConstantTypes.DEFAULT_PAGE_STATE.page
     }
 }
 
-export function setPayloadsPageSize(page_size) {
+export function setPageSize(page_size) {
     return {
-        type: ActionTypes.SET_PAYLOADS_PAGE_SIZE,
-        payload: page_size,
-        pushToUrl: {
-            page_size: page_size
-        }
+        type: ActionTypes.SET_PAGE_SIZE,
+        payload: page_size
     }
 }
 
-export function removePayloadsPageSize() {
+export function removePageSize() {
     return {
-        type: ActionTypes.SET_PAYLOADS_PAGE_SIZE,
-        payload: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.page_size,
-        removeFromUrl: {
-            type: 'page_size'
-        }
+        type: ActionTypes.SET_PAGE_SIZE,
+        payload: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
     }
 }
 
-export function setPayloadsSortDir(sort_dir) {
-    return {
-        type: ActionTypes.SET_PAYLOADS_SORT_DIR,
-        payload: sort_dir,
-        pushToUrl: {
-            sort_dir: sort_dir
-        }
-    }
-}
-
-export function removePayloadsSortDir() {
-    return {
-        type: ActionTypes.SET_PAYLOADS_SORT_DIR,
-        payload: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.sort_dir,
-        removeFromUrl: {
-            type: 'sort_dir'
-        }
-    }
-}
-
-export function setPayloadsSortBy(sort_by) {
-    return {
-        type: ActionTypes.SET_PAYLOADS_SORT_BY,
-        payload: sort_by,
-        pushToUrl: {
-            sort_by: sort_by
-        }
-    }
-}
-
-export function removePayloadsSortBy() {
-    return {
-        type: ActionTypes.SET_PAYLOADS_SORT_BY,
-        payload: ConstantTypes.DEFAULT_PAYLOADS_PAGE_STATE.sort_by,
-        removeFromUrl: {
-            type: 'sort_by'
-        }
-    }
-}
-
-export function addPayloadsFilter(filterType, filterValue) {
+export function addFilter(filterType, filterValue) {
     filterIndex += 1;
     return {
-        type: ActionTypes.ADD_PAYLOADS_FILTER,
+        type: ActionTypes.ADD_FILTER,
         payload: {
             id: filterIndex,
             type: filterType,
             value: filterValue
-        },
-        pushVariableDataToUrl: {
-            type: filterType,
-            value: filterValue
-        },  
+        }
     }
 }
 
-export function removePayloadsFilter(id) {
+export function removeFilter(id) {
     return {
-        type: ActionTypes.REMOVE_PAYLOADS_FILTER,
-        payload: id,
-        removeVariableDataFromUrl: {
-            id: id
-        }
+        type: ActionTypes.REMOVE_FILTER,
+        payload: id
     }
 }
 
@@ -237,40 +170,28 @@ export function setTrackRequestID(request_id) {
 export function setTrackSortBy(sort_by) {
     return {
         type: ActionTypes.SET_TRACK_SORT_BY,
-        payload: sort_by,
-        pushToUrl: {
-            sort_by: sort_by
-        }
+        payload: sort_by
     }
 };
 
 export function removeTrackSortBy() {
     return {
         type: ActionTypes.SET_TRACK_SORT_BY,
-        payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by,
-        removeFromUrl: {
-            type: 'sort_by'
-        }
+        payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by
     }
 };
 
 export function setTrackSortDir(sort_dir) {
     return {
         type: ActionTypes.SET_TRACK_SORT_DIR,
-        payload: sort_dir,
-        pushToUrl: {
-            sort_dir: sort_dir
-        }
+        payload: sort_dir
     }
 };
 
 export function removeTrackSortDir() {
     return {
         type: ActionTypes.SET_TRACK_SORT_DIR,
-        payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir,
-        removeFromUrl: {
-            type: 'sort_dir'
-        }
+        payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir
     }
 };
 

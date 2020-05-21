@@ -59,7 +59,7 @@ const OptionsContainer = ({ cells, setCellActive, setCellInactive, isDisabled })
 }
 
 OptionsContainer.propTypes = {
-    cells: PropTypes.object,
+    cells: PropTypes.array,
     setCellInactive: PropTypes.func,
     setCellActive: PropTypes.func,
     isDisabled: PropTypes.bool

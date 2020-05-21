@@ -1,6 +1,6 @@
 import * as AppActions from '../actions';
 
-import { HOME_GROUP, PAYLOADS_ITEM, TRACK_ITEM } from '../AppConstants'
+import { HOME_GROUP, PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from '../AppConstants'
 import {
     Nav,
     NavExpandable,
@@ -45,6 +45,17 @@ const MainSidebar = ({ activeGroup, activeItem, isNavigationOpen, updateNav }) =
                             onClick={ () => clickHandler(HOME_GROUP, PAYLOADS_ITEM, '/home/payloads') }
                         >
                             Payloads
+                        </NavItem>
+                        <NavItemSeparator/>
+                        <NavItem
+                            to='/home/statuses'
+                            groupId={ HOME_GROUP }
+                            itemId={ STATUSES_ITEM }
+                            preventDefault
+                            isActive={ activeItem === STATUSES_ITEM }
+                            onClick={ () => clickHandler(HOME_GROUP, STATUSES_ITEM, '/home/statuses') }
+                        >
+                            Statuses
                         </NavItem>
                         <NavItemSeparator/>
                         <NavItem

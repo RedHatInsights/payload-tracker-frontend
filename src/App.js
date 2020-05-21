@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import Payloads from './components/Payloads';
 import { Redirect } from 'react-router';
+import Statuses from './components/Statuses';
 import Track from './components/Track';
 
 class App extends Component {
@@ -13,6 +14,7 @@ class App extends Component {
       <Switch>
         <Route path='/' exact render={() => <Redirect to='/home/payloads'/>}/>
         <Route path='/home/payloads' component={Payloads}/>
+        <Route path='/home/statuses' component={Statuses}/>
         <Route exact path='/home/track' component={Track}/>
         <Route path='/home/track/:request_id' component={Track}/>
         {/* <Route path='/stats/successrates' component={SuccessRate}/> */}

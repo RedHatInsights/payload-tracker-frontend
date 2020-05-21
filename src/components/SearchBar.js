@@ -1,18 +1,20 @@
 import * as AppActions from '../actions';
 
 import { Button, Chip, TextInput } from '@patternfly/react-core';
+import { PAYLOAD_FILTER_TYPES, STATUS_FILTER_TYPES } from '../AppConstants';
 import React, { useState } from 'react';
 
 import DropdownContainer from './DropdownContainer';
-import { FILTER_TYPES } from '../AppConstants';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router';
 
-const SearchBar = ({ filters, removeStartDate, removeEndDate, addPayloadsFilter, closeFilterChip, createFilterChip }) => {
+const SearchBar = ({ filters, removeStartDate, removeEndDate, addFilter, closeFilterChip, createFilterChip }) => {
 
   const [isFilterInOpen, setFilterIn] = useState(false);
   const [newValue, setValue] = useState('');
   const [newFilter, setFilter] = useState('');
+  let history = useHistory();
 
   function openFilterInput(type, item) {
     setFilterIn(true);
@@ -21,7 +23,7 @@ const SearchBar = ({ filters, removeStartDate, removeEndDate, addPayloadsFilter,
 
   const createChip = () => {
     if (newValue !== '' && newFilter !== ''){
-      addPayloadsFilter(newFilter, newValue);
+      addFilter(newFilter, newValue);
       setFilterIn(false);
       setFilter('');
       setValue('');
@@ -45,7 +47,10 @@ const SearchBar = ({ filters, removeStartDate, removeEndDate, addPayloadsFilter,
   return (
     <div style={{margin: '10px'}}>
       <DropdownContainer
-        items={ FILTER_TYPES }
+        items={
+          history.location.pathname === '/home/payloads' ?
+            PAYLOAD_FILTER_TYPES : STATUS_FILTER_TYPES
+        }
         type="Add Filter"
         setSelected={openFilterInput}
       />
@@ -87,7 +92,7 @@ SearchBar.propTypes = {
   filters: PropTypes.array,
   removeStartDate: PropTypes.func,
   removeEndDate: PropTypes.func,
-  addPayloadsFilter: PropTypes.func,
+  addFilter: PropTypes.func,
   closeFilterChip: PropTypes.func,
   createFilterChip: PropTypes.func
 };
@@ -99,15 +104,15 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   removeStartDate: () => dispatch(AppActions.removeStartDate),
   removeEndDate: () => dispatch(AppActions.removeEndDate),
-  addPayloadsFilter: (filter, value) => dispatch(AppActions.addPayloadsFilter(filter, value)),
+  addFilter: (filter, value) => dispatch(AppActions.addFilter(filter, value)),
   closeFilterChip: (id) => dispatch([
-    AppActions.removePayloadsFilter(id),
-    AppActions.removePayloadsPage(),
-    AppActions.setPayloadsPage(1)
+    AppActions.removeFilter(id),
+    AppActions.removePage(),
+    AppActions.setPage(1)
   ]),
   createFilterChip: () => dispatch([
-    AppActions.removePayloadsPage(),
-    AppActions.setPayloadsPage(1)
+    AppActions.removePage(),
+    AppActions.setPage(1)
   ])
 });
 

@@ -1,4 +1,5 @@
 import * as ConstantTypes from '../AppConstants';
+
 import { LOCATION_CHANGE } from 'connected-react-router';
 import history from '../history';
 
@@ -9,23 +10,23 @@ const initialState = {
     payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
     count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
     durations: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.durations,
-    cellPath: `${history.location.pathname}`
+    path: `${history.location.pathname}`
 }
 
 const DataReducer = (state=initialState, action) => {
     switch(action.type) {
-        case `${ConstantTypes.GET_PAYLOADS}_PENDING`:
+        case `${ConstantTypes.GET_DATA}_PENDING`:
             return {
                 ...state,
                 loading: true
             }
-        case `${ConstantTypes.GET_PAYLOADS}_REJECTED`:
+        case `${ConstantTypes.GET_DATA}_REJECTED`:
             return {
                 ...state,
                 loading: false,
                 error: action.payload
             }
-        case `${ConstantTypes.GET_PAYLOADS}_FULFILLED`:
+        case `${ConstantTypes.GET_DATA}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
@@ -53,7 +54,7 @@ const DataReducer = (state=initialState, action) => {
                 durations: action.payload.duration
             }
         case LOCATION_CHANGE:
-            return action.payload.location.pathname === state.cellPath ? state : {
+            return action.payload.location.pathname === state.path ? state : {
                 ...state,
                 loading: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loading,
                 loaded: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loaded,
@@ -61,7 +62,7 @@ const DataReducer = (state=initialState, action) => {
                 payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
                 count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
                 durations: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.durations,
-                cellPath: action.payload.location.pathname
+                path: action.payload.location.pathname
             }
         default: {
             return state;
