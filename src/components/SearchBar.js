@@ -48,7 +48,7 @@ const SearchBar = ({ filters, removeStartDate, removeEndDate, addFilter, closeFi
     <div style={{margin: '10px'}}>
       <DropdownContainer
         items={
-          history.location.pathname === '/home/payloads' ?
+          history.location.pathname === '/payloads' ?
             PAYLOAD_FILTER_TYPES : STATUS_FILTER_TYPES
         }
         type="Add Filter"

@@ -3,7 +3,6 @@ import queryString from 'query-string';
 import { sortable } from '@patternfly/react-table';
 
 export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
-export const SET_ACTIVE_GROUP = 'SET_ACTIVE_GROUP';
 export const SET_ACTIVE_ITEM= 'SET_ACTIVE_ITEM';
 export const TOGGLE_NAV = 'TOGGLE_NAV';
 export const GET_DATA = 'GET_DATA';
@@ -51,11 +50,9 @@ export function GET_VALUE_FROM_URL(input) {
     return targetProp === undefined ? null : targetProp;
 }
 
-
-export const HOME_GROUP = 'grp1';
-export const PAYLOADS_ITEM = `${HOME_GROUP}_itm1`;
-export const STATUSES_ITEM = `${HOME_GROUP}_itm2`
-export const TRACK_ITEM = `${HOME_GROUP}_itm3`;
+export const PAYLOADS_ITEM = `itm1`;
+export const STATUSES_ITEM = `itm2`
+export const TRACK_ITEM = `itm3`;
 export const DEFAULT_PAGE_STATE = {
     filters: [],
     page: 1,

@@ -1,6 +1,5 @@
 import * as AppActions from '../actions';
 
-import { HOME_GROUP, PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from '../AppConstants'
 import {
     Nav,
     NavExpandable,
@@ -9,19 +8,18 @@ import {
     NavList,
     PageSidebar
 } from '@patternfly/react-core';
+import { PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from '../AppConstants'
 import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-const MainSidebar = ({ activeGroup, activeItem, isNavigationOpen, updateNav }) => {
-
-    const [isExpanded, setExpanded] = useState(false);
+const MainSidebar = ({ activeItem, isNavigationOpen, updateNav }) => {
     let history = useHistory();
 
-    const clickHandler = (group, item, url) => {
-        updateNav(group, item);
+    const clickHandler = (item, url) => {
+        updateNav(item);
         history.push(url);
     };
 
@@ -29,46 +27,35 @@ const MainSidebar = ({ activeGroup, activeItem, isNavigationOpen, updateNav }) =
         <PageSidebar
             nav = {<Nav>
                 <NavList>
-                    <NavExpandable 
-                        title="Home" 
-                        groupId={ HOME_GROUP }
-                        isActive={ activeGroup === HOME_GROUP }
-                        isExpanded={ isExpanded }
-                        onExpand={ () => setExpanded(!isExpanded) }
+                    <NavItem
+                        to='/payloads'
+                        itemId={ PAYLOADS_ITEM }
+                        preventDefault
+                        isActive={ activeItem === PAYLOADS_ITEM }
+                        onClick={ () => clickHandler(PAYLOADS_ITEM, '/payloads') }
                     >
-                        <NavItem
-                            to='/home/payloads'
-                            groupId={ HOME_GROUP }
-                            itemId={ PAYLOADS_ITEM }
-                            preventDefault
-                            isActive={ activeItem === PAYLOADS_ITEM }
-                            onClick={ () => clickHandler(HOME_GROUP, PAYLOADS_ITEM, '/home/payloads') }
-                        >
-                            Payloads
-                        </NavItem>
-                        <NavItemSeparator/>
-                        <NavItem
-                            to='/home/statuses'
-                            groupId={ HOME_GROUP }
-                            itemId={ STATUSES_ITEM }
-                            preventDefault
-                            isActive={ activeItem === STATUSES_ITEM }
-                            onClick={ () => clickHandler(HOME_GROUP, STATUSES_ITEM, '/home/statuses') }
-                        >
-                            Statuses
-                        </NavItem>
-                        <NavItemSeparator/>
-                        <NavItem
-                            to='/home/track'
-                            groupId={ HOME_GROUP }
-                            itemId={ TRACK_ITEM }
-                            preventDefault
-                            isActive={ activeItem === TRACK_ITEM }
-                            onClick={ () => clickHandler(HOME_GROUP, TRACK_ITEM, '/home/track') }
-                        >
-                            Track
-                        </NavItem>
-                    </NavExpandable>
+                        Payloads
+                    </NavItem>
+                    <NavItemSeparator/>
+                    <NavItem
+                        to='/statuses'
+                        itemId={ STATUSES_ITEM }
+                        preventDefault
+                        isActive={ activeItem === STATUSES_ITEM }
+                        onClick={ () => clickHandler(STATUSES_ITEM, '/statuses') }
+                    >
+                        Statuses
+                    </NavItem>
+                    <NavItemSeparator/>
+                    <NavItem
+                        to='/track'
+                        itemId={ TRACK_ITEM }
+                        preventDefault
+                        isActive={ activeItem === TRACK_ITEM }
+                        onClick={ () => clickHandler(TRACK_ITEM, '/track') }
+                    >
+                        Track
+                    </NavItem>
                 </NavList>
             </Nav>}
             isNavOpen={ isNavigationOpen }
@@ -80,7 +67,6 @@ MainSidebar.propTypes = {
     activeGroup: PropTypes.string,
     activeItem: PropTypes.string,
     isNavigationOpen: PropTypes.bool,
-    setActiveGroup: PropTypes.func,
     updateNav: PropTypes.func
 };
 
@@ -91,9 +77,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setActiveGroup: (group) => dispatch(AppActions.setActiveGroup(group)),
-    updateNav: (group, item) => dispatch([
-        AppActions.setActiveGroup(group),
+    updateNav: (item) => dispatch([
         AppActions.setActiveItem(item)
     ])
 });

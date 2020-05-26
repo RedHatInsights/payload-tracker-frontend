@@ -1,11 +1,11 @@
 import * as AppActions from '../actions';
 
-import { HOME_GROUP, TRACK_ITEM } from '../AppConstants'
 import React, { useState } from 'react';
 
 import { Button } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
+import { TRACK_ITEM } from '../AppConstants'
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -17,8 +17,8 @@ const HoverableAttribute = ({ type, filter, value, setRequestID, updateFilters, 
     const clickHandler = ()  => {
         if (type === 'track') {
             setRequestID(value);
-            history.push(`/home/track/${value}`);
-            beginTracking(TRACK_ITEM, HOME_GROUP);
+            history.push(`/track/${value}`);
+            beginTracking(TRACK_ITEM);
         } else if (type === 'filter') {
             updateFilters(filter, value)
         } else { return null; }
@@ -52,9 +52,8 @@ const mapDispatchToProps = dispatch => ({
         AppActions.removePage(),
         AppActions.setPage(1)
     ]),
-    beginTracking: (item, group) => dispatch([
-        AppActions.setActiveItem(item),
-        AppActions.setActiveGroup(group)
+    beginTracking: (item) => dispatch([
+        AppActions.setActiveItem(item)
     ])
 });
 

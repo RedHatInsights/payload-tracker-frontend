@@ -12,7 +12,7 @@ const MainHeader = ({ isNavigationOpen, toggleNav }) => {
         <PageHeader 
             logo={<Brand src={newlogo} alt= "Red Hat Logo White"/>}
             logoProps={{
-                href: '/home/payloads',
+                href: '/payloads',
                 target: '_blank'
             }}
             toolbar={

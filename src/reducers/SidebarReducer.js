@@ -8,11 +8,6 @@ const initialState = {
 
 const SidebarReducer = (state=initialState, action) => {
     switch(action.type) {
-        case ConstantTypes.SET_ACTIVE_GROUP:
-            return {
-                ...state,
-                activeGroup: action.payload
-            }
         case ConstantTypes.SET_ACTIVE_ITEM: 
             return {
                 ...state,

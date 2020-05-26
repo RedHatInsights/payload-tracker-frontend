@@ -3,7 +3,7 @@ import * as ConstantTypes from '../AppConstants';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import history from '../history';
 
-const DEFAULT_CELL_STATE = history.location.pathname === '/home/payloads' ?
+const DEFAULT_CELL_STATE = history.location.pathname === '/payloads' ?
     ConstantTypes.DEFAULT_PAYLOAD_CELL_STATE :
     ConstantTypes.DEFAULT_STATUSES_CELL_STATE
 
@@ -37,7 +37,7 @@ const CellReducer = (state=initialState, action) => {
         case LOCATION_CHANGE:
             return action.payload.location.pathname === state.cellPath ? state : {
                 ...state,
-                cells: action.payload.location.pathname === '/home/payloads' ?
+                cells: action.payload.location.pathname === '/payloads' ?
                     ConstantTypes.DEFAULT_PAYLOAD_CELL_STATE :
                     ConstantTypes.DEFAULT_STATUSES_CELL_STATE,
                 cellPath: action.payload.location.pathname

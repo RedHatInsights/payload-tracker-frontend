@@ -23,10 +23,10 @@ Routes
 
 The Payload Tracker Frontend can be accessed at the following routes.
 ```
-<Route path='/' exact render={() => <Redirect to='/home/payloads'/>}/>
-<Route path='/home/payloads' component={Payloads}/>
-<Route exact path='/home/track' component={Track}/>
-<Route path='/home/track/:payload_id' component={Track}/>
+<Route path='/' exact render={() => <Redirect to='/payloads'/>}/>
+<Route path='/payloads' component={Payloads}/>
+<Route exact path='/track' component={Track}/>
+<Route path='/track/:payload_id' component={Track}/>
 
 ```
 
@@ -34,7 +34,7 @@ The Payload Tracker Frontend can be accessed at the following routes.
 Basic Usage
 --------------------
 
-The frontend allows for developers to easily view and share payloads as they pass through the platform. The `/home/track:payload_id` allows for developers to understand where errors occur, what the errors are, and how quickly payloads are passing in between services and within individual services.
+The frontend allows for developers to easily view and share payloads as they pass through the platform. The `/track:payload_id` allows for developers to understand where errors occur, what the errors are, and how quickly payloads are passing in between services and within individual services.
 
 
 Docker
@@ -53,7 +53,7 @@ Prequisites
 Socket Updates
 --------------------
 
-We are using the socket.io client to grab data as it changes within the service. This functionality is currently supported within the `/home/track/:payload_id` route, and will refresh as new payloads are picked up with the same payload_id as the one that is currently being viewed.
+We are using the socket.io client to grab data as it changes within the service. This functionality is currently supported within the `/track/:payload_id` route, and will refresh as new payloads are picked up with the same payload_id as the one that is currently being viewed.
 
 
 Dev Setup

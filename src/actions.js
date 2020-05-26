@@ -33,10 +33,6 @@ export function setCellActive(title) {
     }
 }
 
-export function setActiveGroup(group) {
-    return {type: ActionTypes.SET_ACTIVE_GROUP, payload: group}
-};
-
 export function setActiveItem(item) {
     return {type: ActionTypes.SET_ACTIVE_ITEM, payload: item}
 };

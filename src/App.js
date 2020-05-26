@@ -12,11 +12,11 @@ class App extends Component {
   render() {
     return (
       <Switch>
-        <Route path='/' exact render={() => <Redirect to='/home/payloads'/>}/>
-        <Route path='/home/payloads' component={Payloads}/>
-        <Route path='/home/statuses' component={Statuses}/>
-        <Route exact path='/home/track' component={Track}/>
-        <Route path='/home/track/:request_id' component={Track}/>
+        <Route path='/' exact render={() => <Redirect to='/payloads'/>}/>
+        <Route path='/payloads' component={Payloads}/>
+        <Route path='/statuses' component={Statuses}/>
+        <Route exact path='/track' component={Track}/>
+        <Route path='/track/:request_id' component={Track}/>
         {/* <Route path='/stats/successrates' component={SuccessRate}/> */}
       </Switch>
     )

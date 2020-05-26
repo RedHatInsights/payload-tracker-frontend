@@ -3,14 +3,14 @@ import * as ConstantTypes from '../AppConstants';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import history from '../history';
 
-const sort_dir = ConstantTypes.GET_VALUE_FROM_URL('/home/track.sort_dir');
-const sort_by = ConstantTypes.GET_VALUE_FROM_URL('/home/track.sort_by');
+const sort_dir = ConstantTypes.GET_VALUE_FROM_URL('/track.sort_dir');
+const sort_by = ConstantTypes.GET_VALUE_FROM_URL('/track.sort_by');
 
 const initialState = {
     sort_dir: sort_dir === null ? ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir : sort_dir,
     sort_by: sort_by === null ? ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by : sort_by,
     activeTabKey: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.activeTabKey,
-    request_id: history.location.pathname === '/home/track' ?
+    request_id: history.location.pathname === '/track' ?
         ConstantTypes.DEFAULT_TRACK_PAGE_STATE.request_id :
         history.location.pathname.split('/')[3]
 };
@@ -38,7 +38,7 @@ const TrackReducer = (state=initialState, action) => {
                 activeTabKey: action.payload
             }
         case LOCATION_CHANGE:
-            return action.payload.location.pathname.indexOf('/home/track') >= 0 ? state : {
+            return action.payload.location.pathname.indexOf('/track') >= 0 ? state : {
                 ...state,
                 sort_dir: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir,
                 sort_by: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by,
