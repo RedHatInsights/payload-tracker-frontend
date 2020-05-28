@@ -10,9 +10,9 @@ const initialState = {
     sort_dir: sort_dir === null ? ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir : sort_dir,
     sort_by: sort_by === null ? ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by : sort_by,
     activeTabKey: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.activeTabKey,
-    request_id: history.location.pathname === '/track' ?
+    request_id: history.location.pathname.split('/')[1] !== 'track' ?
         ConstantTypes.DEFAULT_TRACK_PAGE_STATE.request_id :
-        history.location.pathname.split('/')[3]
+        history.location.pathname.split('/')[2]
 };
 
 const TrackReducer = (state=initialState, action) => {
