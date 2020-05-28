@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const OptionsContainer = ({ cells, setCellActive, setCellInactive, isDisabled }) => {
+const OptionsContainer = ({ cells, setCellActivity, isDisabled }) => {
 
     const [isOpen, setOpen] = useState(false);
     const toggle = <OptionsMenuToggle 
@@ -20,7 +20,7 @@ const OptionsContainer = ({ cells, setCellActive, setCellInactive, isDisabled })
                     /> 
 
     const clickHandler = cell => {
-        cell.isActive ? setCellInactive(cell.title) : setCellActive(cell.title);
+        cell.isActive ? setCellActivity(cell.title, false) : setCellActivity(cell.title, true);
     }
 
     const generateOptions = () => {
@@ -60,8 +60,7 @@ const OptionsContainer = ({ cells, setCellActive, setCellInactive, isDisabled })
 
 OptionsContainer.propTypes = {
     cells: PropTypes.array,
-    setCellInactive: PropTypes.func,
-    setCellActive: PropTypes.func,
+    setCellActivity: PropTypes.func,
     isDisabled: PropTypes.bool
 };
 
@@ -70,8 +69,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setCellInactive: (title) => dispatch(AppActions.setCellInactive(title)),
-    setCellActive: (title) => dispatch(AppActions.setCellActive(title))
+    setCellActivity: (title, bool) => dispatch(AppActions.setCellActivity(title, bool)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OptionsContainer);

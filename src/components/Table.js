@@ -96,7 +96,7 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
         {loading && <span style={{ justifyContent: 'center', display: 'flex' }}>
             <Spinner size='xl'/>
         </span>}
-        {!loading && <Table
+        {!loading && formattedCells && formattedRows && <Table
                 cells={formattedCells} 
                 rows={formattedRows}
                 variant={TableVariant.compact}

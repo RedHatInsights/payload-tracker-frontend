@@ -19,7 +19,7 @@ import { useHistory } from 'react-router';
 
 const queryBase = '/v1/payloads?';
 
-const Payloads = ({ getPayloads, page, page_size, filters, loading }) => {
+const Payloads = ({ getPayloads, page, page_size, filters }) => {
 
     let history = useHistory();
     const [sortDir, setSortDir] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_dir`) || 'asc');

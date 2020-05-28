@@ -7,31 +7,19 @@ var filterIndex = 0;
 
 export function incFilterIndex() {
     return filterIndex += 1;
-}
+};
 
 export function setCellActivity(title, bool=false) {
     return {
         type: ActionTypes.SET_CELL_ACTIVITY,
         title: title,
-        payload: bool
-    }
+        payload: bool,
+        updateUrl: {
+            type: `${title}Cell`,
+            value: bool ? null : 'inactive'
+        }
+    };
 };
-
-export function setCellInactive(title) {
-    return {
-        type: ActionTypes.SET_CELL_ACTIVITY,
-        title: title,
-        payload: false
-    }
-}
-
-export function setCellActive(title) {
-    return {
-        type: ActionTypes.SET_CELL_ACTIVITY,
-        title: title,
-        payload: true
-    }
-}
 
 export function setActiveItem(item) {
     return {type: ActionTypes.SET_ACTIVE_ITEM, payload: item}
@@ -76,63 +64,95 @@ export const updateDateRange = (moment, startId, endId) => dispatch => {
         addFilter('date_gte', startDate),
         addFilter('date_lte', endDate)
     ]);
-}
+};
 
 export function setStartDate(date) {
     return {
         type: ActionTypes.SET_START_DATE,
         payload: date,
-    }
-}
+        updateUrl: {
+            type: 'start_date',
+            value: date
+        }
+    };
+};
 
 export function removeStartDate() {
     return {
         type: ActionTypes.SET_START_DATE,
         payload: ConstantTypes.DEFAULT_PAGE_STATE.startDate,
-    }
-}
+        updateUrl: {
+            type: 'start_date',
+            value: null
+        }
+    };
+};
 
 export function setEndDate(date) {
     return {
         type: ActionTypes.SET_END_DATE,
         payload: date,
-    }
-}
+        updateUrl: {
+            type: 'end_date',
+            value: date
+        }
+    };
+};
 
 export function removeEndDate() {
     return {
         type: ActionTypes.SET_END_DATE,
         payload: ConstantTypes.DEFAULT_PAGE_STATE.endDate,
-    }
-}
+        updateUrl: {
+            type: 'end_date',
+            value: null
+        }
+    };
+};
 
 export function setPage(page) {
     return {
         type: ActionTypes.SET_PAGE,
-        payload: page
-    }
-}
+        payload: page,
+        updateUrl: {
+            type: 'page',
+            value: page
+        }
+    };
+};
 
 export function removePage() {
     return {
         type: ActionTypes.SET_PAGE,
-        payload: ConstantTypes.DEFAULT_PAGE_STATE.page
-    }
-}
+        payload: ConstantTypes.DEFAULT_PAGE_STATE.page,
+        updateUrl: {
+            type: 'page',
+            value: null
+        }
+    };
+};
 
 export function setPageSize(page_size) {
     return {
         type: ActionTypes.SET_PAGE_SIZE,
-        payload: page_size
-    }
-}
+        payload: page_size,
+        updateUrl: {
+            type: 'page_size',
+            value: page_size
+        }
+    };
+};
 
 export function removePageSize() {
     return {
         type: ActionTypes.SET_PAGE_SIZE,
         payload: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
-    }
-}
+        updateUrl: {
+            type: 'page_size',
+            value: null
+        }
+    };
+};
 
 export function addFilter(filterType, filterValue) {
     filterIndex += 1;
@@ -142,16 +162,24 @@ export function addFilter(filterType, filterValue) {
             id: filterIndex,
             type: filterType,
             value: filterValue
+        },
+        updateUrl: {
+            type: filterType,
+            value: filterValue
         }
-    }
-}
+    };
+};
 
 export function removeFilter(id) {
     return {
         type: ActionTypes.REMOVE_FILTER,
-        payload: id
-    }
-}
+        payload: id,
+        updateUrl: {
+            type: id,
+            value: null
+        }
+    };
+};
 
 export function setTrackRequestID(request_id) {
     return {
@@ -160,40 +188,40 @@ export function setTrackRequestID(request_id) {
         pushIDToUrl: {
             id: request_id
         }
-    }
+    };
 };
 
 export function setTrackSortBy(sort_by) {
     return {
         type: ActionTypes.SET_TRACK_SORT_BY,
         payload: sort_by
-    }
+    };
 };
 
 export function removeTrackSortBy() {
     return {
         type: ActionTypes.SET_TRACK_SORT_BY,
         payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by
-    }
+    };
 };
 
 export function setTrackSortDir(sort_dir) {
     return {
         type: ActionTypes.SET_TRACK_SORT_DIR,
         payload: sort_dir
-    }
+    };
 };
 
 export function removeTrackSortDir() {
     return {
         type: ActionTypes.SET_TRACK_SORT_DIR,
         payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir
-    }
+    };
 };
 
 export function setActiveTabKey(key) {
     return {
         type: ActionTypes.SET_ACTIVE_TAB_KEY,
         payload: key
-    }
-}
+    };
+};

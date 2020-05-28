@@ -2,16 +2,15 @@ import * as AppActions from '../actions';
 
 import {
     Nav,
-    NavExpandable,
     NavItem,
     NavItemSeparator,
     NavList,
     PageSidebar
 } from '@patternfly/react-core';
 import { PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from '../AppConstants'
-import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
