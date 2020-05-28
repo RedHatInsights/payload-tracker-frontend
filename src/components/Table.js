@@ -67,31 +67,6 @@ const generateRows = (payloads, cells) => {
     return (rows);
 };
 
-const createSpinner = (cells) => {
-    const center = cells.length / 2;
-    let rows = [];
-    let count = 0;
-    cells.map(cell => {
-        if (count !== center) {
-            rows.push({
-                title: '',
-                props: {
-                    component: 'th'
-                }
-            })
-        } else {
-            rows.push({
-                title: <Spinner size='lg'/>,
-                props: {
-                    component: 'th'
-                }
-            })
-        }
-        count += 1;
-    });
-    return [rows];
-}
-
 const generateCells = (cells) => {
     var output = [];
     Object.entries(cells).forEach(([key, cell]) => {
@@ -118,9 +93,12 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
     };
 
     return <React.Fragment>
-        {formattedCells && <Table
+        {loading && <span style={{ justifyContent: 'center', display: 'flex' }}>
+            <Spinner size='xl'/>
+        </span>}
+        {!loading && <Table
                 cells={formattedCells} 
-                rows={loading ? createSpinner(formattedCells) : formattedRows}
+                rows={formattedRows}
                 variant={TableVariant.compact}
                 sortBy={{
                     index: formattedCells.findIndex(x => x.title === sortBy),
