@@ -53,7 +53,6 @@ const TrackGraphicView = ({ payloads }) => {
     var messages = (payloads && getMessagesFromService(payloads, services)) || [];
 
     return <Accordion>
-        <React.Fragment>
         {services.map(service =>
             <div style={{padding: '10px'}}>
                 <TrackGraphic
@@ -61,8 +60,8 @@ const TrackGraphicView = ({ payloads }) => {
                     statuses={statuses[service]}
                     messages={messages[service]}
                 />
-            </div>)}
-        </React.Fragment>
+            </div>
+        )}
     </Accordion>
 };
 

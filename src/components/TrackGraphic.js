@@ -79,12 +79,7 @@ const TrackGraphic = ({ service, statuses, messages }) => {
             },
             'date'
         ]);
-    }, [messages])
-
-    var errorMessage = messages.filter(message => (
-        message.status === 'error' ||
-        message.status === 'failure'
-    ))
+    }, [messages]);
 
     function onExpand(e, rowIndex, colIndex) {
         if (rows[rowIndex].cells[colIndex].title !== '') {
@@ -93,7 +88,7 @@ const TrackGraphic = ({ service, statuses, messages }) => {
                 rows[rowIndex].cells[colIndex].props.isOpen = true
             setRows([...rows]);
         };
-    }
+    };
 
     return (
         <AccordionItem>
@@ -102,40 +97,33 @@ const TrackGraphic = ({ service, statuses, messages }) => {
                 onClick={ () => toggleOpen(!isOpen)}
                 isExpanded={isOpen}
             >
-                <Tooltip
-                    position='bottom'
-                    content={ errorMessage ? truncateString(errorMessage, 80) : '' }
-                    style={ errorMessage ? {} : {display: 'none'} }
-                    entryDelay={0}
-                >
-                    <Progress
-                        value={
-                            (statuses.includes('success') ||
-                            statuses.includes('202') ||
-                            statuses.includes('error') ||
-                            statuses.includes('failure') ||
-                            statuses.includes('announced')) ?
-                            100 : (
-                                statuses.includes('processing') ?
-                                50:
-                                25
-                            )
-                        }
-                        title={service}
-                        measureLocation={ProgressMeasureLocation.none}
-                        variant={
-                            (statuses.includes('success') ||
-                            statuses.includes('202') ||
-                            statuses.includes('announced')) ?
-                            ProgressVariant.success : (
-                                (statuses.includes('error') ||
-                                statuses.includes('failure')) ?
-                                ProgressVariant.danger :
-                                ProgressVariant.info
-                            )
-                        }
-                    />
-                </Tooltip>
+                <Progress
+                    value={
+                        (statuses.includes('success') ||
+                        statuses.includes('202') ||
+                        statuses.includes('error') ||
+                        statuses.includes('failure') ||
+                        statuses.includes('announced')) ?
+                        100 : (
+                            statuses.includes('processing') ?
+                            50:
+                            25
+                        )
+                    }
+                    title={service}
+                    measureLocation={ProgressMeasureLocation.none}
+                    variant={
+                        (statuses.includes('success') ||
+                        statuses.includes('202') ||
+                        statuses.includes('announced')) ?
+                        ProgressVariant.success : (
+                            (statuses.includes('error') ||
+                            statuses.includes('failure')) ?
+                            ProgressVariant.danger :
+                            ProgressVariant.info
+                        )
+                    }
+                />
             </AccordionToggle>
             <AccordionContent 
                 isHidden={!isOpen}
@@ -153,7 +141,7 @@ const TrackGraphic = ({ service, statuses, messages }) => {
                 </div>
             </AccordionContent>
         </AccordionItem>
-    )
+    );
 };
 
 TrackGraphic.propTypes = {
