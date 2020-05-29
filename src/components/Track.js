@@ -10,7 +10,7 @@ import {
     Tab,
     Tabs
 } from '@patternfly/react-core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ExportsDropdown from './ExportsDropdown';
 import MainHeader from './MainHeader';
@@ -27,17 +27,17 @@ import openSocket from 'socket.io-client';
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
 
-const Track = ({ request_id, sort_by, sort_dir, activeTabKey, payloads, durations, loading, search, setActiveTabKey }) => {
+const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, addPayload }) => {
+
+    const [activeTabKey, setActiveTabKey] = useState(0);
 
     useEffect(() => {
         request_id && search(queryBase + `${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`, request_id);
     }, [request_id, sort_by, sort_dir, search]);
 
     useEffect(() => {
-        socket.on('payload', (data) => {
-            data.request_id === request_id && payloads.unshift(data)
-        });
-    }, [request_id, payloads]);
+        socket.on('payload', (data) => data.request_id === request_id && addPayload(data));
+    }, [request_id, payloads, addPayload]);
 
     return(
         <Page
@@ -87,7 +87,7 @@ const Track = ({ request_id, sort_by, sort_dir, activeTabKey, payloads, duration
                                     <OptionsContainer isDisabled={request_id ? false : true}/>
                                 </div>
                                 <div style={{float: 'left', paddingLeft: '10px'}}>
-                                    <ExportsDropdown data={payloads}/>
+                                    <ExportsDropdown/>
                                 </div>
                             </CardHeader>
                             <CardBody>
@@ -107,22 +107,18 @@ Track.propTypes = {
     request_id: PropTypes.any,
     sort_by: PropTypes.string,
     sort_dir: PropTypes.string,
-    activeTabKey: PropTypes.any,
     payloads: PropTypes.array,
     durations: PropTypes.array,
-    loading: PropTypes.bool,
     search: PropTypes.func,
-    setActiveTabKey: PropTypes.func
+    addPayload: PropTypes.func
 };
 
 const mapStateToProps = state => ({
     request_id: state.track.request_id,
     sort_by: state.track.sort_by,
     sort_dir: state.track.sort_dir,
-    activeTabKey: state.track.activeTabKey,
     payloads: state.data.payloads,
-    durations: state.data.durations,
-    loading: state.data.loading
+    durations: state.data.durations
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -130,7 +126,7 @@ const mapDispatchToProps = dispatch => ({
         AppActions.getPayloadTrack(url),
         AppActions.setTrackRequestID(request_id)
     ]),
-    setActiveTabKey: (key) => dispatch(AppActions.setActiveTabKey(key))
+    addPayload: (data) => dispatch(AppActions.addPayloadFromSocket(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Track);

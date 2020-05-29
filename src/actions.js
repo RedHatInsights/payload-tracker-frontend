@@ -154,6 +154,13 @@ export function removePageSize() {
     };
 };
 
+export function addPayloadFromSocket(request) {
+    return {
+        type: ActionTypes.ADD_PAYLOAD_FROM_SOCKET,
+        payload: request
+    };
+};
+
 export function addFilter(filterType, filterValue) {
     filterIndex += 1;
     return {
@@ -216,12 +223,5 @@ export function removeTrackSortDir() {
     return {
         type: ActionTypes.SET_TRACK_SORT_DIR,
         payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir
-    };
-};
-
-export function setActiveTabKey(key) {
-    return {
-        type: ActionTypes.SET_ACTIVE_TAB_KEY,
-        payload: key
     };
 };

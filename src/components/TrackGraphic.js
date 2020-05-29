@@ -4,8 +4,7 @@ import {
     AccordionToggle,
     Progress,
     ProgressMeasureLocation,
-    ProgressVariant,
-    Tooltip
+    ProgressVariant
 } from '@patternfly/react-core';
 import React, { useEffect, useState } from 'react';
 import {

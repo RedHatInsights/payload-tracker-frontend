@@ -1,10 +1,18 @@
+import * as ConstantTypes from '../AppConstants';
+
 import { replace } from 'connected-react-router';
 
 export default store => next => action => {
 
     const state = store.getState();
 
-    let { search } = state.router.location;
+    let { search, pathname } = state.router.location;
+
+    if (action.type === ConstantTypes.SET_TRACK_REQUEST_ID) {
+        pathname.split('/').length === 2 && store.dispatch(replace({
+            pathname: `${pathname}/${action.payload}`
+        }));
+    };
 
     if (action.updateUrl) {
 

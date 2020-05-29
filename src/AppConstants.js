@@ -18,9 +18,9 @@ export const SET_SORT_BY = 'SET_SORT_BY';
 export const SET_TRACK_REQUEST_ID = 'SET_TRACK_REQUEST_ID';
 export const SET_TRACK_SORT_DIR = 'SET_TRACK_SORT_DIR';
 export const SET_TRACK_SORT_BY = 'SET_TRACK_SORT_BY';
-export const SET_ACTIVE_TAB_KEY = 'SET_ACTIVE_TAB_KEY';
 
 export const ADD_FILTER = 'ADD_FILTER';
+export const ADD_PAYLOAD_FROM_SOCKET = 'ADD_PAYLOAD_FROM_SOCKET';
 
 export const REMOVE_FILTER = 'REMOVE_FILTER';
 
@@ -63,8 +63,7 @@ export const DEFAULT_PAGE_STATE = {
 export const DEFAULT_TRACK_PAGE_STATE = {
     request_id: '',
     sort_by: 'date',
-    sort_dir: 'desc',
-    activeTabKey: 0,
+    sort_dir: 'desc'
 };
 export const DEFAULT_DATA_REDUCER_STATE = {
     loading: false,

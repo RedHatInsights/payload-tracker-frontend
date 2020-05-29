@@ -53,6 +53,13 @@ const DataReducer = (state=initialState, action) => {
                 payloads: action.payload.data,
                 durations: action.payload.duration
             }
+        case ConstantTypes.ADD_PAYLOAD_FROM_SOCKET:
+            return {
+                ...state,
+                payloads: state.payloads.filter(
+                    p => p.id === action.payload.id
+                ).length === 0 ? [action.payload, ...state.payloads] : state.payloads
+            };
         case LOCATION_CHANGE:
             return action.payload.location.pathname === state.path ? state : {
                 ...state,
