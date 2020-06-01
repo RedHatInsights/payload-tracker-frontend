@@ -30,10 +30,11 @@ export default store => next => action => {
             search = search.map(item => item.length === 2 ? item.join('=') : '');
             search = search.filter(item => item.includes('=')).join('&');
         } else {
+            var count = 0;
             search = search.filter(item => {
                 if (item.length === 2) {
                     const temp = item[0].includes('?') ? item[0].slice(1) : item[0];
-                    return temp !== type;
+                    if (count === 0 && temp === type) { count += 1; } else { return temp; }
                 };
             });
             search = search.map(item => item.length === 2 && item.join('='));
