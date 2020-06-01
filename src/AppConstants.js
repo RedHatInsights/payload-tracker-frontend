@@ -75,12 +75,6 @@ export const DEFAULT_DATA_REDUCER_STATE = {
 };
 export const DEFAULT_STATUSES_CELL_STATE = [
     {
-        title: 'id',
-        isActive: true,
-        isFilterable: false,
-        isTrackable: false,
-        isDate: false,
-    },{
         title: 'request_id',
         isActive: true,
         isFilterable: false,

@@ -29,7 +29,7 @@ const DropdownContainer = ({ items, type, setSelected }) => {
 
     return (
         <Dropdown
-            toggle={<DropdownToggle onToggle={() => setOpen(!isOpen)}>{type}</DropdownToggle>}
+            toggle={<DropdownToggle isPrimary onToggle={() => setOpen(!isOpen)}>{type}</DropdownToggle>}
             isOpen={isOpen}
             dropdownItems={dropdownItems}
         />

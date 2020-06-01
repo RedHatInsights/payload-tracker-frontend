@@ -4,9 +4,9 @@ import * as ConstantTypes from '../AppConstants';
 import {
     Page,
     PageSection,
-    PageSectionVariants,
+    PageSectionVariants
 } from '@patternfly/react-core';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import MainHeader from './MainHeader';
 import MainSidebar from './MainSidebar';
@@ -25,18 +25,18 @@ const Payloads = ({ getPayloads, page, page_size, filters }) => {
     const [sortDir, setSortDir] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_dir`) || 'asc');
     const [sortBy, setSortBy] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_by`) || '');
 
-    const search = () => {
+    const search = useCallback(() => {
         var query = queryBase;
         query += `sort_by=${sortBy}&sort_dir=${sortDir}&page=${page - 1}&page_size=${page_size}`
         filters && filters.map(filter => 
             query += `&${filter.type}=${filter.value}`
         )
         getPayloads(query)
-    }
+    }, [getPayloads, sortBy, sortDir, page, page_size, filters]);
 
     useEffect(() => {
         search();
-    }, [sortDir, sortBy, page, page_size, filters]);
+    }, [sortDir, sortBy, page, page_size, filters, search]);
 
     return(
         <Page 
@@ -44,10 +44,10 @@ const Payloads = ({ getPayloads, page, page_size, filters }) => {
             sidebar={<MainSidebar />} 
             isManagedSidebar
         >
-            <PageSection variant={PageSectionVariants.dark}>
-                <SearchBar/>
-            </PageSection>
             <PageSection variant={PageSectionVariants.light}>
+                <SearchBar>
+                    Recorded Requests
+                </SearchBar>
                 <Pagination>
                     <div style={{maxWidth:'100vw', overflow:'auto'}}>
                         <Table

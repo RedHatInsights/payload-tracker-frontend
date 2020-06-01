@@ -47,7 +47,8 @@ const generateCells = (cells) => {
     var formattedCells = [];
     Object.entries(cells).forEach(([key, cell]) => {
         if (cell.isActive) {
-            formattedCells.push(cell);
+            const { transforms, ...props } = cell;
+            formattedCells.push(props);
         }
     })
     return(formattedCells)

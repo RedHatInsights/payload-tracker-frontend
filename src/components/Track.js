@@ -45,18 +45,15 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
             sidebar={<MainSidebar/>}
             isManagedSidebar
         >
-            <PageSection variant={PageSectionVariants.dark}>
-                <TrackSearchBar/>
-            </PageSection>
             <PageSection
                 variant={PageSectionVariants.light}
                 style={{height:'80vh', overflow:'auto'}}
             >
+                <TrackSearchBar/>
                 <Tabs activeKey={activeTabKey} onSelect={ (e, index) => setActiveTabKey(index) }>
                     <Tab eventKey={0} title='Status'>
                         <Card>
                             <CardHeader>
-                                {request_id ? `request_id: ${request_id}` : ''}
                             </CardHeader>
                             <CardBody>
                                 <TrackGraphic/>
@@ -66,7 +63,6 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
                     <Tab eventKey={1} title='Duration'>
                         <Card>
                             <CardHeader>
-                                <p> {request_id ? `request_id: ${request_id}` : ''} </p>
                                 <p>
                                     {durations.hasOwnProperty('total_time') ? `Total Time: ${durations.total_time}` : ''}
                                 </p>

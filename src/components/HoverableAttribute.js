@@ -20,7 +20,7 @@ const HoverableAttribute = ({ type, filter, value, setRequestID, updateFilters, 
             history.push(`/track/${value}`);
             beginTracking(TRACK_ITEM);
         } else if (type === 'filter') {
-            updateFilters(filter, value)
+            updateFilters(filter, value);
         } else { return null; }
     }
 

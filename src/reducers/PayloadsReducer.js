@@ -8,17 +8,21 @@ const location = history.location.pathname;
 
 const FILTER_TYPES = ConstantTypes.PAYLOAD_FILTER_TYPES.concat(ConstantTypes.STATUS_FILTER_TYPES)
 
-const filters = FILTER_TYPES.reduce((array, filter) => {
-    var newFilter = ConstantTypes.GET_VALUE_FROM_URL(`${location}.${filter}`)
-    if (newFilter) {
-        array.push({
-            id: actions.incFilterIndex(),
-            type: filter,
-            value: newFilter
-        });
-    }
-    return array;
-}, []);
+const determineFilters = () => {
+    return FILTER_TYPES.reduce((array, filter) => {
+        var newFilter = ConstantTypes.GET_VALUE_FROM_URL(`${location}.${filter}`)
+        if (newFilter) {
+            array.push({
+                id: actions.incFilterIndex(),
+                type: filter,
+                value: newFilter
+            });
+        }
+        return array;
+    }, []);
+};
+
+const filters = determineFilters();
 const page = ConstantTypes.GET_VALUE_FROM_URL(`${location}.page`);
 const page_size = ConstantTypes.GET_VALUE_FROM_URL(`${location}.page_size`);
 const startDate = ConstantTypes.GET_VALUE_FROM_URL(`${location}.startDate`);
@@ -77,7 +81,7 @@ export default (state=initialState, action) => {
         case LOCATION_CHANGE:
             return action.payload.location.pathname === state.path ? state : {
                 ...state,
-                filters: ConstantTypes.DEFAULT_PAGE_STATE.filters,
+                filters: determineFilters(),
                 page: ConstantTypes.DEFAULT_PAGE_STATE.page,
                 page_size: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
                 startDate: ConstantTypes.DEFAULT_PAGE_STATE.startDate,
