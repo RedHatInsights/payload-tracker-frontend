@@ -59,6 +59,7 @@ const SearchBar = ({ children, filters, removeStartDate, removeEndDate, addFilte
         {isModalOpen && <Modal
             title='Add Filter'
             isOpen={isModalOpen}
+            isSmall
             onClose={() => setModalState(false)}
             actions={[
                 <Button

@@ -4,11 +4,16 @@ import {
     Card,
     CardBody,
     CardHeader,
+    Flex,
+    FlexItem,
+    FlexModifiers,
     Page,
     PageSection,
     PageSectionVariants,
     Tab,
-    Tabs
+    Tabs,
+    Text,
+    TextContent
 } from '@patternfly/react-core';
 import React, { useEffect, useState } from 'react';
 
@@ -40,17 +45,10 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
     }, [request_id, payloads, addPayload]);
 
     return(
-        <Page
-            header={<MainHeader/>}
-            sidebar={<MainSidebar/>}
-            isManagedSidebar
-        >
-            <PageSection
-                variant={PageSectionVariants.light}
-                style={{height:'80vh', overflow:'auto'}}
-            >
+        <Page header={<MainHeader/>} sidebar={<MainSidebar/>} isManagedSidebar>
+            <PageSection variant={PageSectionVariants.light}>
                 <TrackSearchBar/>
-                <Tabs activeKey={activeTabKey} onSelect={ (e, index) => setActiveTabKey(index) }>
+                { request_id && payloads.length > 0 && <Tabs activeKey={activeTabKey} onSelect={ (e, index) => setActiveTabKey(index) }>
                     <Tab eventKey={0} title='Status'>
                         <Card>
                             <CardHeader>
@@ -63,13 +61,15 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
                     <Tab eventKey={1} title='Duration'>
                         <Card>
                             <CardHeader>
-                                <p>
-                                    {durations.hasOwnProperty('total_time') ? `Total Time: ${durations.total_time}` : ''}
-                                </p>
-                                <p>
-                                    {durations.hasOwnProperty('total_time_in_services') ?
-                                        `Total Time in Services: ${durations.total_time_in_services}` : ''}
-                                </p>
+                                <TextContent>
+                                    <Text>
+                                        {durations.hasOwnProperty('total_time') ? `Total Time: ${durations.total_time}` : ''}
+                                    </Text>
+                                    <Text>
+                                        {durations.hasOwnProperty('total_time_in_services') ?
+                                            `Total Time in Services: ${durations.total_time_in_services}` : ''}
+                                    </Text>
+                                </TextContent>
                             </CardHeader>
                             <CardBody>
                                 <TrackDuration/>
@@ -79,21 +79,21 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
                     <Tab eventKey={2} title='Table'>
                         <Card>
                             <CardHeader>
-                                <div style={{float: 'left'}}>
-                                    <OptionsContainer isDisabled={request_id ? false : true}/>
-                                </div>
-                                <div style={{float: 'left', paddingLeft: '10px'}}>
-                                    <ExportsDropdown/>
-                                </div>
+                                <Flex breakpointMods={[{modifier: FlexModifiers.row}]}>
+                                    <FlexItem>
+                                        <OptionsContainer isDisabled={request_id ? false : true}/>
+                                    </FlexItem>
+                                    <FlexItem>
+                                        <ExportsDropdown/>
+                                    </FlexItem>
+                                </Flex>
                             </CardHeader>
                             <CardBody>
-                                <div style={{maxWidth: '100vw', overflow: 'auto'}}>
-                                    <TrackTable isDisabled={request_id ? false : true}/>
-                                </div>
+                                <TrackTable/>
                             </CardBody>
                         </Card>
                     </Tab>
-                </Tabs>
+                </Tabs>}
             </PageSection>
         </Page>
     )

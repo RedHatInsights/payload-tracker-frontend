@@ -9,8 +9,12 @@ export default store => next => action => {
     let { search, pathname } = state.router.location;
 
     if (action.type === ConstantTypes.SET_TRACK_REQUEST_ID) {
+        console.log(pathname.split('/').length);
         pathname.split('/').length === 2 && store.dispatch(replace({
             pathname: `${pathname}/${action.payload}`
+        }));
+        pathname.split('/').length === 3 && store.dispatch(replace({
+            pathname: `${[pathname.split('/')[0], pathname.split('/')[1]].join('/')}/${action.payload}`
         }));
     };
 

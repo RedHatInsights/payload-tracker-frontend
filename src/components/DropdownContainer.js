@@ -1,7 +1,8 @@
 import {
     Dropdown,
     DropdownItem,
-    DropdownToggle,
+    DropdownPosition,
+    DropdownToggle
 } from '@patternfly/react-core';
 import React, { useEffect, useState } from 'react';
 
@@ -32,6 +33,7 @@ const DropdownContainer = ({ items, type, setSelected }) => {
             toggle={<DropdownToggle isPrimary onToggle={() => setOpen(!isOpen)}>{type}</DropdownToggle>}
             isOpen={isOpen}
             dropdownItems={dropdownItems}
+            position={DropdownPosition.right}
         />
     )
 }

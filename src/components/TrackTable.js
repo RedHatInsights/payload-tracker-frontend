@@ -1,5 +1,3 @@
-import * as AppActions from '../actions';
-
 import {
     Table,
     TableBody,
@@ -54,16 +52,11 @@ const generateCells = (cells) => {
     return(formattedCells)
 }
 
-const TrackTable = ({ payloads, cells, sort_dir, sort_by, isDisabled, onSort }) => <React.Fragment>
+const TrackTable = ({ payloads, cells }) => <React.Fragment>
     <Table
         cells={generateCells(cells)}
         rows={generateRows(payloads, cells)}
         variant={TableVariant.compact}
-        sortBy={isDisabled && {
-            index: cells.findIndex(x => x.title === sort_by),
-            direction: sort_dir
-        }}
-        onSort = {(index, dir) => onSort(index, dir) }
     >
         <TableHeader/>
         <TableBody/>
@@ -72,27 +65,12 @@ const TrackTable = ({ payloads, cells, sort_dir, sort_by, isDisabled, onSort }) 
 
 TrackTable.propTypes = {
     payloads: PropTypes.array,
-    cells: PropTypes.object,
-    sort_by: PropTypes.string,
-    sort_dir: PropTypes.string,
-    isDisabled: PropTypes.bool,
-    onSort: PropTypes.func
+    cells: PropTypes.object
 };
 
 const mapStateToProps = state => ({
     payloads: state.data.payloads,
-    cells: state.cell.cells,
-    sort_by: state.track.sort_by,
-    sort_dir: state.track.sort_dir,
+    cells: state.cell.cells
 });
 
-const mapStateToDispatch = dispatch => ({
-    onSort: (index, dir) => dispatch([
-        AppActions.removeTrackSortBy(),
-        AppActions.removeTrackSortDir(),
-        AppActions.setTrackSortBy(index),
-        AppActions.setTrackSortDir(dir)
-    ])
-});
-
-export default connect(mapStateToProps, mapStateToDispatch)(TrackTable);
+export default connect(mapStateToProps, null)(TrackTable);

@@ -6,7 +6,7 @@ import {
     ProgressMeasureLocation,
     ProgressVariant
 } from '@patternfly/react-core';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Table,
     TableBody,
@@ -18,55 +18,60 @@ import {
 import PropTypes from 'prop-types';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
 
-const truncateString = (string, chars) => string.length > chars ? string.substring(0, chars) + '...' : string;
-
-function generateTableRows(messages) {
-    var rows = [];
-    var parentIndex = 0;
-    for (var i = 0; i < messages.length; i++) {
-        var message = messages[i];
-        var row = {
-            cells: [
-                {
-                    title: message.status
-                },
-                {
-                    title: message.message ? truncateString(message.message, 80) : '',
-                    props: {isOpen: false, ariaControls : 'compound-expansion-table-1'}
-                },
-                {
-                    title: message.date
-                }
-            ]
-        }
-        rows.push(row)
-        var expandablerow = {
-            parent: parentIndex,
-            compoundParent: 1,
-            cells: [
-                { 
-                    title: (
-                        <div style={{maxWidth:'100vw', overflow:'auto'}}>
-                            <SyntaxHighlighter language='python'>
-                                {message.message}
-                            </SyntaxHighlighter>
-                        </div>
-                    ),
-                    props: {colSpan: 6, className: 'pf-m-no-padding'}
-                }
-            ]
-        }
-        rows.push(expandablerow)
-        parentIndex += 2;
-    };
-    return (rows);
-};
-
 const TrackGraphic = ({ service, statuses, messages }) => {
 
     const [isOpen, toggleOpen] = useState(false);
     const [rows, setRows] = useState([]);
     const [cells, setCells] = useState([]);
+
+    const truncateString = (string, chars) => string.length > chars ? string.substring(0, chars) + '...' : string;
+
+    const generateTableRows = useCallback((messages) => {
+        var rows = [];
+        var parentIndex = 0;
+        for (var i = 0; i < messages.length; i++) {
+            var message = messages[i];
+            var row = {
+                cells: [
+                    {
+                        title: message.status
+                    },
+                    {
+                        title: message.message ? truncateString(message.message, 80) : '',
+                        props: {isOpen: false, ariaControls : 'compound-expansion-table-1'}
+                    },
+                    {
+                        title: message.date
+                    }
+                ]
+            }
+            rows.push(row)
+            var expandablerow = {
+                parent: parentIndex,
+                compoundParent: 1,
+                cells: [
+                    {
+                        title: <SyntaxHighlighter language='python'>
+                            {message.message}
+                        </SyntaxHighlighter>,
+                        props: {colSpan: 6, className: 'pf-m-no-padding'}
+                    }
+                ]
+            }
+            rows.push(expandablerow)
+            parentIndex += 2;
+        };
+        return (rows);
+    }, []);
+
+    const onExpand = (e, rowIndex, colIndex) => {
+        if (rows[rowIndex].cells[colIndex].title !== '') {
+            rows[rowIndex].cells[colIndex].props.isOpen ?
+                rows[rowIndex].cells[colIndex].props.isOpen = false :
+                rows[rowIndex].cells[colIndex].props.isOpen = true
+            setRows([...rows]);
+        };
+    };
 
     useEffect(() => {
         setRows(generateTableRows(messages));
@@ -78,16 +83,7 @@ const TrackGraphic = ({ service, statuses, messages }) => {
             },
             'date'
         ]);
-    }, [messages]);
-
-    function onExpand(e, rowIndex, colIndex) {
-        if (rows[rowIndex].cells[colIndex].title !== '') {
-            rows[rowIndex].cells[colIndex].props.isOpen ?
-                rows[rowIndex].cells[colIndex].props.isOpen = false :
-                rows[rowIndex].cells[colIndex].props.isOpen = true
-            setRows([...rows]);
-        };
-    };
+    }, [messages, generateTableRows]);
 
     return (
         <AccordionItem>
@@ -124,20 +120,16 @@ const TrackGraphic = ({ service, statuses, messages }) => {
                     }
                 />
             </AccordionToggle>
-            <AccordionContent 
-                isHidden={!isOpen}
-            >
-                <div style={{maxWidth:'100vw', overflow:'auto'}}>
-                    <Table
-                        onExpand={onExpand}
-                        cells={cells}
-                        rows={rows}
-                        variant={TableVariant.compact}
-                    >
-                        <TableHeader/>
-                        <TableBody/>
-                    </Table>
-                </div>
+            <AccordionContent isHidden={!isOpen}>
+                <Table
+                    onExpand={onExpand}
+                    cells={cells}
+                    rows={rows}
+                    variant={TableVariant.compact}
+                >
+                    <TableHeader/>
+                    <TableBody/>
+                </Table>
             </AccordionContent>
         </AccordionItem>
     );

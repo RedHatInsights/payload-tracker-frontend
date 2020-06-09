@@ -18,15 +18,13 @@ const queryBase = '/v1/statuses?';
 const Statuses = ({ getStatuses, page, page_size, filters }) => {
 
     let history = useHistory();
-    const [sortDir, setSortDir] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_dir`) || 'asc');
+    const [sortDir, setSortDir] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_dir`) || 'desc');
     const [sortBy, setSortBy] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_by`) || 'date');
 
     const search = useCallback(() => {
         var query = queryBase;
-        query += `sort_by=${sortBy}&sort_dir=${sortDir}&page=${page - 1}&page_size=${page_size}`
-        filters && filters.map(filter => 
-            query += `&${filter.type}=${filter.value}`
-        )
+        query += `sort_by=${sortBy}&sort_dir=${sortDir}&page=${page - 1}&page_size=${page_size}`;
+        filters && filters.map(filter => query += `&${filter.type}=${filter.value}`);
         getStatuses(query);
     }, [getStatuses, sortBy, sortDir, page, page_size, filters]);
 
@@ -59,16 +57,12 @@ const Statuses = ({ getStatuses, page, page_size, filters }) => {
 
 Statuses.propTypes = {
     getStatuses: PropTypes.func,
-    sort_dir: PropTypes.string,
-    sort_by: PropTypes.string,
     page: PropTypes.number,
     page_size: PropTypes.number,
     filters: PropTypes.array
 };
 
 const mapStateToProps = state => ({
-    sort_dir: state.payloads.sort_dir,
-    sort_by: state.payloads.sort_by,
     page: state.payloads.page,
     page_size: state.payloads.page_size,
     filters: state.payloads.filters

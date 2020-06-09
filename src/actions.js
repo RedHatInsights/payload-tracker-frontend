@@ -162,7 +162,7 @@ export function addPayloadFromSocket(request) {
 };
 
 export function addFilter(filterType, filterValue) {
-    filterIndex += 1;
+    incFilterIndex();
     return {
         type: ActionTypes.ADD_FILTER,
         payload: {

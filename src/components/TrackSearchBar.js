@@ -1,29 +1,41 @@
 import * as AppActions from '../actions';
 
 import {
+     Bullseye,
      Button,
      Card,
+     EmptyState,
+     EmptyStateBody,
+     EmptyStateIcon,
+     EmptyStateVariant,
      Flex,
      FlexItem,
      FlexModifiers,
      Text,
      TextContent,
      TextInput,
-     TextVariants
+     TextVariants,
+     Title
 } from '@patternfly/react-core';
-import React, { useCallback, useEffect, useState } from 'react';
+import { PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 
-import { PlusCircleIcon } from '@patternfly/react-icons';
+import { PAYLOADS_ITEM } from '../AppConstants';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router';
 
-const TrackSearchBar = ({ request_id, payloads, setRequestID }) => {
+const TrackSearchBar = ({ request_id, payloads, loading, setRequestID, setActiveItem }) => {
 
     const [id, updateID] = useState();
     const [account, setAccount] = useState('');
     const [inventory_id, setInventoryID] = useState('')
     let history = useHistory();
+
+    const clickHandler = (url) => {
+        setActiveItem(PAYLOADS_ITEM);
+        history.push(url);
+    };
 
     const getAccount = useCallback(() => {
         const payloadsWithAccount = payloads.filter(p => p.account);
@@ -64,7 +76,7 @@ const TrackSearchBar = ({ request_id, payloads, setRequestID }) => {
             </Text>
         </TextContent>
         <Card style={{marginBottom: '20px'}}>
-            <Flex
+            {request_id && payloads.length > 0 ? <Flex
                 breakpointMods={[{modifier: FlexModifiers.column}]}
                 style={{ margin: '10px' }}
             >
@@ -76,7 +88,7 @@ const TrackSearchBar = ({ request_id, payloads, setRequestID }) => {
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => history.push(`/payloads?account=${account}`) }
+                            onClick={() => clickHandler(`/payloads?account=${account}`) }
                         >
                             See more Requests for this Account
                         </Button>
@@ -89,13 +101,25 @@ const TrackSearchBar = ({ request_id, payloads, setRequestID }) => {
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => history.push(`/payloads?inventory_id=${inventory_id}`)}
+                            onClick={() => clickHandler(`/payloads?inventory_id=${inventory_id}`)}
                         >
                             See more Requests for this ID
                         </Button>
                     </FlexItem>}
                 </Flex>
-            </Flex>
+            </Flex> : !loading && <Bullseye>
+                <EmptyState variant={EmptyStateVariant.lg}>
+                    <EmptyStateIcon icon={TimesCircleIcon} color='#c9190b'/>
+                    {request_id ? <Title headingLevel='h1'>
+                        Invalid request_id
+                    </Title> : <Title headingLevel='h1'>
+                        No request_id specified
+                    </Title>}
+                    <EmptyStateBody>
+                        To see tracking information enter a valid request_id.
+                    </EmptyStateBody>
+                </EmptyState>
+            </Bullseye>}
         </Card>
     </React.Fragment>;
 };
@@ -110,16 +134,20 @@ const inputStyle = {
 TrackSearchBar.propTypes = {
     request_id: PropTypes.string,
     payloads: PropTypes.array,
-    setRequestID: PropTypes.func
+    loading: PropTypes.bool,
+    setRequestID: PropTypes.func,
+    setActiveItem: PropTypes.func
 };
 
 const mapStateToProps = state => ({
     request_id: state.track.request_id,
-    payloads: state.data.payloads
+    payloads: state.data.payloads,
+    loading: state.data.loading
 });
 
 const mapDispatchToProps = dispatch => ({
-    setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id))
+    setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id)),
+    setActiveItem: (item) => dispatch(AppActions.setActiveItem(item))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrackSearchBar);
