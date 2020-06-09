@@ -77,6 +77,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     updateNav: (item) => dispatch([
+        AppActions.setTrackRequestID(null),
         AppActions.setActiveItem(item)
     ])
 });

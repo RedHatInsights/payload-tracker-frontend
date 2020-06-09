@@ -18,7 +18,7 @@ import {
      Title
 } from '@patternfly/react-core';
 import { PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { PAYLOADS_ITEM } from '../AppConstants';
 import PropTypes from 'prop-types';
