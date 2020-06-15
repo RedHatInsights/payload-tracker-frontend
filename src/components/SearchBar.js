@@ -86,6 +86,7 @@ const SearchBar = ({ children, filters, removeStartDate, removeEndDate, addFilte
             </TextContent>
             <TextInput
                 onChange={(val) => setChipValue(val)}
+                onKeyPress={(e) => e.key === 'Enter' && createChip()}
                 placeholder={chipType + '...'}
                 value={chipValue}
             />

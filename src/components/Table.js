@@ -1,17 +1,25 @@
 import 'moment-timezone';
 
+import {
+    Bullseye,
+    EmptyState,
+    EmptyStateBody,
+    EmptyStateIcon,
+    Spinner,
+    Title
+} from '@patternfly/react-core';
 import React, { useEffect, useState } from 'react';
 import {
     Table,
     TableBody,
     TableHeader,
-    TableVariant,
+    TableVariant
 } from '@patternfly/react-table';
 
 import HoverableAttribute from './HoverableAttribute'
 import Moment from 'react-moment';
 import PropTypes from 'prop-types';
-import { Spinner } from '@patternfly/react-core';
+import { SearchIcon } from '@patternfly/react-icons';
 import { connect } from 'react-redux';
 
 Moment.globalTimezone = 'America/New_York';
@@ -109,6 +117,17 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
                 <TableHeader/>
                 <TableBody/>
         </Table>}
+        {!loading && formattedCells && formattedRows && payloads.length === 0 && <Bullseye>
+            <EmptyState>
+                <EmptyStateIcon icon={SearchIcon}/>
+                <Title>
+                    No results found
+                </Title>
+                <EmptyStateBody>
+                    No results match the filter criteria. Clear filters to show results.
+                </EmptyStateBody>
+            </EmptyState>
+        </Bullseye>}
     </React.Fragment>;
 };
 
