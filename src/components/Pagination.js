@@ -10,7 +10,6 @@ import {
     SplitItem
 } from '@patternfly/react-core';
 
-import DateRangeFilter from './DateRangeFilter';
 import ExportsDropdown from './ExportsDropdown';
 import OptionsContainer from './OptionsContainer';
 import PropTypes from 'prop-types';
@@ -25,9 +24,6 @@ const PayloadsPagination = ({ count, page_size, page, updatePageSize, updatePage
             </SplitItem>
             <SplitItem>
                 <ExportsDropdown/>
-            </SplitItem>
-            <SplitItem>
-                <DateRangeFilter/>
             </SplitItem>
             <SplitItem isFilled/>
             <SplitItem>

@@ -1,7 +1,11 @@
 import * as AppActions from '../actions';
 
-import {Brand, Button, PageHeader} from '@patternfly/react-core';
+import {
+    Brand,
+    PageHeader
+} from '@patternfly/react-core';
 
+import DateRangeFilter from './DateRangeFilter';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -16,14 +20,7 @@ const MainHeader = ({ isNavigationOpen, toggleNav }) => {
                 target: '_blank'
             }}
             toolbar={
-                <Button 
-                    component='a' 
-                    variant='tertiary'
-                    href='https://github.com/RedHatInsights/payload-tracker#rest-api-endpoints'
-                    target="_blank"
-                >
-                    API Endpoints
-                </Button>
+                <DateRangeFilter/>
             }
             onNavToggle={ () => toggleNav(isNavigationOpen) }
             showNavToggle

@@ -51,18 +51,27 @@ export const getPayloadTrack = (url) => dispatch => {
         })
 };
 
-export const updateDateRange = (moment, startId, endId) => dispatch => {
+export const addNewTimeFilter = (currentType, start, end) => {
+    return {
+        type: ActionTypes.ADD_RECENT_TIME_FILTER,
+        payload: {
+            type: currentType,
+            obj: {
+                start,
+                end
+            }
+        }
+    }
+};
 
-    const startDate = moment.start.format("YYYY-MM-DD");
-    const endDate = moment.end.format("YYYY-MM-DD");
-
+export const updateDateRange = (start, end, type, startId, endId) => dispatch => {
     dispatch([
-        setStartDate(startDate),
-        setEndDate(endDate),
+        setStartDate(start),
+        setEndDate(end),
         removeFilter(startId),
         removeFilter(endId),
-        addFilter('date_gte', startDate),
-        addFilter('date_lte', endDate)
+        addFilter(`${type}_gte`, start.toISOString()),
+        addFilter(`${type}_lte`, end.toISOString())
     ]);
 };
 
