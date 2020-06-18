@@ -8,7 +8,7 @@ export default store => next => action => {
 
     let { search, pathname } = state.router.location;
 
-    if (action.type === ConstantTypes.SET_TRACK_REQUEST_ID) {
+    if (action.type === ConstantTypes.SET_TRACK_REQUEST_ID && action.payload) {
         pathname.split('/').length === 2 && store.dispatch(replace({
             pathname: `${pathname}/${action.payload}`
         }));

@@ -34,6 +34,8 @@ const initialState = {
     page_size: page_size === null ? ConstantTypes.DEFAULT_PAGE_STATE.page_size : page_size,
     startDate: startDate === null ? ConstantTypes.DEFAULT_PAGE_STATE.startDate : startDate,
     endDate: endDate === null ? ConstantTypes.DEFAULT_PAGE_STATE.endDate : endDate,
+    recentTimeFilters: [{start: null, end: null}],
+    recentTimeType: null,
     path: `${location}`
 };
 
@@ -48,6 +50,12 @@ export default (state=initialState, action) => {
             return {
                 ...state,
                 endDate: action.payload
+            }
+        case ConstantTypes.ADD_RECENT_TIME_FILTER:
+            return {
+                ...state,
+                recentTimeType: action.payload.type,
+                recentTimeFilters: [action.payload.obj, ...state.recentTimeFilters]
             }
         case ConstantTypes.SET_PAGE:
             return {
@@ -75,7 +83,9 @@ export default (state=initialState, action) => {
             return {
                 ...state,
                 filters: state.filters.filter(filter => {
-                    return filter.id !== action.payload
+                    if (filter.id !== action.payload){
+                        return filter;
+                    };
                 })
             }
         case LOCATION_CHANGE:
@@ -84,9 +94,8 @@ export default (state=initialState, action) => {
                 filters: determineFilters(),
                 page: ConstantTypes.DEFAULT_PAGE_STATE.page,
                 page_size: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
-                startDate: ConstantTypes.DEFAULT_PAGE_STATE.startDate,
-                endDate: ConstantTypes.DEFAULT_PAGE_STATE.endDate,
-                path: action.payload.location.pathname
+                path: action.payload.location.pathname,
+                recentTimeType: action.payload.location.pathname === '/payloads' ? 'created_at' : state.recentTimeType
             }
         default:
             return state;
