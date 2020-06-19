@@ -16,6 +16,7 @@ import {
     TableVariant
 } from '@patternfly/react-table';
 
+import DateTime from 'luxon/src/datetime';
 import HoverableAttribute from './HoverableAttribute'
 import PropTypes from 'prop-types';
 import { SearchIcon } from '@patternfly/react-icons';
@@ -52,7 +53,11 @@ const generateRows = (payloads, cells) => {
                             }})
                         } else if (cellValue.isDate) {
                             row.push({
-                                title: getLocalDate(new Date(payloadValue))
+                                title: getLocalDate(
+                                    DateTime.fromFormat(
+                                        payloadValue, 'yyyy-MM-dd H:mm:ss.uZZ'
+                                    ).toJSDate()
+                                )
                             })
                         } else {
                             row.push({ title: payloadValue })
