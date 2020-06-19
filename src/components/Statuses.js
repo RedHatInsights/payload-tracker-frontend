@@ -15,7 +15,7 @@ import { useHistory } from 'react-router';
 
 const queryBase = '/v1/statuses?';
 
-const Statuses = ({ getStatuses, page, page_size, filters }) => {
+const Statuses = ({ getStatuses, page, page_size, filters, startDate, endDate, recentTimeType }) => {
 
     let history = useHistory();
     const [sortDir, setSortDir] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_dir`) || 'desc');
@@ -25,12 +25,18 @@ const Statuses = ({ getStatuses, page, page_size, filters }) => {
         var query = queryBase;
         query += `sort_by=${sortBy}&sort_dir=${sortDir}&page=${page - 1}&page_size=${page_size}`;
         filters && filters.map(filter => query += `&${filter.type}=${filter.value}`);
+        if (startDate) {
+            query += `&${recentTimeType}_gte=${startDate}`;
+        }
+        if (endDate) {
+            query += `&${recentTimeType}_lte=${endDate}`;
+        }
         getStatuses(query);
-    }, [getStatuses, sortBy, sortDir, page, page_size, filters]);
+    }, [getStatuses, sortBy, sortDir, page, page_size, filters, startDate, endDate, recentTimeType]);
 
     useEffect(() => {
         search();
-    }, [sortDir, sortBy, page, page_size, filters, search]);
+    }, [sortDir, sortBy, page, page_size, filters, search, startDate, endDate, recentTimeType]);
 
     return <Page
         header={<MainHeader />} 
@@ -59,13 +65,19 @@ Statuses.propTypes = {
     getStatuses: PropTypes.func,
     page: PropTypes.number,
     page_size: PropTypes.number,
-    filters: PropTypes.array
+    filters: PropTypes.array,
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
+    recentTimeType: PropTypes.string
 };
 
 const mapStateToProps = state => ({
     page: state.payloads.page,
     page_size: state.payloads.page_size,
-    filters: state.payloads.filters
+    filters: state.payloads.filters,
+    startDate: state.payloads.startDate,
+    endDate: state.payloads.endDate,
+    recentTimeType: state.payloads.recentTimeType
 });
 
 const mapDispatchToProps = dispatch => ({

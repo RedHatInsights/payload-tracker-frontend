@@ -64,14 +64,10 @@ export const addNewTimeFilter = (currentType, start, end) => {
     }
 };
 
-export const updateDateRange = (start, end, type, startId, endId) => dispatch => {
+export const updateDateRange = (start, end) => dispatch => {
     dispatch([
-        setStartDate(start),
-        setEndDate(end),
-        removeFilter(startId),
-        removeFilter(endId),
-        addFilter(`${type}_gte`, start.toISOString()),
-        addFilter(`${type}_lte`, end.toISOString())
+        setStartDate(start.toISOString()),
+        setEndDate(end.toISOString()),
     ]);
 };
 

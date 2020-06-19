@@ -10,8 +10,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import newlogo from './static/images/rh-new-logo.svg';
+import { useHistory } from 'react-router';
 
 const MainHeader = ({ isNavigationOpen, toggleNav }) => {
+
+    const history = useHistory();
+    const { pathname } = history.location;
+
     return (
         <PageHeader 
             logo={<Brand src={newlogo} alt= "Red Hat Logo White"/>}
@@ -20,7 +25,7 @@ const MainHeader = ({ isNavigationOpen, toggleNav }) => {
                 target: '_blank'
             }}
             toolbar={
-                <DateRangeFilter/>
+                !pathname.includes('/track') && <DateRangeFilter/>
             }
             onNavToggle={ () => toggleNav(isNavigationOpen) }
             showNavToggle

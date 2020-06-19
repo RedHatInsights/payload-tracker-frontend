@@ -20,7 +20,6 @@ import {
     Tabs,
     Text,
     TextInput,
-    TextVariants
 } from '@patternfly/react-core';
 import { CaretLeftIcon, CaretRightIcon, ClockIcon } from '@patternfly/react-icons';
 import React, {
@@ -37,6 +36,7 @@ import DayPicker from 'react-day-picker';
 import Dropdown from './DropdownContainer';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { getLocalDate } from '../AppConstants';
 import { useHistory } from 'react-router';
 
 const DateTextInput = forwardRef(({ setValidation, val }, ref) => {
@@ -45,15 +45,18 @@ const DateTextInput = forwardRef(({ setValidation, val }, ref) => {
     const [currentValue, setCurrentValue] = useState();
 
     const checkVal = (newVal) => {
-        const res = DateTime.fromISO(newVal);
-        if (res.invalid) {
-            setIsDate(false);
-            setValidation(false);
-        } else {
-            setIsDate(true);
-            setValidation(true);
+        if (newVal) {
+            newVal = newVal instanceof Object ? newVal.toLocaleString('en-US') : newVal
+            const res = DateTime.fromFormat(newVal, 'm/d/y, h:mm:ss a');
+            if (res.invalid) {
+                setIsDate(false);
+                setValidation(false);
+            } else {
+                setIsDate(true);
+                setValidation(true);
+            };
+            setCurrentValue(newVal);
         };
-        setCurrentValue(newVal);
     };
 
     useEffect(() => {
@@ -73,7 +76,7 @@ const DateTextInput = forwardRef(({ setValidation, val }, ref) => {
     }));
 
     return <TextInput
-        value={currentValue}
+        value={currentValue && currentValue.toLocaleString('en-US')}
         onChange={(val) => checkVal(val)}
         validated={isDate ? 'success' : 'error'}
     />
@@ -86,14 +89,14 @@ DateTextInput.propTypes = {
 };
 
 const DateRangeFilter = ({
-    updateDateRange, addNewTimeFilter, removeFilter, setStartDate, setEndDate,
-    filters, startDate, endDate, recentTimeFilters, recentTimeType
+    updateDateRange, addNewTimeFilter, setStartDate, setEndDate,
+    startDate, endDate, recentTimeFilters, recentTimeType
 }) => {
 
     const [isOpen, setOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-    const [start, setStart] = useState(startDate);
-    const [end, setEnd] = useState(endDate);
+    const [start, setStart] = useState(startDate && new Date(startDate));
+    const [end, setEnd] = useState(endDate && new Date(endDate));
     const [type, setType] = useState(recentTimeType);
     const [isValidated, setValidation] = useState(true);
     const [leftRecentsStack, setLeftRecentsStack] = useState();
@@ -101,14 +104,6 @@ const DateRangeFilter = ({
     const fromRef = useRef();
     const toRef = useRef();
     const history = useHistory();
-
-    const getId = (array, type) => {
-        for(var i = 0; i < array.length; i++) {
-            if(array[i].type === type){
-                return array[i].id
-            };
-        };
-    };
 
     const resetStacks = (start, end) => {
         for(var i = 0; i < recentTimeFilters.length; i++) {
@@ -128,8 +123,8 @@ const DateRangeFilter = ({
     }, [addNewTimeFilter]);
 
     const updateState = useCallback((s, e, type) => {
-        updateDateRange(s, e, type, getId(filters, `${type}_gte`), getId(filters, `${type}_lte`));
-    }, [filters, updateDateRange]);
+        updateDateRange(s, e);
+    }, [updateDateRange]);
 
     useEffect(() => {
         resetStacks(start, end)
@@ -152,11 +147,6 @@ const DateRangeFilter = ({
                 setStartDate(start);
                 setEndDate(end);
             }
-            filters.map(filter => {
-                if  (filter.type.includes('gte') || filter.type.includes('lte')) {
-                    removeFilter(filter.id);
-                };
-            });
         };
     //eslint-disable-next-line
     }, [start, end, type]);
@@ -194,10 +184,6 @@ const DateRangeFilter = ({
         setStart(leftRecent.start);
         setEnd(leftRecent.end);
         setLeftRecentsStack(moreRecents);
-    };
-
-    const getLocalDate = (date) => {
-        return date ? `${date.toLocaleString()} UTC-${date.getTimezoneOffset()/60}00` : null;
     };
 
     return <React.Fragment>
@@ -250,12 +236,12 @@ const DateRangeFilter = ({
                                         <FlexItem>
                                             <DateTextInput
                                                 ref={fromRef}
-                                                val={start ? start.toISOString() : start}
+                                                val={start}
                                                 setValidation={setValidation}
                                             />
                                         </FlexItem>
                                         <FlexItem>
-                                            <DayPicker onDayClick={(day) => fromRef.current.setValue(day.toISOString())}/>
+                                            <DayPicker onDayClick={(day) => fromRef.current.setValue(day)}/>
                                         </FlexItem>
                                     </Flex>
                                 </FormGroup>
@@ -264,21 +250,18 @@ const DateRangeFilter = ({
                                         <FlexItem>
                                             <DateTextInput
                                                 ref={toRef}
-                                                val={end ? end.toISOString() : end}
+                                                val={end}
                                                 setValidation={setValidation}
                                             />
                                         </FlexItem>
                                         <FlexItem>
                                             <DayPicker
-                                                onDayClick={(day) => toRef.current.setValue(day.toISOString())}
+                                                onDayClick={(day) => toRef.current.setValue(day)}
                                             />
                                         </FlexItem>
                                     </Flex>
                                 </FormGroup>
                             </Flex>
-                            <Text component={TextVariants.p}>
-                                Note: Only ISO-formatted dates using UTC are valid.
-                            </Text>
                         </Form>
                     </Bullseye>
                 </Tab>
@@ -333,10 +316,8 @@ const DateRangeFilter = ({
 DateRangeFilter.propTypes = {
     updateDateRange: PropTypes.func,
     addNewTimeFilter: PropTypes.func,
-    removeFilter: PropTypes.func,
     setStartDate: PropTypes.func,
     setEndDate: PropTypes.func,
-    filters: PropTypes.any,
     startDate: PropTypes.any,
     endDate: PropTypes.any,
     recentTimeFilters: PropTypes.array,
@@ -344,7 +325,6 @@ DateRangeFilter.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    filters: state.payloads.filters,
     startDate: state.payloads.startDate,
     endDate: state.payloads.endDate,
     recentTimeFilters: state.payloads.recentTimeFilters,
@@ -352,9 +332,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    updateDateRange: (start, end, type, startId, endId) => dispatch(AppActions.updateDateRange(start, end, type, startId, endId)),
+    updateDateRange: (start, end) => dispatch(AppActions.updateDateRange(start, end)),
     addNewTimeFilter: (type, start, end) => dispatch(AppActions.addNewTimeFilter(type, start, end)),
-    removeFilter: (id) => dispatch(AppActions.removeFilter(id)),
     setStartDate: (start) => dispatch(AppActions.setStartDate(start)),
     setEndDate: (end) => dispatch(AppActions.setEndDate(end))
 });

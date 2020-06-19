@@ -17,13 +17,10 @@ import {
 } from '@patternfly/react-table';
 
 import HoverableAttribute from './HoverableAttribute'
-import Moment from 'react-moment';
 import PropTypes from 'prop-types';
 import { SearchIcon } from '@patternfly/react-icons';
 import { connect } from 'react-redux';
-
-Moment.globalTimezone = 'America/New_York';
-Moment.globalFormat = 'LLLL z';
+import { getLocalDate } from '../AppConstants';
 
 const generateRows = (payloads, cells) => {
     var rows = [];
@@ -55,9 +52,7 @@ const generateRows = (payloads, cells) => {
                             }})
                         } else if (cellValue.isDate) {
                             row.push({
-                                title: <Moment>
-                                { `${payloadValue}-0000` }
-                                </Moment> 
+                                title: getLocalDate(new Date(payloadValue))
                             })
                         } else {
                             row.push({ title: payloadValue })

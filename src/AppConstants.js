@@ -26,14 +26,11 @@ export const ADD_RECENT_TIME_FILTER = 'ADD_RECENT_TIME_FILTER';
 export const REMOVE_FILTER = 'REMOVE_FILTER';
 
 export const PAYLOAD_FILTER_TYPES = [
-    'account', 'inventory_id', 'system_id', 'created_at_lt',
-    'created_at_gt', 'created_at_lte', 'created_at_gte'
+    'account', 'inventory_id', 'system_id'
 ];
 
 export const STATUS_FILTER_TYPES = [
-    'service', 'source', 'status', 'status_msg', 'date_lt',
-    'date_gt', 'date_lte', 'date_gte', 'created_at_lt',
-    'created_at_gt', 'created_at_lte', 'created_at_gte'
+    'service', 'source', 'status', 'status_msg'
 ];
 
 export function GET_VALUE_FROM_URL(input) {
@@ -49,7 +46,11 @@ export function GET_VALUE_FROM_URL(input) {
     const targetProp = query[prop];
   
     return targetProp === undefined ? null : targetProp;
-}
+};
+
+export const getLocalDate = (date) => {
+    return date ? `${date.toLocaleString('en-US')} UTC-${date.getTimezoneOffset()/60}00` : null;
+};
 
 export const PAYLOADS_ITEM = `itm1`;
 export const STATUSES_ITEM = `itm2`
