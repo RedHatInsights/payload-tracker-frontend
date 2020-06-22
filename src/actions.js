@@ -51,6 +51,15 @@ export const getPayloadTrack = (url) => dispatch => {
         })
 };
 
+export const addMessage = (type, title, content) => {
+    return {
+        type: ActionTypes.ADD_MESSAGE,
+        payload: {
+            type, title, content
+        }
+    }
+};
+
 export const addNewTimeFilter = (currentType, start, end) => {
     return {
         type: ActionTypes.ADD_RECENT_TIME_FILTER,
