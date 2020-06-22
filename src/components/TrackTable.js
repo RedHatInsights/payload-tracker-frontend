@@ -5,10 +5,11 @@ import {
     TableVariant
 } from '@patternfly/react-table';
 
-import Moment from 'react-moment';
+import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import { getLocalDate } from '../AppConstants';
 
 const generateRows = (payloads, cells) => {
     var rows = [];
@@ -22,9 +23,11 @@ const generateRows = (payloads, cells) => {
                         if (cellValue.title === payloadKey) {
                             cellValue.isDate ?
                                 row.push({
-                                    title: <Moment local format='LLLL'>
-                                    { payloadValue }
-                                    </Moment>
+                                    title: getLocalDate(
+                                        DateTime.fromFormat(
+                                            payloadValue, 'yyyy-MM-dd H:mm:ss.uZZ'
+                                        ).toJSDate()
+                                    )
                                 }) :
                                 row.push({ title: payloadValue } )
                             valueWasFound = true;
