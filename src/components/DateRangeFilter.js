@@ -90,7 +90,7 @@ DateTextInput.propTypes = {
 
 const DateRangeFilter = ({
     updateDateRange, addNewTimeFilter, setStartDate, setEndDate,
-    startDate, endDate, recentTimeFilters, recentTimeType
+    addMessage, startDate, endDate, recentTimeFilters, recentTimeType
 }) => {
 
     const [isOpen, setOpen] = useState(false);
@@ -158,6 +158,8 @@ const DateRangeFilter = ({
             if (to >= from) {
                 setStart(from);
                 setEnd(to);
+            } else {
+                addMessage('danger', 'Date Range Error', `${getLocalDate(from)} is not before ${getLocalDate(to)}`)
             };
         };
         getValuesFromModal();
@@ -318,6 +320,7 @@ DateRangeFilter.propTypes = {
     addNewTimeFilter: PropTypes.func,
     setStartDate: PropTypes.func,
     setEndDate: PropTypes.func,
+    addMessage: PropTypes.func,
     startDate: PropTypes.any,
     endDate: PropTypes.any,
     recentTimeFilters: PropTypes.array,
@@ -335,7 +338,8 @@ const mapDispatchToProps = dispatch => ({
     updateDateRange: (start, end) => dispatch(AppActions.updateDateRange(start, end)),
     addNewTimeFilter: (type, start, end) => dispatch(AppActions.addNewTimeFilter(type, start, end)),
     setStartDate: (start) => dispatch(AppActions.setStartDate(start)),
-    setEndDate: (end) => dispatch(AppActions.setEndDate(end))
+    setEndDate: (end) => dispatch(AppActions.setEndDate(end)),
+    addMessage: (type, title, content) => dispatch(AppActions.addMessage(type, title, content))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DateRangeFilter);

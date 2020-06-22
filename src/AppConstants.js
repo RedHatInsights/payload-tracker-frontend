@@ -22,6 +22,7 @@ export const SET_TRACK_SORT_BY = 'SET_TRACK_SORT_BY';
 export const ADD_FILTER = 'ADD_FILTER';
 export const ADD_PAYLOAD_FROM_SOCKET = 'ADD_PAYLOAD_FROM_SOCKET';
 export const ADD_RECENT_TIME_FILTER = 'ADD_RECENT_TIME_FILTER';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
 
 export const REMOVE_FILTER = 'REMOVE_FILTER';
 
@@ -71,6 +72,7 @@ export const DEFAULT_DATA_REDUCER_STATE = {
     loading: false,
     loaded: false,
     error: null,
+    messages: [],
     payloads: [],
     count: 0,
     durations: {},

@@ -7,6 +7,7 @@ const initialState = {
     loading: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loading,
     loaded: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loaded,
     error: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.error,
+    messages: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.messages,
     payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
     count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
     durations: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.durations,
@@ -59,13 +60,19 @@ const DataReducer = (state=initialState, action) => {
                 payloads: state.payloads.filter(
                     p => p.id === action.payload.id
                 ).length === 0 ? [action.payload, ...state.payloads] : state.payloads
-            };
+            }
+        case ConstantTypes.ADD_MESSAGE:
+            return {
+                ...state,
+                messages: [...state.messages, action.payload]
+            }
         case LOCATION_CHANGE:
             return action.payload.location.pathname === state.path ? state : {
                 ...state,
                 loading: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loading,
                 loaded: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loaded,
                 error: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.error,
+                messages: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.messages,
                 payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
                 count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
                 durations: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.durations,
