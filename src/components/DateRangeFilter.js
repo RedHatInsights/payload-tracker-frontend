@@ -39,24 +39,23 @@ import { connect } from 'react-redux';
 import { getLocalDate } from '../AppConstants';
 import { useHistory } from 'react-router';
 
-const DateTextInput = forwardRef(({ setValidation, val }, ref) => {
+const DateTextInput = forwardRef(({ val, setValidation }, ref) => {
 
-    const [isDate, setIsDate] = useState(true);
+    const [isValid, setTextValidation] = useState(false);
     const [currentValue, setCurrentValue] = useState();
+
+    const updateState = (validation) => {
+        setTextValidation(validation);
+        setValidation(validation);
+    };
 
     const checkVal = (newVal) => {
         if (newVal) {
             newVal = newVal instanceof Object ? newVal.toLocaleString('en-US') : newVal
             const res = DateTime.fromFormat(newVal, 'm/d/y, h:mm:ss a');
-            if (res.invalid) {
-                setIsDate(false);
-                setValidation(false);
-            } else {
-                setIsDate(true);
-                setValidation(true);
-            };
+            res.invalid ? updateState(false) : updateState(true);
             setCurrentValue(newVal);
-        };
+        }
     };
 
     useEffect(() => {
@@ -78,8 +77,8 @@ const DateTextInput = forwardRef(({ setValidation, val }, ref) => {
     return <TextInput
         value={currentValue && currentValue.toLocaleString('en-US')}
         onChange={(val) => checkVal(val)}
-        validated={isDate ? 'success' : 'error'}
-    />
+        validated={isValid ? 'success' : 'error'}
+    />;
 });
 
 DateTextInput.propTypes = {
@@ -105,14 +104,12 @@ const DateRangeFilter = ({
     const toRef = useRef();
     const history = useHistory();
 
-    const resetStacks = (start, end) => {
+    const resetStacks = () => {
         for(var i = 0; i < recentTimeFilters.length; i++) {
             if (getLocalDate(recentTimeFilters[i].start) === getLocalDate(start) &&
                 getLocalDate(recentTimeFilters[i].end) === getLocalDate(end)) {
                 setLeftRecentsStack(recentTimeFilters.slice(0, i).reverse());
                 setRightRecentsStack(recentTimeFilters.slice(i+1, recentTimeFilters.length));
-                setStart(start);
-                setEnd(end);
                 break;
             };
         };
@@ -122,12 +119,12 @@ const DateRangeFilter = ({
         addNewTimeFilter(t, s, e);
     }, [addNewTimeFilter]);
 
-    const updateState = useCallback((s, e, type) => {
+    const updateState = useCallback((s, e) => {
         updateDateRange(s, e);
     }, [updateDateRange]);
 
     useEffect(() => {
-        resetStacks(start, end)
+        resetStacks()
     //eslint-disable-next-line
     }, [recentTimeFilters, setLeftRecentsStack, setRightRecentsStack]);
 
@@ -138,7 +135,7 @@ const DateRangeFilter = ({
             };
         });
         if (start && end && type) {
-            updateState(start, end, type);
+            updateState(start, end);
             if (areValuesInArray.length === 0) {
                 addRecent(type, start, end);
             };
@@ -159,7 +156,7 @@ const DateRangeFilter = ({
                 setStart(from);
                 setEnd(to);
             } else {
-                addMessage('danger', 'Date Range Error', `${getLocalDate(from)} is not before ${getLocalDate(to)}`)
+                addMessage('danger', 'Date range error', `${getLocalDate(from)} is not before ${getLocalDate(to)}`)
             };
         };
         getValuesFromModal();
