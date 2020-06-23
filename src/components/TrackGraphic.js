@@ -15,8 +15,10 @@ import {
     compoundExpand
 } from '@patternfly/react-table';
 
+import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
+import { getLocalDate } from '../AppConstants';
 
 const TrackGraphic = ({ service, statuses, messages }) => {
 
@@ -41,7 +43,11 @@ const TrackGraphic = ({ service, statuses, messages }) => {
                         props: {isOpen: false, ariaControls : 'compound-expansion-table-1'}
                     },
                     {
-                        title: message.date
+                        title: getLocalDate(
+                            DateTime.fromFormat(
+                                message.date, 'yyyy-MM-dd H:mm:ss.uZZ'
+                            ).toJSDate()
+                        )
                     }
                 ]
             }
