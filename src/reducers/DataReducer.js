@@ -54,6 +54,11 @@ const DataReducer = (state=initialState, action) => {
                 payloads: action.payload.data,
                 durations: action.payload.duration
             }
+        case ConstantTypes.UPDATE_DURATIONS_FROM_SOCKET:
+            return {
+                ...state,
+                durations: action.payload
+            }
         case ConstantTypes.ADD_PAYLOAD_FROM_SOCKET:
             return {
                 ...state,
