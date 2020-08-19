@@ -32,7 +32,7 @@ import openSocket from 'socket.io-client';
 const socket = openSocket('/', {transports: ['websocket', 'polling', 'flashsocket']});
 const queryBase = '/v1/payloads/';
 
-const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, addPayload }) => {
+const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, addPayload, updateDurations }) => {
 
     const [activeTabKey, setActiveTabKey] = useState(0);
 
@@ -41,7 +41,11 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
     }, [request_id, sort_by, sort_dir, search]);
 
     useEffect(() => {
-        socket.on('payload', (data) => data.request_id === request_id && addPayload(data));
+        socket.on('payload', (incoming) => incoming.request_id === request_id && addPayload(incoming));
+        socket.on('duration', (incoming) => {
+            const { id, key, data } = incoming;
+            durations && id === request_id && updateDurations({...durations, [key]: data})
+        });
     }, [request_id, payloads, addPayload]);
 
     return(
@@ -106,7 +110,8 @@ Track.propTypes = {
     payloads: PropTypes.array,
     durations: PropTypes.array,
     search: PropTypes.func,
-    addPayload: PropTypes.func
+    addPayload: PropTypes.func,
+    updateDurations: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -122,7 +127,8 @@ const mapDispatchToProps = dispatch => ({
         AppActions.getPayloadTrack(url),
         AppActions.setTrackRequestID(request_id)
     ]),
-    addPayload: (data) => dispatch(AppActions.addPayloadFromSocket(data))
+    addPayload: (data) => dispatch(AppActions.addPayloadFromSocket(data)),
+    updateDurations: (data) => dispatch(AppActions.updateDurationsFromSocket(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Track);

@@ -175,6 +175,13 @@ export function addPayloadFromSocket(request) {
     };
 };
 
+export function updateDurationsFromSocket(duration) {
+    return {
+        type: ActionTypes.UPDATE_DURATIONS_FROM_SOCKET,
+        payload: duration
+    };
+};
+
 export function addFilter(filterType, filterValue) {
     incFilterIndex();
     return {

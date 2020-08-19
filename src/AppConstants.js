@@ -26,6 +26,8 @@ export const ADD_MESSAGE = 'ADD_MESSAGE';
 
 export const REMOVE_FILTER = 'REMOVE_FILTER';
 
+export const UPDATE_DURATIONS_FROM_SOCKET = 'UPDATE_DURATIONS_FROM_SOCKET';
+
 export const PAYLOAD_FILTER_TYPES = [
     'account', 'inventory_id', 'system_id'
 ];
