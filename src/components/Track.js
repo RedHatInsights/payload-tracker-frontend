@@ -44,7 +44,7 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
         socket.on('payload', (incoming) => incoming.request_id === request_id && addPayload(incoming));
         socket.on('duration', (incoming) => {
             const { id, key, data } = incoming;
-            durations && id === request_id && updateDurations({...durations, [key]: data})
+            durations && id === request_id && updateDurations({ [key]: data })
         });
     }, [request_id, payloads, addPayload]);
 
