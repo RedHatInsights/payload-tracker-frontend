@@ -104,7 +104,7 @@ const SearchBar = ({ children, filters, removeStartDate, removeEndDate, addFilte
                     <DropdownContainer
                         items={
                         history.location.pathname === '/payloads' ?
-                            PAYLOAD_FILTER_TYPES : STATUS_FILTER_TYPES
+                            PAYLOAD_FILTER_TYPES : STATUS_FILTER_TYPES.filter(f => f !== 'partition')
                         }
                         type="Add Filter"
                         setSelected={setSelected}

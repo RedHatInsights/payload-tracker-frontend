@@ -33,7 +33,7 @@ export const PAYLOAD_FILTER_TYPES = [
 ];
 
 export const STATUS_FILTER_TYPES = [
-    'service', 'source', 'status', 'status_msg'
+    'service', 'source', 'status', 'status_msg', 'partition'
 ];
 
 export function GET_VALUE_FROM_URL(input) {
