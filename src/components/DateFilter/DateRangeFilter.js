@@ -1,6 +1,6 @@
 import 'react-day-picker/lib/style.css';
 
-import * as AppActions from '../actions';
+import * as AppActions from '../../actions';
 
 import {
     Bullseye,
@@ -12,80 +12,23 @@ import {
     DropdownPosition,
     Flex,
     FlexItem,
-    FlexModifiers,
     Form,
     FormGroup,
     Modal,
     Tab,
     Tabs,
-    Text,
-    TextInput,
+    Text
 } from '@patternfly/react-core';
 import { CaretLeftIcon, CaretRightIcon, ClockIcon } from '@patternfly/react-icons';
-import React, {
-    forwardRef,
-    useCallback,
-    useEffect,
-    useImperativeHandle,
-    useRef,
-    useState
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import DateTime from 'luxon/src/datetime';
+import DateTextInput from './DateTextInput';
 import DayPicker from 'react-day-picker';
-import Dropdown from './DropdownContainer';
+import Dropdown from '../DropdownContainer';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getLocalDate } from '../AppConstants';
+import { getLocalDate } from '../../AppConstants';
 import { useHistory } from 'react-router';
-
-const DateTextInput = forwardRef(({ val, setValidation }, ref) => {
-
-    const [isValid, setTextValidation] = useState(false);
-    const [currentValue, setCurrentValue] = useState();
-
-    const updateState = (validation) => {
-        setTextValidation(validation);
-        setValidation(validation);
-    };
-
-    const checkVal = (newVal) => {
-        if (newVal) {
-            newVal = newVal instanceof Object ? newVal.toLocaleString('en-US') : newVal
-            const res = DateTime.fromFormat(newVal, 'm/d/y, h:mm:ss a');
-            res.invalid ? updateState(false) : updateState(true);
-            setCurrentValue(newVal);
-        }
-    };
-
-    useEffect(() => {
-        checkVal(val);
-        setCurrentValue(val);
-    //eslint-disable-next-line
-    }, [val, setCurrentValue]);
-
-    useImperativeHandle(ref, () => ({
-        setValue: (value) => {
-            checkVal(value);
-            setCurrentValue(value);
-        },
-        getValue: () => {
-            return new Date(currentValue);
-        }
-    }));
-
-    return <TextInput
-        value={currentValue && currentValue.toLocaleString('en-US')}
-        onChange={(val) => checkVal(val)}
-        validated={isValid ? 'success' : 'error'}
-    />;
-});
-
-DateTextInput.propTypes = {
-    setVal: PropTypes.func,
-    setValidation: PropTypes.func,
-    val: PropTypes.any
-};
 
 const DateRangeFilter = ({
     updateDateRange, addNewTimeFilter, setStartDate, setEndDate,
@@ -211,7 +154,7 @@ const DateRangeFilter = ({
                     label='Specify column to filter:'
                     isRequired={!type}
                 >
-                    <Flex breakpointMods={[{modifier: FlexModifiers.column}]}>
+                    <Flex direction={{default: 'column'}}>
                         <FlexItem>
                             <Dropdown
                                 position={DropdownPosition.left}
@@ -229,9 +172,9 @@ const DateRangeFilter = ({
                 <Tab eventKey={0} title='Absolute'>
                     <Bullseye style={{paddingTop: '30px'}}>
                         <Form>
-                            <Flex breakpointMods={[{modifier: FlexModifiers.row}]}>
+                            <Flex direction={{default: 'row'}}>
                                 <FormGroup label='From'>
-                                    <Flex breakpointMods={[{modifier: FlexModifiers.column}]}>
+                                    <Flex direction={{default: 'column'}}>
                                         <FlexItem>
                                             <DateTextInput
                                                 ref={fromRef}
@@ -245,7 +188,7 @@ const DateRangeFilter = ({
                                     </Flex>
                                 </FormGroup>
                                 <FormGroup label='To'>
-                                    <Flex breakpointMods={[{modifier: FlexModifiers.column}]}>
+                                    <Flex direction={{default: 'column'}}>
                                         <FlexItem>
                                             <DateTextInput
                                                 ref={toRef}
@@ -268,7 +211,7 @@ const DateRangeFilter = ({
                     <Card>
                         <CardHeader/>
                         <CardBody>
-                            <Flex breakpointMods={[{modifier: FlexModifiers.column}]}>
+                            <Flex direction={{default: 'column'}}>
                                 {recentTimeFilters.map(filter =>
                                     <React.Fragment>
                                         <FlexItem>
@@ -294,8 +237,8 @@ const DateRangeFilter = ({
             onClick={leftRecentHandler}
         > <CaretLeftIcon/> </Button>}
         <Button variant='inline' onClick={() => setOpen(!isOpen)}>
-            <Flex variant={[{modifier: FlexModifiers.row}]}>
-                <FlexItem spacer={{default: 'spacerNone'}}>
+            <Flex direction={{default: 'row'}} >
+                <FlexItem>
                     <ClockIcon/>
                 </FlexItem>
                 <FlexItem>

@@ -1,32 +1,10 @@
+import './TrackDurationView.scss';
+
 import { Card, CardBody, CardHeader, Gallery, GalleryItem } from '@patternfly/react-core';
 
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-
-const DurationGraphic = props => {
-    return (
-        <div style={{
-            background: 
-                props.status ? 
-                '#92d400' :
-                '#c9190b',
-            borderRadius: '50%',
-            width: '150px',
-            height: '150px',
-            MozBoxSizing: 'border-box',
-            boxSizing: 'border-box',
-        }}>
-            <p style={{
-                textAlign: 'center',
-                padding: '60px 0px',
-                fontSize: '13pt',
-            }}>
-                {`${props.duration}s`}
-            </p>
-        </div>
-    )
-}
 
 const DurationView = ({ payloads, durations }) => {
 
@@ -52,10 +30,13 @@ const DurationView = ({ payloads, durations }) => {
                             {service}
                         </CardHeader>
                         <CardBody>
-                            <DurationGraphic
-                                duration={duration}
-                                status={getStatus(service, payloads)}
-                            />
+                            <div className={
+                                `pt-c-track--duration ${getStatus(service, payloads) ? 'success' : 'error'}`
+                            }>
+                                <p className={'pt-c-track--duration__text'}>
+                                    {`${duration}s`}
+                                </p>
+                            </div>
                         </CardBody>
                     </Card>
                 </GalleryItem> : ''

@@ -4,7 +4,7 @@ import {
     Card,
     CardBody,
     CardFooter,
-    CardHeader,
+    CardTitle,
     Pagination,
     Split,
     SplitItem
@@ -17,8 +17,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 const PayloadsPagination = ({ count, page_size, page, updatePageSize, updatePageNumber, children }) => <Card>
-    <CardHeader>
-        <Split gutter='md'>
+    <CardTitle>
+        <Split hasGutter>
             <SplitItem>
                 <OptionsContainer/>
             </SplitItem>
@@ -27,7 +27,8 @@ const PayloadsPagination = ({ count, page_size, page, updatePageSize, updatePage
             </SplitItem>
             <SplitItem isFilled/>
             <SplitItem>
-                <Pagination 
+                <Pagination
+                    isCompact
                     itemCount={count}
                     perPage={page_size}
                     page={page}
@@ -37,12 +38,12 @@ const PayloadsPagination = ({ count, page_size, page, updatePageSize, updatePage
                 />
             </SplitItem>
         </Split>
-    </CardHeader>
+    </CardTitle>
     <CardBody>
         {children}
     </CardBody>
     <CardFooter>
-        <Split gutter='md'>
+        <Split hasGutter>
             <SplitItem isFilled/>
             <SplitItem>
                 <Pagination 

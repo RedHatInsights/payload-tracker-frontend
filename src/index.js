@@ -1,8 +1,10 @@
+import '@patternfly/react-core/dist/styles/base.css';
+
 import { Provider, ReactReduxContext } from 'react-redux';
 
 import App from './App';
 import { ConnectedRouter } from 'connected-react-router';
-import NotificationsPortal from './components/NotificationsPortal';
+import NotificationsPortal from './components/Notifications/NotificationsPortal';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import history from './history';

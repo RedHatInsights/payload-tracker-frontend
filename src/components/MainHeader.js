@@ -1,49 +1,37 @@
 import * as AppActions from '../actions';
 
-import {
-    Brand,
-    PageHeader
-} from '@patternfly/react-core';
+import { Brand, PageHeader, PageHeaderTools } from '@patternfly/react-core';
 
-import DateRangeFilter from './DateRangeFilter';
+import DateRangeFilter from './DateFilter/DateRangeFilter';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connect } from 'react-redux';
 import newlogo from './static/images/rh-new-logo.svg';
 import { useHistory } from 'react-router';
 
-const MainHeader = ({ isNavigationOpen, toggleNav }) => {
+const MainHeader = ({ isNavOpen, toggleNav }) => {
 
     const history = useHistory();
     const { pathname } = history.location;
 
     return (
-        <PageHeader 
-            logo={<Brand src={newlogo} alt= "Red Hat Logo White"/>}
+        <PageHeader
+            logo={<span dangerouslySetInnerHTML={{__html: newlogo}} />}
             logoProps={{
                 href: '/payloads',
                 target: '_blank'
             }}
-            toolbar={
-                !pathname.includes('/track') && <DateRangeFilter/>
-            }
-            onNavToggle={ () => toggleNav(isNavigationOpen) }
+            headerTools={ <PageHeaderTools>
+                {!pathname.includes('/track') ? <DateRangeFilter/> : undefined}
+            </PageHeaderTools> }
+            onNavToggle={ () => toggleNav(!isNavOpen) }
             showNavToggle
         />
     )
 }
 
 MainHeader.propTypes = {
-    isNavigationOpen: PropTypes.bool,
+    isNavOpen: PropTypes.bool,
     toggleNav: PropTypes.func
 };
 
-const mapStateToProps = state => ({
-    isNavigationOpen: state.sidebar.isNavigationOpen
-});
-
-const mapDispatchToProps = dispatch => ({
-    toggleNav: (bool) => dispatch(AppActions.toggleNav(bool))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainHeader);
+export default (MainHeader);

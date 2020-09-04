@@ -10,13 +10,9 @@ const FILTER_TYPES = ConstantTypes.PAYLOAD_FILTER_TYPES.concat(ConstantTypes.STA
 
 const determineFilters = () => {
     return FILTER_TYPES.reduce((array, filter) => {
-        var newFilter = ConstantTypes.GET_VALUE_FROM_URL(`${location}.${filter}`)
-        if (newFilter) {
-            array.push({
-                id: actions.incFilterIndex(),
-                type: filter,
-                value: newFilter
-            });
+        const value = ConstantTypes.GET_VALUE_FROM_URL(`${location}.${filter}`)
+        if (value) {
+            array.push({ [filter]: value });
         }
         return array;
     }, []);
@@ -36,6 +32,7 @@ const initialState = {
     endDate: endDate === null ? ConstantTypes.DEFAULT_PAGE_STATE.endDate : endDate,
     recentTimeFilters: [{start: null, end: null}],
     recentTimeType: null,
+    staged: [],
     path: `${location}`
 };
 
@@ -67,26 +64,21 @@ export default (state=initialState, action) => {
                 ...state,
                 page_size: action.payload
             }
-        case ConstantTypes.ADD_FILTER:
+        case ConstantTypes.STAGE_FILTERS:
             return {
                 ...state,
-                filters: [
-                    ...state.filters,
-                    {
-                        id: action.payload.id,
-                        type: action.payload.type,
-                        value: action.payload.value
-                    }
-                ]
+                staged: [...state.staged, ...[action.payload].flatMap(item => item)]
             }
-        case ConstantTypes.REMOVE_FILTER:
+        case ConstantTypes.UNSTAGE_FILTER:
             return {
                 ...state,
-                filters: state.filters.filter(filter => {
-                    if (filter.id !== action.payload){
-                        return filter;
-                    };
-                })
+                staged: state.staged.filter(item => item !== action.payload)
+            }
+        case ConstantTypes.UPDATE_FILTERS:
+            return {
+                ...state,
+                filters: action.payload,
+                staged: []
             }
         case LOCATION_CHANGE:
             return action.payload.location.pathname === state.path ? state : {

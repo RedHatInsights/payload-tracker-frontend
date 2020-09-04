@@ -1,12 +1,6 @@
 import * as AppActions from '../actions';
 
-import {
-    Nav,
-    NavItem,
-    NavItemSeparator,
-    NavList,
-    PageSidebar
-} from '@patternfly/react-core';
+import { Nav, NavItem, NavList, PageSidebar } from '@patternfly/react-core';
 import { PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from '../AppConstants'
 
 import PropTypes from 'prop-types';
@@ -14,11 +8,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-const MainSidebar = ({ activeItem, isNavigationOpen, updateNav }) => {
+const MainSidebar = ({ activeItem, setActiveItem, isNavOpen, setTrackRequestID }) => {
     let history = useHistory();
 
     const clickHandler = (item, url) => {
-        updateNav(item);
+        setTrackRequestID(null);
+        setActiveItem(item);
         history.push(url);
     };
 
@@ -35,7 +30,6 @@ const MainSidebar = ({ activeItem, isNavigationOpen, updateNav }) => {
                     >
                         Payloads
                     </NavItem>
-                    <NavItemSeparator/>
                     <NavItem
                         to='/statuses'
                         itemId={ STATUSES_ITEM }
@@ -45,7 +39,6 @@ const MainSidebar = ({ activeItem, isNavigationOpen, updateNav }) => {
                     >
                         Statuses
                     </NavItem>
-                    <NavItemSeparator/>
                     <NavItem
                         to='/track'
                         itemId={ TRACK_ITEM }
@@ -57,29 +50,20 @@ const MainSidebar = ({ activeItem, isNavigationOpen, updateNav }) => {
                     </NavItem>
                 </NavList>
             </Nav>}
-            isNavOpen={ isNavigationOpen }
+            isNavOpen={ isNavOpen }
         />
     );
 };
 
 MainSidebar.propTypes = {
-    activeGroup: PropTypes.string,
     activeItem: PropTypes.string,
-    isNavigationOpen: PropTypes.bool,
-    updateNav: PropTypes.func
+    setActiveItem: PropTypes.func,
+    isNavOpen: PropTypes.bool,
+    setTrackRequestID: PropTypes.func
 };
 
-const mapStateToProps = state => ({
-    activeGroup: state.sidebar.activeGroup,
-    activeItem: state.sidebar.activeItem,
-    isNavigationOpen: state.sidebar.isNavigationOpen
-});
-
 const mapDispatchToProps = dispatch => ({
-    updateNav: (item) => dispatch([
-        AppActions.setTrackRequestID(null),
-        AppActions.setActiveItem(item)
-    ])
+    setTrackRequestID: (item) => dispatch(AppActions.setTrackRequestID(item))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainSidebar);
+export default connect(undefined, mapDispatchToProps)(MainSidebar);

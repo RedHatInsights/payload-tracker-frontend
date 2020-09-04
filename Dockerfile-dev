@@ -3,9 +3,9 @@ WORKDIR /usr/src/app
 ARG SERVICE_HOST
 ENV API_HOST=${SERVICE_HOST:+$SERVICE_HOST}
 ENV API_HOST=${SERVICE_HOST:-localhost}
-ADD build ./build
+ADD dist ./dist
 RUN ["rm", "-rfv", "/usr/share/nginx/html"]
-RUN ["cp", "-rfv", "/usr/src/app/build", "/usr/share/nginx/html"]
+RUN ["cp", "-rfv", "/usr/src/app/dist", "/usr/share/nginx/html"]
 COPY nginx.conf /etc/nginx/nginx.conf
 RUN sed -i s/API_HOST/$API_HOST/g /etc/nginx/nginx.conf
 EXPOSE 8080

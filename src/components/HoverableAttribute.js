@@ -1,15 +1,15 @@
 import * as AppActions from '../actions';
 
+import { Button, Tooltip } from '@patternfly/react-core';
 import React, { useState } from 'react';
 
-import { Button } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 import { TRACK_ITEM } from '../AppConstants'
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-const HoverableAttribute = ({ type, filter, value, setRequestID, updateFilters, beginTracking }) => {
+const HoverableAttribute = ({ type, filter, value, setRequestID, stageFilters, beginTracking }) => {
 
     const [isHovered, setHover] = useState(false);
     let history = useHistory();
@@ -20,20 +20,29 @@ const HoverableAttribute = ({ type, filter, value, setRequestID, updateFilters, 
             history.push(`/track/${value}`);
             beginTracking(TRACK_ITEM);
         } else if (type === 'filter') {
-            updateFilters(filter, value);
+            stageFilters({ [filter] : value });
         } else { return null; }
-    }
+    };
 
-    return(
-        <Button 
+    return <React.Fragment>
+        {value.length > 12 ? <Tooltip content={value}>
+            <Button 
+                onClick={clickHandler}
+                variant='plain'
+                onMouseOver={ () => setHover(true) }
+                onMouseOut={ () => setHover(false) }
+            >
+                {`${value.substring(0, 12)}...`} {isHovered ? <PlusCircleIcon/> : null }
+            </Button>
+        </Tooltip> : <Button 
             onClick={clickHandler}
             variant='plain'
             onMouseOver={ () => setHover(true) }
             onMouseOut={ () => setHover(false) }
         >
             {value} {isHovered ? <PlusCircleIcon/> : null }
-        </Button>
-    )
+        </Button>}
+    </React.Fragment>;
 };
 
 HoverableAttribute.propTypes = {
@@ -41,17 +50,13 @@ HoverableAttribute.propTypes = {
     filter: PropTypes.string,
     value: PropTypes.string.isRequired,
     setRequestID: PropTypes.func,
-    updateFilters: PropTypes.func,
+    stageFilters: PropTypes.func,
     beginTracking: PropTypes.func
 };
 
 const mapDispatchToProps = dispatch => ({
     setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id)),
-    updateFilters: (key, value) => dispatch([
-        AppActions.addFilter(key, value),
-        AppActions.removePage(),
-        AppActions.setPage(1)
-    ]),
+    stageFilters: (filters) => dispatch(AppActions.stageFilters(filters)),
     beginTracking: (item) => dispatch([
         AppActions.setActiveItem(item)
     ])

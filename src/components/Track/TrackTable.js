@@ -1,15 +1,16 @@
-import {
-    Table,
-    TableBody,
-    TableHeader,
-    TableVariant
-} from '@patternfly/react-table';
+import { Table, TableBody, TableHeader, TableVariant } from '@patternfly/react-table';
 
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { getLocalDate } from '../AppConstants';
+import { getLocalDate } from '../../AppConstants';
+
+const truncate = (value) => <React.Fragment>
+    {value.length > 12 ?
+        `${value.substring(0, 12)}...` :
+        value}
+</React.Fragment>;
 
 const generateRows = (payloads, cells) => {
     var rows = [];
@@ -29,7 +30,7 @@ const generateRows = (payloads, cells) => {
                                         ).toJSDate()
                                     )
                                 }) :
-                                row.push({ title: payloadValue } )
+                                row.push({ title: truncate(payloadValue) } )
                             valueWasFound = true;
                         }
                     })

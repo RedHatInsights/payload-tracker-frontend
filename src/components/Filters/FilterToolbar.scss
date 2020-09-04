@@ -1,0 +1,22 @@
+.pt-c-toolbar {
+    display: inline-flex;
+    justify-content: space-between;
+    height: 40px;
+    width: 100%;
+    border-bottom: 1px solid black;
+
+    > * {
+        outline: none;
+    }
+
+    .pt-c-toolbar__selector {
+        padding-left: 10px;
+        top: -3px;
+        width: 160px;
+    }
+
+    .pt-c-toolbar__apply {
+        top: -5px;
+    }
+
+}
