@@ -2,6 +2,8 @@ import history from './history';
 import queryString from 'query-string';
 import { sortable } from '@patternfly/react-table';
 
+export const API_URL = process.env.ENV === 'development' ? 'http://localhost:8080' : '';
+
 export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
 export const SET_ACTIVE_ITEM= 'SET_ACTIVE_ITEM';
 export const TOGGLE_NAV = 'TOGGLE_NAV';
@@ -19,14 +21,15 @@ export const SET_TRACK_REQUEST_ID = 'SET_TRACK_REQUEST_ID';
 export const SET_TRACK_SORT_DIR = 'SET_TRACK_SORT_DIR';
 export const SET_TRACK_SORT_BY = 'SET_TRACK_SORT_BY';
 
-export const ADD_FILTER = 'ADD_FILTER';
 export const ADD_PAYLOAD_FROM_SOCKET = 'ADD_PAYLOAD_FROM_SOCKET';
 export const ADD_RECENT_TIME_FILTER = 'ADD_RECENT_TIME_FILTER';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
-export const REMOVE_FILTER = 'REMOVE_FILTER';
+export const STAGE_FILTERS = 'STAGE_FILTERS';
+export const UNSTAGE_FILTER = 'UNSTAGE_FILTER';
 
 export const UPDATE_DURATIONS_FROM_SOCKET = 'UPDATE_DURATIONS_FROM_SOCKET';
+export const UPDATE_FILTERS = 'UPDATE_FILTERS';
 
 export const PAYLOAD_FILTER_TYPES = [
     'account', 'inventory_id', 'system_id'

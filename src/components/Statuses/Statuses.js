@@ -1,22 +1,21 @@
-import * as AppActions from '../actions';
-import * as ConstantTypes from '../AppConstants';
+import './Statuses.scss';
 
-import { Page, PageSection, PageSectionVariants } from '@patternfly/react-core';
+import * as AppActions from '../../actions';
+import * as ConstantTypes from '../../AppConstants';
+
+import { PageSection, PageSectionVariants, Text, TextContent, TextVariants } from '@patternfly/react-core';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import MainHeader from './MainHeader';
-import MainSidebar from './MainSidebar';
-import Pagination from './Pagination';
+import FilterToolbar from '../Filters/FilterToolbar';
+import Pagination from '../Pagination';
 import PropTypes from 'prop-types';
-import SearchBar from './SearchBar';
-import Table from './Table';
+import Table from '../Table';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router';
 
-const queryBase = '/v1/statuses?';
+const queryBase = `${ConstantTypes.API_URL}/v1/statuses?`;
 
 const Statuses = ({ getStatuses, page, page_size, filters, startDate, endDate, recentTimeType }) => {
-
     let history = useHistory();
     const [sortDir, setSortDir] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_dir`) || 'desc');
     const [sortBy, setSortBy] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_by`) || 'date');
@@ -24,7 +23,10 @@ const Statuses = ({ getStatuses, page, page_size, filters, startDate, endDate, r
     const search = useCallback(() => {
         var query = queryBase;
         query += `sort_by=${sortBy}&sort_dir=${sortDir}&page=${page - 1}&page_size=${page_size}`;
-        filters && filters.map(filter => query += `&${filter.type}=${filter.value}`);
+        query += filters.reduce((str, filter) => {
+            const filterStr = Object.entries(filter).reduce((filter, [key, value]) => filter +=`&${key}=${value}`, '');
+            return str += filterStr;
+        }, '');
         if (startDate) {
             query += `&${recentTimeType}_gte=${startDate}`;
         }
@@ -38,27 +40,22 @@ const Statuses = ({ getStatuses, page, page_size, filters, startDate, endDate, r
         search();
     }, [sortDir, sortBy, page, page_size, filters, search, startDate, endDate, recentTimeType]);
 
-    return <Page
-        header={<MainHeader />} 
-        sidebar={<MainSidebar />} 
-        isManagedSidebar
-    >
+    return <div className='pt-c-statuses__content'>
+        <FilterToolbar options={ConstantTypes.STATUS_FILTER_TYPES.filter(type => type !== 'partition')}/>
         <PageSection variant={PageSectionVariants.light}>
-            <SearchBar>
-                Request Statuses
-            </SearchBar>
+            <TextContent className='pt-c-statuses__header'>
+                <Text component={TextVariants.h1}> Recorded Statuses </Text>
+            </TextContent>
             <Pagination>
-                <div style={{maxWidth:'100vw', overflow:'auto'}}>
-                    <Table
-                        sortDir={sortDir}
-                        setSortDir={setSortDir}
-                        sortBy={sortBy}
-                        setSortBy={setSortBy}
-                    />
-                </div>
+                <Table
+                    sortDir={sortDir}
+                    setSortDir={setSortDir}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                />
             </Pagination>
         </PageSection>
-    </Page>
+    </div>;
 };
 
 Statuses.propTypes = {

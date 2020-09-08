@@ -12,7 +12,8 @@ const Notification = ({ error, message }) => {
             aria-label='notification'
             variant='danger'
             title='Error fetching data'
-            action={<AlertActionCloseButton onClose={() => setClosed(true)}/>}
+            timeout={3000}
+            actionClose={<AlertActionCloseButton onClose={() => setClosed(true)}/>}
         >
             {error.message}
         </Alert>}
@@ -21,7 +22,8 @@ const Notification = ({ error, message }) => {
             variant={message.type}
             title={message.title}
             isInline
-            action={<AlertActionCloseButton onClose={() => setClosed(true)}/>}
+            timeout={3000}
+            actionClose={<AlertActionCloseButton onClose={() => setClosed(true)}/>}
         >
             {message.content}
         </Alert>}

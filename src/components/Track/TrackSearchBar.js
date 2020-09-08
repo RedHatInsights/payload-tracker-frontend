@@ -1,4 +1,4 @@
-import * as AppActions from '../actions';
+import * as AppActions from '../../actions';
 
 import {
      Bullseye,
@@ -10,7 +10,6 @@ import {
      EmptyStateVariant,
      Flex,
      FlexItem,
-     FlexModifiers,
      Text,
      TextContent,
      TextInput,
@@ -20,7 +19,7 @@ import {
 import { PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { PAYLOADS_ITEM } from '../AppConstants';
+import { PAYLOADS_ITEM } from '../../AppConstants';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -77,13 +76,13 @@ const TrackSearchBar = ({ request_id, payloads, loading, setRequestID, setActive
         </TextContent>
         <Card style={{marginBottom: '20px'}}>
             {request_id && payloads.length > 0 ? <Flex
-                breakpointMods={[{modifier: FlexModifiers.column}]}
+                direction={{default: 'column'}}
                 style={{ margin: '10px' }}
             >
                 <FlexItem> request_id: {request_id} </FlexItem>
                 <Flex>
                     <FlexItem> account: {account} </FlexItem>
-                    {account && <FlexItem breakpointMods={[{modifier: FlexModifiers["align-right"]}]}>
+                    {account && <FlexItem align={{default: 'right'}}>
                         <Button
                             variant="link"
                             isInline
@@ -96,7 +95,7 @@ const TrackSearchBar = ({ request_id, payloads, loading, setRequestID, setActive
                 </Flex>
                 <Flex>
                     <FlexItem> inventory_id: {inventory_id} </FlexItem>
-                    {inventory_id && <FlexItem breakpointMods={[{modifier: FlexModifiers["align-right"]}]}>
+                    {inventory_id && <FlexItem align={{default: 'right'}}>
                         <Button
                             variant="link"
                             isInline

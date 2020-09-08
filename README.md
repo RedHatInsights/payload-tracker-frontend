@@ -7,7 +7,7 @@ Overview
 
 The Frontend for the Payload Tracker is aimed to create a easy-to-use interface in which to access the data created and stored by the Payload Tracker Service. The Service exposes a REST API to which we can make calls.
 
-We utilized `create-react-app` to package this React application. The main components are `Payload.js` and `Track.js` corresponding to the pages that are present in the application.
+This application uses webpack for distribution, and is based on the `patternfly-react-seed` repository. The main components are found in the `track`, `payloads`, and `statuses` directories. These components return full page views which are navigable via `react-router`.
 
 
 Architecture
@@ -40,7 +40,7 @@ The frontend allows for developers to easily view and share payloads as they pas
 Docker
 --------------------
 
-This repo contains a Dockerfile and Dockerfile-dev. The Dockerfile creates the full nginx production build of the application, while Dockerfile-dev creates an image suitable for a dev environment. It does this by speeding up build time by removing the node_modules installation via yarn.
+This repo contains a Dockerfile and Dockerfile-dev. The Dockerfile creates the full nginx production build of the application, while Dockerfile-dev creates an image suitable for a dev environment. It does this by speeding up build time by using the locally built version of the `dist` directory.
 
 
 Prequisites
@@ -60,12 +60,32 @@ Dev Setup
 --------------------
 1. Install dependencies
 ```
-yarn
+npm i
+```
+
+2. Start Payload Tracker Service and API https://github.com/RedHatInsights/payload-tracker#dev-setup
+```
+pipenv run server
+```
+
+3. Start Frontend
+```
+npm run start
+```
+
+**Note:** This will yield CORS errors. Consider installinig https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf to remove these errors. 
+
+
+Dev Setup using Docker
+--------------------
+1. Install dependencies
+```
+npm i
 ```
 
 2. Create build
 ```
-yarn run build
+npm run build
 ```
 
 3. Setup Payload Tracker Service https://github.com/RedHatInsights/payload-tracker#dev-setup
@@ -86,34 +106,16 @@ docker run -p 8080:8080 frontend:latest
 ```
 
 **Note:** There is a draw back to using this method to do frontend development, which is inherent in the use of nginx to provide files from the `build` directory. In order to apply changes occuring in the frontend, we need to do the following:
+
 1. Rebuild frontend
 ```
-yarn run build
+npm run build
 ```
 
 2. Restart Environment
 ```
 docker build . -f Dockerfile-dev -t frontend:latest && docker run -p 8080:8080 frontend:latest
 ```
-
-To more easily facilitate frontend dev, do the following:
-1. Install Dependencies
-```
-yarn
-```
-
-2. Start Frontend
-```
-yarn start
-```
-
-3. Start Payload Tracker Service https://github.com/RedHatInsights/payload-tracker#dev-setup
-
-4. Adjust `querybase` in `Payloads.js` and `Track.js` to point to `http://localhost:8080`
-
-5. Install https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf to remove CORS errors
-
-Changes will be applied as they are made using this strategy.
 
 
 Contributing
@@ -124,6 +126,6 @@ page. PRs should be submitted against the master branch for any new features or 
 
 Versioning
 --------------------
-Anytime an endpoint is modified, the versin should be incremented by `0.1`. New
+Anytime an endpoint is modified, the version should be incremented by `0.1`. New
 functionality introduced that may effect the client should increment by `1`. Minor
 features and bug fixes can increment by `0.0.1`

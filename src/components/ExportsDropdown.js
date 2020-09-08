@@ -2,8 +2,8 @@ import { Dropdown, DropdownItem, DropdownToggle } from '@patternfly/react-core';
 import React, { useState } from 'react';
 
 import { CSVLink } from 'react-csv';
+import { ExportIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
-import { TableIcon } from '@patternfly/react-icons';
 import { connect } from 'react-redux';
 
 const ExportsDropdown = ({ payloads }) => {
@@ -14,17 +14,19 @@ const ExportsDropdown = ({ payloads }) => {
         onSelect={() => setOpen(false)}
         toggle={
             <DropdownToggle
+                toggleIndicator={null}
                 onToggle={() => setOpen(!isOpen)}
             >
-                <TableIcon/>
+                <ExportIcon/>
             </DropdownToggle>
         }
         isOpen={isOpen}
         position='left'
+        isPlain
         dropdownItems={[
             <DropdownItem>
                 <CSVLink data={payloads}>
-                    Export .csv
+                    Export CSV
                 </CSVLink>
             </DropdownItem>
         ]}

@@ -3,12 +3,6 @@ import * as ConstantTypes from './AppConstants';
 
 import axios from 'axios';
 
-var filterIndex = 0;
-
-export function incFilterIndex() {
-    return filterIndex += 1;
-};
-
 export function setCellActivity(title, bool=false) {
     return {
         type: ActionTypes.SET_CELL_ACTIVITY,
@@ -182,32 +176,26 @@ export function updateDurationsFromSocket(duration) {
     };
 };
 
-export function addFilter(filterType, filterValue) {
-    incFilterIndex();
+export function updateFilters(filters) {
     return {
-        type: ActionTypes.ADD_FILTER,
-        payload: {
-            id: filterIndex,
-            type: filterType,
-            value: filterValue
-        },
-        updateUrl: {
-            type: filterType,
-            value: filterValue
-        }
+        type: ActionTypes.UPDATE_FILTERS,
+        payload: filters
     };
 };
 
-export function removeFilter(id) {
+export function stageFilters(filters) {
     return {
-        type: ActionTypes.REMOVE_FILTER,
-        payload: id,
-        updateUrl: {
-            type: id,
-            value: null
-        }
+        type: ActionTypes.STAGE_FILTERS,
+        payload: filters
     };
 };
+
+export function unstageFilter(filter) {
+    return {
+        type: ActionTypes.UNSTAGE_FILTER,
+        payload: filter
+    };
+}
 
 export function setTrackRequestID(request_id) {
     return {

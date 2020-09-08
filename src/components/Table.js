@@ -1,5 +1,3 @@
-import 'moment-timezone';
-
 import {
     Bullseye,
     EmptyState,
@@ -100,7 +98,7 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
         setSortBy(index)
     };
 
-    return <React.Fragment>
+    return <div style={{maxWidth:'100vw', overflow:'auto'}}>
         {loading && <span style={{ justifyContent: 'center', display: 'flex' }}>
             <Spinner size='xl'/>
         </span>}
@@ -120,7 +118,7 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
         {!loading && formattedCells && formattedRows && payloads.length === 0 && <Bullseye>
             <EmptyState>
                 <EmptyStateIcon icon={SearchIcon}/>
-                <Title>
+                <Title headingLevel="h4" size="lg">
                     No results found
                 </Title>
                 <EmptyStateBody>
@@ -128,7 +126,7 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
                 </EmptyStateBody>
             </EmptyState>
         </Bullseye>}
-    </React.Fragment>;
+    </div>;
 };
 
 PayloadsTable.propTypes = {
