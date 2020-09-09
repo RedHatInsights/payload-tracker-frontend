@@ -1,4 +1,5 @@
 import 'react-day-picker/lib/style.css';
+import './DateRangeFilter.scss';
 
 import * as AppActions from '../../actions';
 
@@ -130,9 +131,10 @@ const DateRangeFilter = ({
 
     return <React.Fragment>
         {isOpen && <Modal
+            className='pt-c-filters__date'
             isOpen={isOpen}
             onClose={() => setOpen(!isOpen)}
-            width={'50%'}
+            width='50%'
             title='Set time range'
             isFooterLeftAligned
             actions={[

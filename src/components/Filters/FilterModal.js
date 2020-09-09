@@ -1,3 +1,5 @@
+import './FilterModal.scss';
+
 import { Button, Form, FormGroup, Modal, TextInput } from '@patternfly/react-core';
 import React, { useEffect, useState } from 'react';
 
@@ -7,10 +9,6 @@ const FilterModal = ({ isOpen, options, onStageFn, onCancelFn }) => {
 
     const [toStage, setToStage] = useState([]);
     const [canStage, setCanStage] = useState(false);
-
-    const preprocess = (filters) => {
-        return filters.map(item => Object.entries(item).map(([key, value]) => `${key}=${value}`));
-    };
 
     const updateValue = (value, option) => {
         setToStage(toStage.flatMap(item => Object.keys(item).map(key => key === option ? { [key]: value } : item)));
@@ -27,8 +25,9 @@ const FilterModal = ({ isOpen, options, onStageFn, onCancelFn }) => {
     }, [toStage]);
 
     return <Modal
+        className='pt-c-filters__modal'
         title='Stage Filters'
-        variant='small'
+        width='50%'
         isOpen={isOpen}
         onClose={onCancelFn}
         actions={[
