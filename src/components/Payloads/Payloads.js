@@ -41,7 +41,7 @@ const Payloads = ({ getPayloads, pathname, page, page_size, filters, startDate, 
     return <div className='pt-c-payloads__content'>
         <FilterToolbar options={ConstantTypes.PAYLOAD_FILTER_TYPES}/>
         <PageSection variant={PageSectionVariants.light}>
-            <TextContent className='pt-c-payloads__header'>
+            <TextContent className='pt-c-header'>
                 <Text component={TextVariants.h1}> Recorded Requests </Text>
             </TextContent>
             <Pagination>

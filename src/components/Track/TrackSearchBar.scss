@@ -1,0 +1,38 @@
+.pt-c-track__search {
+    width: 100%;
+    margin-bottom: 30px;
+    display: inline-flex;
+
+    .pt-c-track__search--input {
+        width: 95%;
+        margin-right: 10px;
+    }
+}
+
+.pt-c-track__header {
+    display: block;
+    margin-bottom: 20px;
+
+    .pt-c-track__header--content {
+        padding: 10px 15px 5px 15px;
+    }
+
+    .pt-c-track__header--content > * {
+        margin-bottom: 10px;
+    }
+
+    .pt-c-track__header--content .pt-c-track__header--item {
+        width: 100%;
+        display: inline-flex;
+        flex-direction: row;
+
+        .pt-c-track__header--title {
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .pt-c-track__header--button {
+            margin-left: auto;
+        }
+    }
+}

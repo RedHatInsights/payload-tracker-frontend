@@ -2,3 +2,8 @@
     height: calc(100vh - var(--pf-c-page__header--MinHeight));
     overflow-y: scroll;
 }
+
+.pt-c-header {
+    margin-top: -15px;
+    margin-bottom: 20px;
+}

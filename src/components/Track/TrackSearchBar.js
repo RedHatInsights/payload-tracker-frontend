@@ -1,3 +1,5 @@
+import './TrackSearchBar.scss';
+
 import * as AppActions from '../../actions';
 
 import {
@@ -47,61 +49,65 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
     }, [payloads, getAccount, getInventoryID]);
 
     return <React.Fragment>
-        <TextInput
-            isRequired
-            id='request_id'
-            type="text"
-            name="request_id"
-            value={id}
-            onChange={(id) => updateID(id)}
-            onKeyPress={(e) => e.key === 'Enter' && setRequestID(id)}
-            style={inputStyle}
-            placeholder='Enter a new Request ID...'
-        />
-        <Button
-            variant='primary'
-            onClick={() => setRequestID(id)}
-            isDisabled={id === ""}>
-                Submit
-        </Button>
-        <TextContent style={{marginBottom: '20px'}}>
+        <div className='pt-c-track__search'>
+            <TextInput
+                className='pt-c-track__search--input'
+                isRequired
+                id='request_id'
+                type="text"
+                name="request_id"
+                value={id}
+                onChange={(id) => updateID(id)}
+                onKeyPress={(e) => e.key === 'Enter' && setRequestID(id)}
+                placeholder='Enter a new Request ID...'
+            />
+            <Button
+                variant='primary'
+                onClick={() => setRequestID(id)}
+                isDisabled={id === ''}>
+                    Submit
+            </Button>
+        </div>
+        <TextContent className='pt-c-header'>
             <Text component={TextVariants.h1}>
                 Request Information
             </Text>
         </TextContent>
-        <Card style={{marginBottom: '20px'}}>
-            {request_id && payloads.length > 0 ? <Flex
-                direction={{default: 'column'}}
-                style={{ margin: '10px' }}
-            >
-                <FlexItem> request_id: {request_id} </FlexItem>
-                <Flex>
-                    <FlexItem> account: {account} </FlexItem>
-                    {account && <FlexItem align={{default: 'right'}}>
-                        <Button
-                            variant="link"
-                            isInline
-                            icon={<PlusCircleIcon/>}
-                            onClick={() => clickHandler(`/payloads?account=${account}`) }
-                        >
-                            See more Requests for this Account
-                        </Button>
-                    </FlexItem>}
-                </Flex>
-                <Flex>
-                    <FlexItem> inventory_id: {inventory_id} </FlexItem>
-                    {inventory_id && <FlexItem align={{default: 'right'}}>
-                        <Button
-                            variant="link"
-                            isInline
-                            icon={<PlusCircleIcon/>}
-                            onClick={() => clickHandler(`/payloads?inventory_id=${inventory_id}`)}
-                        >
-                            See more Requests for this ID
-                        </Button>
-                    </FlexItem>}
-                </Flex>
-            </Flex> : !loading && <Bullseye>
+        <Card className='pt-c-track__header'>
+            {request_id && payloads.length > 0 ? <div className='pt-c-track__header--content'>
+                <div className='pt-c-track__header--item'>
+                    <span className='pt-c-track__header--title'> request_id: </span>
+                    <span> {request_id} </span>
+                </div>
+                <hr/>
+                <div className='pt-c-track__header--item'>
+                    <span className='pt-c-track__header--title'> account: </span>
+                    <span> {account} </span>
+                    <Button
+                        className='pt-c-track__header--button'
+                        variant="link"
+                        isInline
+                        icon={<PlusCircleIcon/>}
+                        onClick={() => clickHandler(`/payloads?account=${account}`) }
+                    >
+                        See more Requests for this Account
+                    </Button>
+                </div>
+                <hr/>
+                <div className='pt-c-track__header--item'>
+                    <span className='pt-c-track__header--title'> inventory_id: </span>
+                    <span> {inventory_id} </span>
+                    <Button
+                        className='pt-c-track__header--button'
+                        variant="link"
+                        isInline
+                        icon={<PlusCircleIcon/>}
+                        onClick={() => clickHandler(`/payloads?inventory_id=${inventory_id}`)}
+                    >
+                        See more Requests for this ID
+                    </Button>
+                </div>
+            </div> : !loading && <Bullseye>
                 <EmptyState variant={EmptyStateVariant.lg}>
                     <EmptyStateIcon icon={TimesCircleIcon} color='#c9190b'/>
                     {request_id ? <Title headingLevel='h1'>
@@ -117,13 +123,6 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
         </Card>
     </React.Fragment>;
 };
-
-const inputStyle = {
-    width: '90%',
-    marginBottom: '20px',
-    marginRight: '10px',
-    boxSizing: 'border-box',
-}
 
 TrackSearchBar.propTypes = {
     push: PropTypes.func,

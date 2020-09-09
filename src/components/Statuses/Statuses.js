@@ -41,7 +41,7 @@ const Statuses = ({ getStatuses, pathname, page, page_size, filters, startDate, 
     return <div className='pt-c-statuses__content'>
         <FilterToolbar options={ConstantTypes.STATUS_FILTER_TYPES.filter(type => type !== 'partition')}/>
         <PageSection variant={PageSectionVariants.light}>
-            <TextContent className='pt-c-statuses__header'>
+            <TextContent className='pt-c-header'>
                 <Text component={TextVariants.h1}> Recorded Statuses </Text>
             </TextContent>
             <Pagination>
