@@ -3,7 +3,7 @@ import './Payloads.scss';
 import * as AppActions from '../../actions';
 import * as ConstantTypes from '../../AppConstants';
 
-import { PageSection, PageSectionVariants, Text, TextContent, TextVariants } from '@patternfly/react-core';
+import { PageSection, Text, TextContent, TextVariants } from '@patternfly/react-core';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import FilterToolbar from '../Filters/FilterToolbar';
@@ -40,7 +40,7 @@ const Payloads = ({ getPayloads, pathname, page, page_size, filters, startDate, 
 
     return <div className='pt-c-payloads__content'>
         <FilterToolbar options={ConstantTypes.PAYLOAD_FILTER_TYPES}/>
-        <PageSection variant={PageSectionVariants.light}>
+        <PageSection>
             <TextContent className='pt-c-header'>
                 <Text component={TextVariants.h1}> Recorded Requests </Text>
             </TextContent>

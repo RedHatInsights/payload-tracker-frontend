@@ -7,9 +7,7 @@ import {
     CardHeader,
     Flex,
     FlexItem,
-    FlexModifiers,
     PageSection,
-    PageSectionVariants,
     Tab,
     Tabs,
     Text,
@@ -45,7 +43,7 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
         });
     }, [request_id, payloads, addPayload]);
 
-    return <PageSection variant={PageSectionVariants.light}>
+    return <PageSection>
         <TrackSearchBar/>
         { request_id && payloads.length > 0 && <Tabs activeKey={activeTabKey} onSelect={ (e, index) => setActiveTabKey(index) }>
             <Tab eventKey={0} title='Status'>
