@@ -5,7 +5,6 @@ import { sortable } from '@patternfly/react-table';
 export const API_URL = process.env.ENV === 'development' ? 'http://localhost:8080' : '';
 
 export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
-export const SET_ACTIVE_ITEM= 'SET_ACTIVE_ITEM';
 export const TOGGLE_NAV = 'TOGGLE_NAV';
 export const GET_DATA = 'GET_DATA';
 export const GET_PAYLOAD_TRACK = 'GET_PAYLOAD_TRACK';

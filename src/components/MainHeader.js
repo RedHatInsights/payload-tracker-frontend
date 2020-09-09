@@ -1,17 +1,11 @@
-import * as AppActions from '../actions';
-
-import { Brand, PageHeader, PageHeaderTools } from '@patternfly/react-core';
+import { PageHeader, PageHeaderTools } from '@patternfly/react-core';
 
 import DateRangeFilter from './DateFilter/DateRangeFilter';
 import PropTypes from 'prop-types';
 import React from 'react';
 import newlogo from './static/images/rh-new-logo.svg';
-import { useHistory } from 'react-router';
 
-const MainHeader = ({ isNavOpen, toggleNav }) => {
-
-    const history = useHistory();
-    const { pathname } = history.location;
+const MainHeader = ({ isNavOpen, toggleNav, pathname }) => {
 
     return (
         <PageHeader
@@ -31,7 +25,8 @@ const MainHeader = ({ isNavOpen, toggleNav }) => {
 
 MainHeader.propTypes = {
     isNavOpen: PropTypes.bool,
-    toggleNav: PropTypes.func
+    toggleNav: PropTypes.func,
+    pathname: PropTypes.string
 };
 
 export default (MainHeader);

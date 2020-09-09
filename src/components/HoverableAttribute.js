@@ -5,20 +5,17 @@ import React, { useState } from 'react';
 
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
-import { TRACK_ITEM } from '../AppConstants'
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { push } from 'connected-react-router';
 
-const HoverableAttribute = ({ type, filter, value, setRequestID, stageFilters, beginTracking }) => {
+const HoverableAttribute = ({ type, filter, value, push, setRequestID, stageFilters }) => {
 
     const [isHovered, setHover] = useState(false);
-    let history = useHistory();
 
     const clickHandler = ()  => {
         if (type === 'track') {
             setRequestID(value);
-            history.push(`/track/${value}`);
-            beginTracking(TRACK_ITEM);
+            push(`/track/${value}`);
         } else if (type === 'filter') {
             stageFilters({ [filter] : value });
         } else { return null; }
@@ -49,17 +46,15 @@ HoverableAttribute.propTypes = {
     type: PropTypes.string.isRequired,
     filter: PropTypes.string,
     value: PropTypes.string.isRequired,
+    push: PropTypes.func,
     setRequestID: PropTypes.func,
-    stageFilters: PropTypes.func,
-    beginTracking: PropTypes.func
+    stageFilters: PropTypes.func
 };
 
 const mapDispatchToProps = dispatch => ({
+    push: (url) => dispatch(push(url)),
     setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id)),
     stageFilters: (filters) => dispatch(AppActions.stageFilters(filters)),
-    beginTracking: (item) => dispatch([
-        AppActions.setActiveItem(item)
-    ])
 });
 
 export default connect(null, mapDispatchToProps)(HoverableAttribute);

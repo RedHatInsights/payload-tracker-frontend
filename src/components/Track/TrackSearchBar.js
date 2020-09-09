@@ -19,22 +19,17 @@ import {
 import { PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { PAYLOADS_ITEM } from '../../AppConstants';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router';
+import { push } from 'connected-react-router';
 
-const TrackSearchBar = ({ request_id, payloads, loading, setRequestID, setActiveItem }) => {
+const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) => {
 
     const [id, updateID] = useState();
     const [account, setAccount] = useState('');
     const [inventory_id, setInventoryID] = useState('')
-    let history = useHistory();
 
-    const clickHandler = (url) => {
-        setActiveItem(PAYLOADS_ITEM);
-        history.push(url);
-    };
+    const clickHandler = (url) => push(url);
 
     const getAccount = useCallback(() => {
         const payloadsWithAccount = payloads.filter(p => p.account);
@@ -131,11 +126,11 @@ const inputStyle = {
 }
 
 TrackSearchBar.propTypes = {
+    push: PropTypes.func,
     request_id: PropTypes.string,
     payloads: PropTypes.array,
     loading: PropTypes.bool,
-    setRequestID: PropTypes.func,
-    setActiveItem: PropTypes.func
+    setRequestID: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -145,8 +140,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id)),
-    setActiveItem: (item) => dispatch(AppActions.setActiveItem(item))
+    push: (url) => dispatch(push(url)),
+    setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrackSearchBar);

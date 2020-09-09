@@ -6,15 +6,12 @@ import { PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from '../AppConstants'
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
-const MainSidebar = ({ activeItem, setActiveItem, isNavOpen, setTrackRequestID }) => {
-    let history = useHistory();
+const MainSidebar = ({ activeItem, onClickFn, isNavOpen, setTrackRequestID }) => {
 
-    const clickHandler = (item, url) => {
+    const clickHandler = url => {
         setTrackRequestID(null);
-        setActiveItem(item);
-        history.push(url);
+        onClickFn(url);
     };
 
     return (
@@ -26,7 +23,7 @@ const MainSidebar = ({ activeItem, setActiveItem, isNavOpen, setTrackRequestID }
                         itemId={ PAYLOADS_ITEM }
                         preventDefault
                         isActive={ activeItem === PAYLOADS_ITEM }
-                        onClick={ () => clickHandler(PAYLOADS_ITEM, '/payloads') }
+                        onClick={ () => clickHandler('/payloads') }
                     >
                         Payloads
                     </NavItem>
@@ -35,7 +32,7 @@ const MainSidebar = ({ activeItem, setActiveItem, isNavOpen, setTrackRequestID }
                         itemId={ STATUSES_ITEM }
                         preventDefault
                         isActive={ activeItem === STATUSES_ITEM }
-                        onClick={ () => clickHandler(STATUSES_ITEM, '/statuses') }
+                        onClick={ () => clickHandler('/statuses') }
                     >
                         Statuses
                     </NavItem>
@@ -44,7 +41,7 @@ const MainSidebar = ({ activeItem, setActiveItem, isNavOpen, setTrackRequestID }
                         itemId={ TRACK_ITEM }
                         preventDefault
                         isActive={ activeItem === TRACK_ITEM }
-                        onClick={ () => clickHandler(TRACK_ITEM, '/track') }
+                        onClick={ () => clickHandler('/track') }
                     >
                         Track
                     </NavItem>
@@ -57,7 +54,7 @@ const MainSidebar = ({ activeItem, setActiveItem, isNavOpen, setTrackRequestID }
 
 MainSidebar.propTypes = {
     activeItem: PropTypes.string,
-    setActiveItem: PropTypes.func,
+    onClickFn: PropTypes.func,
     isNavOpen: PropTypes.bool,
     setTrackRequestID: PropTypes.func
 };

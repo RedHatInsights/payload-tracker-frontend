@@ -11,14 +11,12 @@ import Pagination from '../Pagination';
 import PropTypes from 'prop-types';
 import Table from '../Table';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router';
 
 const queryBase = `${ConstantTypes.API_URL}/v1/statuses?`;
 
-const Statuses = ({ getStatuses, page, page_size, filters, startDate, endDate, recentTimeType }) => {
-    let history = useHistory();
-    const [sortDir, setSortDir] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_dir`) || 'desc');
-    const [sortBy, setSortBy] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${history.location.pathname}.sort_by`) || 'date');
+const Statuses = ({ getStatuses, pathname, page, page_size, filters, startDate, endDate, recentTimeType }) => {
+    const [sortDir, setSortDir] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${pathname}.sort_dir`) || 'desc');
+    const [sortBy, setSortBy] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${pathname}.sort_by`) || 'date');
 
     const search = useCallback(() => {
         var query = queryBase;
@@ -60,6 +58,7 @@ const Statuses = ({ getStatuses, page, page_size, filters, startDate, endDate, r
 
 Statuses.propTypes = {
     getStatuses: PropTypes.func,
+    pathname: PropTypes.string,
     page: PropTypes.number,
     page_size: PropTypes.number,
     filters: PropTypes.array,
@@ -69,6 +68,7 @@ Statuses.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    pathname: state.router.location.pathname,
     page: state.payloads.page,
     page_size: state.payloads.page_size,
     filters: state.payloads.filters,

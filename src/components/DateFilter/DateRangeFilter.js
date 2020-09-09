@@ -29,10 +29,9 @@ import Dropdown from '../DropdownContainer';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getLocalDate } from '../../AppConstants';
-import { useHistory } from 'react-router';
 
 const DateRangeFilter = ({
-    updateDateRange, addNewTimeFilter, setStartDate, setEndDate,
+    updateDateRange, addNewTimeFilter, pathname, setStartDate, setEndDate,
     addMessage, startDate, endDate, recentTimeFilters, recentTimeType
 }) => {
 
@@ -46,7 +45,6 @@ const DateRangeFilter = ({
     const [rightRecentsStack, setRightRecentsStack] = useState();
     const fromRef = useRef();
     const toRef = useRef();
-    const history = useHistory();
 
     const resetStacks = () => {
         for(var i = 0; i < recentTimeFilters.length; i++) {
@@ -161,7 +159,7 @@ const DateRangeFilter = ({
                             <Dropdown
                                 position={DropdownPosition.left}
                                 type={type ? type : 'Column'}
-                                items={history.location.pathname === '/payloads' ? [
+                                items={pathname === '/payloads' ? [
                                     'created_at'
                                 ]: ['created_at', 'date']}
                                 setSelected={(e, type) => setType(type)}
@@ -263,6 +261,7 @@ DateRangeFilter.propTypes = {
     setStartDate: PropTypes.func,
     setEndDate: PropTypes.func,
     addMessage: PropTypes.func,
+    pathname: PropTypes.string,
     startDate: PropTypes.any,
     endDate: PropTypes.any,
     recentTimeFilters: PropTypes.array,
@@ -270,6 +269,7 @@ DateRangeFilter.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    pathname: state.router.location.pathname,
     startDate: state.payloads.startDate,
     endDate: state.payloads.endDate,
     recentTimeFilters: state.payloads.recentTimeFilters,
