@@ -9,7 +9,7 @@ import urlSyncMiddleware from '../middlewares/urlSync';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const middlewares = [thunk, routerMiddleware(history)]
+const middlewares = [thunk, routerMiddleware(history), urlSyncMiddleware]
 
 export default createStore(
     createRootReducer(history),
