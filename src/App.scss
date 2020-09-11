@@ -1,3 +1,7 @@
+section, button {
+    outline: none
+}
+
 .pf-c-page__main {
     height: calc(100vh - var(--pf-c-page__header--MinHeight));
     overflow-y: scroll;

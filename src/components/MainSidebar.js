@@ -27,7 +27,7 @@ const MainSidebar = ({ activeItem, onClickFn, isNavOpen, setTrackRequestID }) =>
                     >
                         Payloads
                     </NavItem>
-                    <NavItem
+                    {/* <NavItem
                         to='/statuses'
                         itemId={ STATUSES_ITEM }
                         preventDefault
@@ -35,7 +35,7 @@ const MainSidebar = ({ activeItem, onClickFn, isNavOpen, setTrackRequestID }) =>
                         onClick={ () => clickHandler('/statuses') }
                     >
                         Statuses
-                    </NavItem>
+                    </NavItem> */}
                     <NavItem
                         to='/track'
                         itemId={ TRACK_ITEM }

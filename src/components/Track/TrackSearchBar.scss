@@ -14,10 +14,13 @@
     margin-bottom: 20px;
 
     .pt-c-track__header--content {
-        padding: 10px 15px 5px 15px;
+        padding: 15px 15px 5px 15px;
     }
 
     .pt-c-track__header--content > * {
+        hr {
+            margin-bottom: 10px;
+        }
         margin-bottom: 10px;
     }
 

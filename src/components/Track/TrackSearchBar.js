@@ -79,34 +79,38 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                     <span className='pt-c-track__header--title'> request_id: </span>
                     <span> {request_id} </span>
                 </div>
-                <hr/>
-                <div className='pt-c-track__header--item'>
-                    <span className='pt-c-track__header--title'> account: </span>
-                    <span> {account} </span>
-                    <Button
-                        className='pt-c-track__header--button'
-                        variant="link"
-                        isInline
-                        icon={<PlusCircleIcon/>}
-                        onClick={() => clickHandler(`/payloads?account=${account}`) }
-                    >
-                        See more Requests for this Account
-                    </Button>
-                </div>
-                <hr/>
-                <div className='pt-c-track__header--item'>
-                    <span className='pt-c-track__header--title'> inventory_id: </span>
-                    <span> {inventory_id} </span>
-                    <Button
-                        className='pt-c-track__header--button'
-                        variant="link"
-                        isInline
-                        icon={<PlusCircleIcon/>}
-                        onClick={() => clickHandler(`/payloads?inventory_id=${inventory_id}`)}
-                    >
-                        See more Requests for this ID
-                    </Button>
-                </div>
+                {account && <div>
+                    <hr/>
+                    <div className='pt-c-track__header--item'>
+                        <span className='pt-c-track__header--title'> account: </span>
+                        <span> {account} </span>
+                        <Button
+                            className='pt-c-track__header--button'
+                            variant="link"
+                            isInline
+                            icon={<PlusCircleIcon/>}
+                            onClick={() => clickHandler(`/payloads?account=${account}`) }
+                        >
+                            See more Requests for this Account
+                        </Button>
+                    </div>
+                </div>}
+                {inventory_id && <div>
+                    <hr/>
+                    <div className='pt-c-track__header--item'>
+                        <span className='pt-c-track__header--title'> inventory_id: </span>
+                        <span> {inventory_id} </span>
+                        <Button
+                            className='pt-c-track__header--button'
+                            variant="link"
+                            isInline
+                            icon={<PlusCircleIcon/>}
+                            onClick={() => clickHandler(`/payloads?inventory_id=${inventory_id}`)}
+                        >
+                            See more Requests for this ID
+                        </Button>
+                    </div>
+                </div>}
             </div> : !loading && <Bullseye>
                 <EmptyState variant={EmptyStateVariant.lg}>
                     <EmptyStateIcon icon={TimesCircleIcon} color='#c9190b'/>

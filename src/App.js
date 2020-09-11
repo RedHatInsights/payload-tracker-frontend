@@ -20,6 +20,8 @@ const App = ({ pathname, push }) => {
   const [isNavOpen, toggleNav] = useState(false);
   const [activeItem, setActiveItem] = useState(PAYLOADS_ITEM);
 
+  const onClickFn = (url) => { push(url); toggleNav(false); }
+
   useEffect(() => {
     pathname.indexOf('/track') >= 0 ? setActiveItem(TRACK_ITEM): (
       pathname === '/payloads' ? setActiveItem(PAYLOADS_ITEM) :
@@ -29,12 +31,12 @@ const App = ({ pathname, push }) => {
 
   return <Page
     header={<MainHeader isNavOpen={isNavOpen} toggleNav={toggleNav} pathname={pathname}/>}
-    sidebar={<MainSidebar activeItem={activeItem} onClickFn={push} isNavOpen={isNavOpen}/>}
+    sidebar={<MainSidebar activeItem={activeItem} onClickFn={onClickFn} isNavOpen={isNavOpen}/>}
   >
     <Switch>
       <Route path='/' exact render={() => <Redirect to='/payloads'/>}/>
       <Route path='/payloads' component={Payloads}/>
-      <Route path='/statuses' component={Statuses}/>
+      <Route path='/statuses' render={() => <Redirect to='/payloads'/>}/>
       <Route exact path='/track' component={Track}/>
       <Route path='/track/:request_id' component={Track}/>
     </Switch>
