@@ -1,0 +1,75 @@
+.pt-c-durations {
+    --pt-c-durations--success: var(--pf-global--success-color--100);
+    --pt-c-durations--error: var(--pf-global--danger-color--100);
+    --pt-c-durations--processing: var(--pf-global--primary-color--100);
+    margin: 20px 0 20px 0;
+}
+
+.pt-c-durations__chart {
+    display: inline-flex;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 50px;
+
+    &.hide {
+        height: 0px;
+    }
+}
+
+.pt-c-durations__header {
+    display: inline-flex;
+
+    > * {
+        margin-right: 20px;
+        font-size: 12pt;
+        font-weight: bold
+    }
+}
+
+.pt-c-durations__service {
+    background-color: var(--pt-c-durations--processing);
+    height: inherit;
+    border: 1px solid black;
+    color: white;
+
+    &.success {
+        background-color: var(--pt-c-durations--success);
+    }
+
+    &.error {
+        background-color: var(--pt-c-durations--error);
+    }
+}
+
+.pt-c-durations__legend {
+    display: inline-flex;
+    flex-wrap: wrap;
+
+    .pt-c-durations__legend--item {
+        display: inline-flex;
+        margin-right: 20px;
+    }
+
+    .pt-c-durations__legend--circle {
+        margin: 5px 5px 0 0;
+        width: 7px;
+        height: 7px;
+        border-radius: 3.5px;
+        background-color: var(--pt-c-durations--processing);
+
+        &.success {
+            background-color: var(--pt-c-durations--success);
+        }
+
+        &.error {
+            background-color: var(--pt-c-durations--error);
+        }
+    }
+
+    .pt-c-durations__legend--label {
+        color: black;
+        font-size: 8pt;
+        font-weight: bold;
+    }
+
+}

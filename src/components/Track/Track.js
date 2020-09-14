@@ -15,10 +15,10 @@ import {
 } from '@patternfly/react-core';
 import React, { useEffect, useState } from 'react';
 
+import Durations from './Durations';
 import ExportsDropdown from '../ExportsDropdown';
 import OptionsContainer from '../OptionsContainer';
 import PropTypes from 'prop-types';
-import TrackDuration from './TrackDurationView';
 import TrackGraphic from './TrackGraphicView';
 import TrackSearchBar from './TrackSearchBar';
 import TrackTable from './TrackTable';
@@ -45,52 +45,37 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
 
     return <PageSection>
         <TrackSearchBar/>
-        { request_id && payloads.length > 0 && <Tabs activeKey={activeTabKey} onSelect={ (e, index) => setActiveTabKey(index) }>
-            <Tab eventKey={0} title='Status'>
-                <Card>
-                    <CardHeader>
-                    </CardHeader>
-                    <CardBody>
-                        <TrackGraphic/>
-                    </CardBody>
-                </Card>
-            </Tab>
-            <Tab eventKey={1} title='Duration'>
-                <Card>
-                    <CardHeader>
-                        <TextContent>
-                            <Text>
-                                {durations.hasOwnProperty('total_time') ? `Total Time: ${durations.total_time}` : ''}
-                            </Text>
-                            <Text>
-                                {durations.hasOwnProperty('total_time_in_services') ?
-                                    `Total Time in Services: ${durations.total_time_in_services}` : ''}
-                            </Text>
-                        </TextContent>
-                    </CardHeader>
-                    <CardBody>
-                        <TrackDuration/>
-                    </CardBody>
-                </Card>
-            </Tab>
-            <Tab eventKey={2} title='Table'>
-                <Card>
-                    <CardHeader>
-                        <Flex direction={{default: 'row'}}>
-                            <FlexItem>
-                                <OptionsContainer isDisabled={request_id ? false : true}/>
-                            </FlexItem>
-                            <FlexItem>
-                                <ExportsDropdown/>
-                            </FlexItem>
-                        </Flex>
-                    </CardHeader>
-                    <CardBody>
-                        <TrackTable/>
-                    </CardBody>
-                </Card>
-            </Tab>
-        </Tabs>}
+        { request_id && payloads.length > 0 && <React.Fragment>
+            <Durations/>
+            <Tabs activeKey={activeTabKey} onSelect={ (e, index) => setActiveTabKey(index) }>
+                <Tab eventKey={0} title='Status'>
+                    <Card>
+                        <CardHeader>
+                        </CardHeader>
+                        <CardBody>
+                            <TrackGraphic/>
+                        </CardBody>
+                    </Card>
+                </Tab>
+                <Tab eventKey={1} title='Table'>
+                    <Card>
+                        <CardHeader>
+                            <Flex direction={{default: 'row'}}>
+                                <FlexItem>
+                                    <OptionsContainer isDisabled={request_id ? false : true}/>
+                                </FlexItem>
+                                <FlexItem>
+                                    <ExportsDropdown/>
+                                </FlexItem>
+                            </Flex>
+                        </CardHeader>
+                        <CardBody>
+                            <TrackTable/>
+                        </CardBody>
+                    </Card>
+                </Tab>
+            </Tabs>
+        </React.Fragment>}
     </PageSection>;
 };
 
