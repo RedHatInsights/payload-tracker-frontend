@@ -13,6 +13,7 @@ module.exports = () => {
       rules: [
         {
           test: /src\/.*\.js$/,
+          exclude: /node_modules/,
           use: [{ loader: 'source-map-loader' }, { loader: 'babel-loader' }, { loader: 'eslint-loader' }]
         },
         {
