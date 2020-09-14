@@ -39,8 +39,9 @@ const TrackTable = ({ payloads, cells }) => {
     };
 
     useEffect(() => {
-        setRows(generateRows(payloads, cells));
-        setCols(generateCells(cells));
+        const cols = generateCells(cells);
+        setCols(cols);
+        setRows(generateRows(payloads, cols));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [payloads, cells]);
 

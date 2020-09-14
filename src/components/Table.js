@@ -74,8 +74,10 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
     };
 
     useEffect(() => {
-        setFormattedRows(generateRows(payloads, cells));
-        setFormattedCells(generateCells(cells));
+        const cols = generateCells(cells);
+        setFormattedCells(cols);
+        setFormattedRows(generateRows(payloads, cols));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cells, payloads]);
 
     const onSort = (_event, index, direction) => {
