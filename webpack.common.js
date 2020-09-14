@@ -14,7 +14,7 @@ module.exports = () => {
         {
           test: /src\/.*\.js$/,
           exclude: /node_modules/,
-          use: [{ loader: 'source-map-loader' }, { loader: 'babel-loader' }, { loader: 'eslint-loader' }]
+          use: [{ loader: 'source-map-loader' }, { loader: 'babel-loader' }]
         },
         {
           test: /\.s?[ac]ss$/,
