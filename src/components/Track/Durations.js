@@ -6,8 +6,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const SUCCESS_STATUSES = ['success']
-const ERROR_STATUSES = ['error', 'failed', 'processing_error']
+const SUCCESS_STATUSES = ['success'];
+const ERROR_STATUSES = ['error', 'failed', 'processing_error'];
 
 const Durations = ({ payloads, durations }) => {
     const [width, setWidth] = useState();
@@ -22,7 +22,7 @@ const Durations = ({ payloads, durations }) => {
         checkStatus(service, ERROR_STATUSES) ? 'error' : ''
     );
 
-    const reverse = (str) => str.split("").reverse().join("");
+    const reverse = (str) => str.split('').reverse().join('');
 
     const getSeconds = (str) => {
         const time = reverse(str);
@@ -31,7 +31,7 @@ const Durations = ({ payloads, durations }) => {
         return (timeArr[0] * 3600) + (timeArr[1] * 60) + timeArr[2];
     };
 
-    const isReadyToRender = () => Boolean(width && totalTime && getSeconds(durations?.['total_time_in_services']) !== 0)
+    const isReadyToRender = () => Boolean(width && totalTime && getSeconds(durations?.total_time_in_services) !== 0);
 
     const computeServiceWidth = (duration, width) => width * (getSeconds(duration) / totalTime);
 
@@ -39,29 +39,32 @@ const Durations = ({ payloads, durations }) => {
         if (chartRef.current) {
             while (chartRef.current.clientWidth === 0) {
                 handleResize();
-            };
+            }
+
             setWidth(chartRef.current.clientWidth);
         }
-    }
+    };
 
     useEffect(() => {
         handleResize();
         window.addEventListener('resize', handleResize);
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        const total = durations?.['total_time_in_services'];
+        const total = durations?.total_time_in_services;
         total && width > 0 && setTotalTime(getSeconds(total));
+        //eslint-disable-next-line
     }, [durations, width]);
 
     return <Card className='pt-c-durations'>
         <CardHeader>
             <div className='pt-c-durations__header'>
                 <span>
-                    {durations?.['total_time'] && `Total Time: ${durations.total_time}`}
+                    {durations?.total_time && `Total Time: ${durations.total_time}`}
                 </span>
                 <span>
-                    {durations?.['total_time_in_services'] &&
+                    {durations?.total_time_in_services &&
                         `Total Time in Services: ${durations.total_time_in_services}`}
                 </span>
             </div>
@@ -86,7 +89,7 @@ const Durations = ({ payloads, durations }) => {
                             <div className='pt-c-durations__legend--label'>
                                 {`${service} | ${duration}`}
                             </div>
-                        </div>
+                        </div>;
                     }
                 })}
             </div>

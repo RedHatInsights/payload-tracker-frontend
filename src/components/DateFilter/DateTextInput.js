@@ -16,7 +16,7 @@ const DateTextInput = forwardRef(({ val, setValidation }, ref) => {
 
     const checkVal = (newVal) => {
         if (newVal) {
-            newVal = newVal instanceof Object ? newVal.toLocaleString('en-US') : newVal
+            newVal = newVal instanceof Object ? newVal.toLocaleString('en-US') : newVal;
             const res = DateTime.fromFormat(newVal, 'm/d/y, h:mm:ss a');
             res.invalid ? updateState(false) : updateState(true);
             setCurrentValue(newVal);
@@ -45,6 +45,8 @@ const DateTextInput = forwardRef(({ val, setValidation }, ref) => {
         validated={isValid ? 'success' : 'error'}
     />;
 });
+
+DateTextInput.displayName = 'DateTextInput';
 
 DateTextInput.propTypes = {
     setVal: PropTypes.func,

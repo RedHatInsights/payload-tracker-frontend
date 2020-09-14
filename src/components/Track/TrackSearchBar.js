@@ -3,20 +3,18 @@ import './TrackSearchBar.scss';
 import * as AppActions from '../../actions';
 
 import {
-     Bullseye,
-     Button,
-     Card,
-     EmptyState,
-     EmptyStateBody,
-     EmptyStateIcon,
-     EmptyStateVariant,
-     Flex,
-     FlexItem,
-     Text,
-     TextContent,
-     TextInput,
-     TextVariants,
-     Title
+    Bullseye,
+    Button,
+    Card,
+    EmptyState,
+    EmptyStateBody,
+    EmptyStateIcon,
+    EmptyStateVariant,
+    Text,
+    TextContent,
+    TextInput,
+    TextVariants,
+    Title
 } from '@patternfly/react-core';
 import { PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -29,23 +27,23 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
 
     const [id, updateID] = useState();
     const [account, setAccount] = useState('');
-    const [inventory_id, setInventoryID] = useState('')
+    const [inventory_id, setInventoryID] = useState('');
 
     const clickHandler = (url) => push(url);
 
     const getAccount = useCallback(() => {
         const payloadsWithAccount = payloads.filter(p => p.account);
-        return payloadsWithAccount.length > 0 ? payloadsWithAccount[0].account : ''
+        return payloadsWithAccount.length > 0 ? payloadsWithAccount[0].account : '';
     }, [payloads]);
 
     const getInventoryID = useCallback(() => {
         const payloadsWithID = payloads.filter(p => p.inventory_id);
-        return payloadsWithID.length > 0 ? payloadsWithID[0].inventory_id : ''
+        return payloadsWithID.length > 0 ? payloadsWithID[0].inventory_id : '';
     }, [payloads]);
 
     useEffect(() => {
         payloads && setAccount(getAccount());
-        payloads && setInventoryID(getInventoryID())
+        payloads && setInventoryID(getInventoryID());
     }, [payloads, getAccount, getInventoryID]);
 
     return <React.Fragment>

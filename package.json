@@ -7,8 +7,7 @@
     "dr:surge": "node dr-surge.js",
     "build": "ENV=production webpack --config webpack.prod.js && npm run dr:surge",
     "start": "ENV=development webpack-dev-server --hot --color --progress --info=true --config webpack.dev.js",
-    "eslint": "eslint --ext .js ./src/",
-    "lint": "npm run eslint",
+    "lint": "eslint --ext .js ./src/",
     "build:bundle-profile": "webpack --config webpack.prod.js --profile --json > stats.json",
     "bundle-profile:analyze": "npm run build:bundle-profile && webpack-bundle-analyzer ./stats.json",
     "clean": "rimraf dist"

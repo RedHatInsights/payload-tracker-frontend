@@ -47,14 +47,14 @@ const DateRangeFilter = ({
     const toRef = useRef();
 
     const resetStacks = () => {
-        for(var i = 0; i < recentTimeFilters.length; i++) {
+        for (let i = 0; i < recentTimeFilters.length; i++) {
             if (getLocalDate(recentTimeFilters[i].start) === getLocalDate(start) &&
                 getLocalDate(recentTimeFilters[i].end) === getLocalDate(end)) {
                 setLeftRecentsStack(recentTimeFilters.slice(0, i).reverse());
-                setRightRecentsStack(recentTimeFilters.slice(i+1, recentTimeFilters.length));
+                setRightRecentsStack(recentTimeFilters.slice(i + 1, recentTimeFilters.length));
                 break;
-            };
-        };
+            }
+        }
     };
 
     const addRecent = useCallback((t, s, e) => {
@@ -66,7 +66,7 @@ const DateRangeFilter = ({
     }, [updateDateRange]);
 
     useEffect(() => {
-        resetStacks()
+        resetStacks();
     //eslint-disable-next-line
     }, [recentTimeFilters, setLeftRecentsStack, setRightRecentsStack]);
 
@@ -74,19 +74,19 @@ const DateRangeFilter = ({
         let areValuesInArray = recentTimeFilters.filter(filter => {
             if (getLocalDate(filter.start) === getLocalDate(start) && getLocalDate(filter.end) === getLocalDate(end)) {
                 return filter;
-            };
+            }
         });
         if (start && end && type) {
             updateState(start, end);
             if (areValuesInArray.length === 0) {
                 addRecent(type, start, end);
-            };
+            }
         } else if (!(start && end)) {
             if (type) {
                 setStartDate(start);
                 setEndDate(end);
             }
-        };
+        }
     //eslint-disable-next-line
     }, [start, end, type]);
 
@@ -98,22 +98,23 @@ const DateRangeFilter = ({
                 setStart(from);
                 setEnd(to);
             } else {
-                addMessage('danger', 'Date range error', `${getLocalDate(from)} is not before ${getLocalDate(to)}`)
-            };
+                addMessage('danger', 'Date range error', `${getLocalDate(from)} is not before ${getLocalDate(to)}`);
+            }
         };
+
         getValuesFromModal();
         setOpen(!isOpen);
     };
 
     const recentClickHandler = (start, end) => {
-        resetStacks(start, end)
+        resetStacks(start, end);
         setOpen(!isOpen);
         setActiveTab(0);
     };
 
     const rightRecentHandler = () => {
         const [rightRecent, ...moreRecents] = rightRecentsStack;
-        setLeftRecentsStack([{start, end}, ...leftRecentsStack]);
+        setLeftRecentsStack([{ start, end }, ...leftRecentsStack]);
         setStart(rightRecent.start);
         setEnd(rightRecent.end);
         setRightRecentsStack(moreRecents);
@@ -121,7 +122,7 @@ const DateRangeFilter = ({
 
     const leftRecentHandler = () => {
         const [leftRecent, ...moreRecents] = leftRecentsStack;
-        setRightRecentsStack([{start, end}, ...rightRecentsStack]);
+        setRightRecentsStack([{ start, end }, ...rightRecentsStack]);
         setStart(leftRecent.start);
         setEnd(leftRecent.end);
         setLeftRecentsStack(moreRecents);
@@ -149,19 +150,19 @@ const DateRangeFilter = ({
                 </Button>
             ]}
         >
-            <Form style={{paddingBottom: '30px'}}>
+            <Form style={{ paddingBottom: '30px' }}>
                 <FormGroup
                     label='Specify column to filter:'
-                    isRequired={!type}
+                    isRequired={ !type }
                 >
-                    <Flex direction={{default: 'column'}}>
+                    <Flex direction={{ default: 'column' }}>
                         <FlexItem>
                             <Dropdown
-                                position={DropdownPosition.left}
-                                type={type ? type : 'Column'}
+                                position={ DropdownPosition.left }
+                                type={ type ? type : 'Column' }
                                 items={pathname === '/payloads' ? [
                                     'created_at'
-                                ]: ['created_at', 'date']}
+                                ] : ['created_at', 'date']}
                                 setSelected={(e, type) => setType(type)}
                             />
                         </FlexItem>
@@ -170,16 +171,16 @@ const DateRangeFilter = ({
             </Form>
             <Tabs activeKey={activeTab} onSelect={(e, index) => setActiveTab(index)} isBox>
                 <Tab eventKey={0} title='Absolute'>
-                    <Bullseye style={{paddingTop: '30px'}}>
+                    <Bullseye style={{ paddingTop: '30px' }}>
                         <Form>
-                            <Flex direction={{default: 'row'}}>
+                            <Flex direction={{ default: 'row' }}>
                                 <FormGroup label='From'>
-                                    <Flex direction={{default: 'column'}}>
+                                    <Flex direction={{ default: 'column' }}>
                                         <FlexItem>
                                             <DateTextInput
-                                                ref={fromRef}
-                                                val={start}
-                                                setValidation={setValidation}
+                                                ref={ fromRef }
+                                                val={ start }
+                                                setValidation={ setValidation }
                                             />
                                         </FlexItem>
                                         <FlexItem>
@@ -188,12 +189,12 @@ const DateRangeFilter = ({
                                     </Flex>
                                 </FormGroup>
                                 <FormGroup label='To'>
-                                    <Flex direction={{default: 'column'}}>
+                                    <Flex direction={{ default: 'column' }}>
                                         <FlexItem>
                                             <DateTextInput
-                                                ref={toRef}
-                                                val={end}
-                                                setValidation={setValidation}
+                                                ref={ toRef }
+                                                val={ end }
+                                                setValidation={ setValidation }
                                             />
                                         </FlexItem>
                                         <FlexItem>
@@ -211,21 +212,18 @@ const DateRangeFilter = ({
                     <Card>
                         <CardHeader/>
                         <CardBody>
-                            <Flex direction={{default: 'column'}}>
-                                {recentTimeFilters.map(filter =>
-                                    <React.Fragment>
-                                        <FlexItem>
-                                            <Button
-                                                variant='link'
-                                                onClick={() => recentClickHandler(filter.start, filter.end)}
-                                            >
-                                                {filter.start && filter.end ? <span>
-                                                    {getLocalDate(filter.start)} to {getLocalDate(filter.end)}
-                                                </span> : <Text> All time </Text>}
-                                            </Button>
-                                            <Divider/>
-                                        </FlexItem>
-                                    </React.Fragment>)}
+                            <Flex direction={{ default: 'column' }}>
+                                {recentTimeFilters.map(filter => <FlexItem key={ filter }>
+                                    <Button
+                                        variant='link'
+                                        onClick={() => recentClickHandler(filter.start, filter.end)}
+                                    >
+                                        {filter.start && filter.end ? <span>
+                                            {getLocalDate(filter.start)} to {getLocalDate(filter.end)}
+                                        </span> : <Text> All time </Text>}
+                                    </Button>
+                                    <Divider/>
+                                </FlexItem>)}
                             </Flex>
                         </CardBody>
                     </Card>
@@ -234,10 +232,10 @@ const DateRangeFilter = ({
         </Modal>}
         {!(leftRecentsStack && leftRecentsStack.length === 0) && <Button
             variant='inline'
-            onClick={leftRecentHandler}
+            onClick={ leftRecentHandler }
         > <CaretLeftIcon/> </Button>}
         <Button variant='inline' onClick={() => setOpen(!isOpen)}>
-            <Flex direction={{default: 'row'}} >
+            <Flex direction={{ default: 'row' }} >
                 <FlexItem>
                     <ClockIcon/>
                 </FlexItem>
@@ -250,7 +248,7 @@ const DateRangeFilter = ({
         </Button>
         {!(rightRecentsStack && rightRecentsStack.length === 0) && <Button
             variant='inline'
-            onClick={rightRecentHandler}
+            onClick={ rightRecentHandler }
         > <CaretRightIcon/> </Button>}
     </React.Fragment>;
 };
@@ -265,7 +263,7 @@ DateRangeFilter.propTypes = {
     startDate: PropTypes.any,
     endDate: PropTypes.any,
     recentTimeFilters: PropTypes.array,
-    recentTimeType: PropTypes.string,
+    recentTimeType: PropTypes.string
 };
 
 const mapStateToProps = state => ({

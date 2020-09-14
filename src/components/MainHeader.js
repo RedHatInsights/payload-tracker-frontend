@@ -7,21 +7,19 @@ import newlogo from './static/images/rh-new-logo.svg';
 
 const MainHeader = ({ isNavOpen, toggleNav, pathname }) => {
 
-    return (
-        <PageHeader
-            logo={<span dangerouslySetInnerHTML={{__html: newlogo}} />}
-            logoProps={{
-                href: '/payloads',
-                target: '_blank'
-            }}
-            headerTools={ <PageHeaderTools>
-                {!pathname.includes('/track') ? <DateRangeFilter/> : undefined}
-            </PageHeaderTools> }
-            onNavToggle={ () => toggleNav(!isNavOpen) }
-            showNavToggle
-        />
-    )
-}
+    return <PageHeader
+        logo={<span dangerouslySetInnerHTML={{ __html: newlogo }} />}
+        logoProps={{
+            href: '/payloads',
+            target: '_blank'
+        }}
+        headerTools={ <PageHeaderTools>
+            {!pathname.includes('/track') ? <DateRangeFilter/> : undefined}
+        </PageHeaderTools> }
+        onNavToggle={ () => toggleNav(!isNavOpen) }
+        showNavToggle
+    />;
+};
 
 MainHeader.propTypes = {
     isNavOpen: PropTypes.bool,

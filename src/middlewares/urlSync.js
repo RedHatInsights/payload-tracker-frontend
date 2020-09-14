@@ -15,7 +15,7 @@ export default store => next => action => {
         pathname.split('/').length === 3 && store.dispatch(replace({
             pathname: `${[pathname.split('/')[0], pathname.split('/')[1]].join('/')}/${action.payload}`
         }));
-    };
+    }
 
     // if (action.updateUrl) {
 

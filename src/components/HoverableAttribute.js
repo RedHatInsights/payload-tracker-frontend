@@ -17,13 +17,13 @@ const HoverableAttribute = ({ type, filter, value, push, setRequestID, stageFilt
             setRequestID(value);
             push(`/track/${value}`);
         } else if (type === 'filter') {
-            stageFilters({ [filter] : value });
+            stageFilters({ [filter]: value });
         } else { return null; }
     };
 
     return <React.Fragment>
         {value.length > 12 ? <Tooltip content={value}>
-            <Button 
+            <Button
                 onClick={clickHandler}
                 variant='plain'
                 onMouseOver={ () => setHover(true) }
@@ -31,7 +31,7 @@ const HoverableAttribute = ({ type, filter, value, push, setRequestID, stageFilt
             >
                 {`${value.substring(0, 12)}...`} {isHovered ? <PlusCircleIcon/> : null }
             </Button>
-        </Tooltip> : <Button 
+        </Tooltip> : <Button
             onClick={clickHandler}
             variant='plain'
             onMouseOver={ () => setHover(true) }
@@ -54,7 +54,7 @@ HoverableAttribute.propTypes = {
 const mapDispatchToProps = dispatch => ({
     push: (url) => dispatch(push(url)),
     setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id)),
-    stageFilters: (filters) => dispatch(AppActions.stageFilters(filters)),
+    stageFilters: (filters) => dispatch(AppActions.stageFilters(filters))
 });
 
 export default connect(null, mapDispatchToProps)(HoverableAttribute);

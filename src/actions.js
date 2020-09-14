@@ -3,10 +3,10 @@ import * as ConstantTypes from './AppConstants';
 
 import axios from 'axios';
 
-export function setCellActivity(title, bool=false) {
+export const setCellActivity = (title, bool = false) => {
     return {
         type: ActionTypes.SET_CELL_ACTIVITY,
-        title: title,
+        title,
         payload: bool,
         updateUrl: {
             type: `${title}Cell`,
@@ -15,30 +15,30 @@ export function setCellActivity(title, bool=false) {
     };
 };
 
-export function toggleNav(bool=true) {
-    return {type: ActionTypes.TOGGLE_NAV, payload: !bool}
+export const toggleNav = (bool = true) => {
+    return { type: ActionTypes.TOGGLE_NAV, payload: !bool };
 };
 
 export const getData = (url) => dispatch => {
-    dispatch({type: `${ActionTypes.GET_DATA}_PENDING`})
+    dispatch({ type: `${ActionTypes.GET_DATA}_PENDING` });
     axios.get(url)
-        .then((response) => {
-            dispatch({type: `${ActionTypes.GET_DATA}_FULFILLED`, payload: response.data})
-        })
-        .catch((error) => {
-            dispatch({type: `${ActionTypes.GET_DATA}_REJECTED`, payload: error})
-        })
+    .then((response) => {
+        dispatch({ type: `${ActionTypes.GET_DATA}_FULFILLED`, payload: response.data });
+    })
+    .catch((error) => {
+        dispatch({ type: `${ActionTypes.GET_DATA}_REJECTED`, payload: error });
+    });
 };
 
 export const getPayloadTrack = (url) => dispatch => {
-    dispatch({type: `${ActionTypes.GET_PAYLOAD_TRACK}_PENDING`})
+    dispatch({ type: `${ActionTypes.GET_PAYLOAD_TRACK}_PENDING` });
     axios.get(url)
-        .then((response) => {
-            dispatch({type: `${ActionTypes.GET_PAYLOAD_TRACK}_FULFILLED`, payload: response.data})
-        })
-        .catch((error) => {
-            dispatch({type: `${ActionTypes.GET_PAYLOAD_TRACK}_REJECTED`, payload: error})
-        })
+    .then((response) => {
+        dispatch({ type: `${ActionTypes.GET_PAYLOAD_TRACK}_FULFILLED`, payload: response.data });
+    })
+    .catch((error) => {
+        dispatch({ type: `${ActionTypes.GET_PAYLOAD_TRACK}_REJECTED`, payload: error });
+    });
 };
 
 export const addMessage = (type, title, content) => {
@@ -47,7 +47,7 @@ export const addMessage = (type, title, content) => {
         payload: {
             type, title, content
         }
-    }
+    };
 };
 
 export const addNewTimeFilter = (currentType, start, end) => {
@@ -60,17 +60,10 @@ export const addNewTimeFilter = (currentType, start, end) => {
                 end
             }
         }
-    }
+    };
 };
 
-export const updateDateRange = (start, end) => dispatch => {
-    dispatch([
-        setStartDate(start.toISOString()),
-        setEndDate(end.toISOString()),
-    ]);
-};
-
-export function setStartDate(date) {
+export const setStartDate = (date) => {
     return {
         type: ActionTypes.SET_START_DATE,
         payload: date,
@@ -81,7 +74,7 @@ export function setStartDate(date) {
     };
 };
 
-export function removeStartDate() {
+export const removeStartDate = () => {
     return {
         type: ActionTypes.SET_START_DATE,
         payload: ConstantTypes.DEFAULT_PAGE_STATE.startDate,
@@ -92,7 +85,7 @@ export function removeStartDate() {
     };
 };
 
-export function setEndDate(date) {
+export const setEndDate = (date) => {
     return {
         type: ActionTypes.SET_END_DATE,
         payload: date,
@@ -103,7 +96,7 @@ export function setEndDate(date) {
     };
 };
 
-export function removeEndDate() {
+export const removeEndDate = () => {
     return {
         type: ActionTypes.SET_END_DATE,
         payload: ConstantTypes.DEFAULT_PAGE_STATE.endDate,
@@ -114,7 +107,14 @@ export function removeEndDate() {
     };
 };
 
-export function setPage(page) {
+export const updateDateRange = (start, end) => dispatch => {
+    dispatch([
+        setStartDate(start.toISOString()),
+        setEndDate(end.toISOString())
+    ]);
+};
+
+export const setPage = (page) => {
     return {
         type: ActionTypes.SET_PAGE,
         payload: page,
@@ -125,7 +125,7 @@ export function setPage(page) {
     };
 };
 
-export function removePage() {
+export const removePage = () => {
     return {
         type: ActionTypes.SET_PAGE,
         payload: ConstantTypes.DEFAULT_PAGE_STATE.page,
@@ -136,7 +136,7 @@ export function removePage() {
     };
 };
 
-export function setPageSize(page_size) {
+export const setPageSize = (page_size) => {
     return {
         type: ActionTypes.SET_PAGE_SIZE,
         payload: page_size,
@@ -147,7 +147,7 @@ export function setPageSize(page_size) {
     };
 };
 
-export function removePageSize() {
+export const removePageSize = () => {
     return {
         type: ActionTypes.SET_PAGE_SIZE,
         payload: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
@@ -158,42 +158,42 @@ export function removePageSize() {
     };
 };
 
-export function addPayloadFromSocket(request) {
+export const addPayloadFromSocket = (request) => {
     return {
         type: ActionTypes.ADD_PAYLOAD_FROM_SOCKET,
         payload: request
     };
 };
 
-export function updateDurationsFromSocket(duration) {
+export const updateDurationsFromSocket = (duration) => {
     return {
         type: ActionTypes.UPDATE_DURATIONS_FROM_SOCKET,
         payload: duration
     };
 };
 
-export function updateFilters(filters) {
+export const updateFilters = (filters) => {
     return {
         type: ActionTypes.UPDATE_FILTERS,
         payload: filters
     };
 };
 
-export function stageFilters(filters) {
+export const stageFilters = (filters) => {
     return {
         type: ActionTypes.STAGE_FILTERS,
         payload: filters
     };
 };
 
-export function unstageFilter(filter) {
+export const unstageFilter = (filter) => {
     return {
         type: ActionTypes.UNSTAGE_FILTER,
         payload: filter
     };
-}
+};
 
-export function setTrackRequestID(request_id) {
+export const setTrackRequestID = (request_id) => {
     return {
         type: ActionTypes.SET_TRACK_REQUEST_ID,
         payload: request_id,
@@ -203,28 +203,28 @@ export function setTrackRequestID(request_id) {
     };
 };
 
-export function setTrackSortBy(sort_by) {
+export const setTrackSortBy = (sort_by) => {
     return {
         type: ActionTypes.SET_TRACK_SORT_BY,
         payload: sort_by
     };
 };
 
-export function removeTrackSortBy() {
+export const removeTrackSortBy = () => {
     return {
         type: ActionTypes.SET_TRACK_SORT_BY,
         payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by
     };
 };
 
-export function setTrackSortDir(sort_dir) {
+export const setTrackSortDir = (sort_dir) => {
     return {
         type: ActionTypes.SET_TRACK_SORT_DIR,
         payload: sort_dir
     };
 };
 
-export function removeTrackSortDir() {
+export const removeTrackSortDir = () => {
     return {
         type: ActionTypes.SET_TRACK_SORT_DIR,
         payload: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir

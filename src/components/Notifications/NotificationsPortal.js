@@ -13,7 +13,7 @@ const NotificationsPortal = ({ error, messages }) => {
             zIndex: 2000
         }}>
             { error && <Notification error={error}/>}
-            { messages && messages.map(message => <Notification message={message}/>)}
+            { messages && messages.map((message, index) => <Notification key={index} message={message}/>)}
         </div>
     ), document.body);
 };

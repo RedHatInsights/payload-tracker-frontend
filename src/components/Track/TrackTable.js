@@ -1,75 +1,62 @@
+import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableHeader, TableVariant } from '@patternfly/react-table';
 
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
-import React from 'react';
 import { connect } from 'react-redux';
 import { getLocalDate } from '../../AppConstants';
 
-const truncate = (value) => <React.Fragment>
-    {value.length > 12 ?
-        `${value.substring(0, 12)}...` :
-        value}
-</React.Fragment>;
+const TrackTable = ({ payloads, cells }) => {
 
-const generateRows = (payloads, cells) => {
-    var rows = [];
-    if (payloads) {
-        Object.values(payloads).forEach(payload => {
-            var row = [];
-            Object.entries(cells).forEach(([cellKey, cellValue]) => {
-                var valueWasFound = false;
-                if (cellValue.isActive) {
-                    Object.entries(payload).forEach(([payloadKey, payloadValue]) => {
-                        if (cellValue.title === payloadKey) {
-                            cellValue.isDate ?
-                                row.push({
-                                    title: getLocalDate(
-                                        DateTime.fromFormat(
-                                            payloadValue, 'yyyy-MM-dd H:mm:ss.uZZ'
-                                        ).toJSDate()
-                                    )
-                                }) :
-                                row.push({ title: truncate(payloadValue) } )
-                            valueWasFound = true;
-                        }
-                    })
-                    if(!valueWasFound){
-                        row.push("")
+    const [rows, setRows] = useState([]);
+    const [cols, setCols] = useState([]);
+
+    const truncate = (value) => value.length > 12 ? `${value.substring(0, 12)}...` : value;
+
+    const generateCells = (cells) => cells.filter(cell => cell.isActive);
+
+    const generateRows = (payloads, cells) => {
+        return payloads.map(payload => {
+            return cells.map(cell => {
+                const value = payload?.[cell.title];
+                if (value) {
+                    if (cell.isDate) {
+                        return {
+                            title: getLocalDate(
+                                DateTime.fromFormat(
+                                    value, 'yyyy-MM-dd H:mm:ss.uZZ'
+                                ).toJSDate()
+                            )
+                        };
+                    } else {
+                        return { title: truncate(value) };
                     }
+                } else {
+                    return {};
                 }
-            })
-            rows.push({ cells: row })
-        })
-    }
-    return (rows);
-}
+            });
+        });
+    };
 
-const generateCells = (cells) => {
-    var formattedCells = [];
-    Object.entries(cells).forEach(([key, cell]) => {
-        if (cell.isActive) {
-            const { transforms, ...props } = cell;
-            formattedCells.push(props);
-        }
-    })
-    return(formattedCells)
-}
+    useEffect(() => {
+        setRows(generateRows(payloads, cells));
+        setCols(generateCells(cells));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [payloads, cells]);
 
-const TrackTable = ({ payloads, cells }) => <React.Fragment>
-    <Table
-        cells={generateCells(cells)}
-        rows={generateRows(payloads, cells)}
+    return <Table
+        cells={cols}
+        rows={rows}
         variant={TableVariant.compact}
     >
         <TableHeader/>
         <TableBody/>
-    </Table>
-</React.Fragment>;
+    </Table>;
+};
 
 TrackTable.propTypes = {
     payloads: PropTypes.array,
-    cells: PropTypes.object
+    cells: PropTypes.array
 };
 
 const mapStateToProps = state => ({

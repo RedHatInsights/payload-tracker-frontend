@@ -14,49 +14,42 @@ import { connect } from 'react-redux';
 const OptionsContainer = ({ cells, setCellActivity, isDisabled }) => {
 
     const [isOpen, setOpen] = useState(false);
-    const toggle = <OptionsMenuToggle 
-                        onToggle={ () => {setOpen(!isOpen)} } 
-                        toggleTemplate={<React.Fragment>Show Columns</React.Fragment>}
-                    /> 
 
     const clickHandler = cell => {
         cell.isActive ? setCellActivity(cell.title, false) : setCellActivity(cell.title, true);
-    }
+    };
 
     const generateOptions = () => {
-        var options = [];
+        let options = [];
         Object.entries(cells).forEach(([key, cell]) => {
             if (cell.title !== 'id') {
                 options.push(
-                    <OptionsMenuItem 
-                        onSelect={ 
-                            () => { clickHandler(cell) }
-                        }
-                        isSelected={
-                            cell.isActive
-                        }
+                    <OptionsMenuItem
+                        onSelect={() => clickHandler(cell)}
+                        isSelected={cell.isActive}
                         id={cell.title}
                         key={key}
                     >
                         {cell.title}
                     </OptionsMenuItem>
-                )
+                );
             }
-        })
+        });
         return (options);
-    }
+    };
 
-    return (
-        <OptionsMenu
-            id="options-menu-align-right-example" 
-            position={OptionsMenuPosition.right} 
-            menuItems={generateOptions()} 
-            toggle={toggle} 
-            isOpen={isOpen}
-            isDisabled={isDisabled}
-       />
-    )
-}
+    return <OptionsMenu
+        id="options-menu-align-right-example"
+        position={OptionsMenuPosition.right}
+        menuItems={generateOptions()}
+        toggle={<OptionsMenuToggle
+            onToggle={() => setOpen(!isOpen)}
+            toggleTemplate={<React.Fragment>Show Columns</React.Fragment>}
+        />}
+        isOpen={isOpen}
+        isDisabled={isDisabled}
+    />;
+};
 
 OptionsContainer.propTypes = {
     cells: PropTypes.array,
@@ -69,7 +62,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setCellActivity: (title, bool) => dispatch(AppActions.setCellActivity(title, bool)),
+    setCellActivity: (title, bool) => dispatch(AppActions.setCellActivity(title, bool))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OptionsContainer);

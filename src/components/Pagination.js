@@ -46,7 +46,7 @@ const PayloadsPagination = ({ count, page_size, page, updatePageSize, updatePage
         <Split hasGutter>
             <SplitItem isFilled/>
             <SplitItem>
-                <Pagination 
+                <Pagination
                     itemCount={count}
                     perPage={page_size}
                     page={page}
@@ -71,7 +71,7 @@ PayloadsPagination.propTypes = {
 const mapStateToProps = state => ({
     count: state.data.count,
     page: state.payloads.page,
-    page_size: state.payloads.page_size,
+    page_size: state.payloads.page_size
 });
 
 const mapDispatchToProps = dispatch => ({

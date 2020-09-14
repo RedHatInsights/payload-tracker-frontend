@@ -13,7 +13,7 @@ module.exports = () => {
       rules: [
         {
           test: /src\/.*\.js$/,
-          use: [{ loader: 'source-map-loader' }, { loader: 'babel-loader' }]
+          use: [{ loader: 'source-map-loader' }, { loader: 'babel-loader' }, { loader: 'eslint-loader' }]
         },
         {
           test: /\.s?[ac]ss$/,

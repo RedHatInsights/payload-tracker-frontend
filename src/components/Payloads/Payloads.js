@@ -15,22 +15,18 @@ import { connect } from 'react-redux';
 const queryBase = `${ConstantTypes.API_URL}/v1/payloads?`;
 
 const Payloads = ({ getPayloads, pathname, page, page_size, filters, startDate, endDate, recentTimeType }) => {
-    const [sortDir, setSortDir] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${pathname}.sort_dir`) || 'desc');
-    const [sortBy, setSortBy] = useState(ConstantTypes.GET_VALUE_FROM_URL(`${pathname}.sort_by`) || 'created_at');
+    const [sortDir, setSortDir] = useState(ConstantTypes.getValueFromURL(`${pathname}.sort_dir`) || 'desc');
+    const [sortBy, setSortBy] = useState(ConstantTypes.getValueFromURL(`${pathname}.sort_by`) || 'created_at');
 
     const search = useCallback(() => {
-        var query = queryBase;
+        let query = queryBase;
         query += `sort_by=${sortBy}&sort_dir=${sortDir}&page=${page - 1}&page_size=${page_size}`;
         query += filters.reduce((str, filter) => {
-            const filterStr = Object.entries(filter).reduce((filter, [key, value]) => filter +=`&${key}=${value}`, '');
+            const filterStr = Object.entries(filter).reduce((filter, [key, value]) => filter += `&${key}=${value}`, '');
             return str += filterStr;
         }, '');
-        if (startDate) {
-            query += `&${recentTimeType}_gte=${startDate}`;
-        }
-        if (endDate) {
-            query += `&${recentTimeType}_lte=${endDate}`;
-        }
+        query += startDate ? `&${recentTimeType}_gte=${startDate}` : '';
+        query += endDate ? `&${recentTimeType}_lte=${endDate}` : '';
         getPayloads(query);
     }, [getPayloads, sortBy, sortDir, page, page_size, filters, startDate, endDate, recentTimeType]);
 
@@ -45,12 +41,12 @@ const Payloads = ({ getPayloads, pathname, page, page_size, filters, startDate, 
                 <Text component={TextVariants.h1}> Recorded Requests </Text>
             </TextContent>
             <Pagination>
-                    <Table
-                        sortDir={sortDir}
-                        setSortDir={setSortDir}
-                        sortBy={sortBy}
-                        setSortBy={setSortBy}
-                    />
+                <Table
+                    sortDir={sortDir}
+                    setSortDir={setSortDir}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                />
             </Pagination>
         </PageSection>
     </div>;

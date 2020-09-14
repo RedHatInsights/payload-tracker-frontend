@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 const ExportsDropdown = ({ payloads }) => {
 
-    const [isOpen, setOpen] = useState(false)
+    const [isOpen, setOpen] = useState(false);
 
     return <Dropdown
         onSelect={() => setOpen(false)}
@@ -24,7 +24,7 @@ const ExportsDropdown = ({ payloads }) => {
         position='left'
         isPlain
         dropdownItems={[
-            <DropdownItem>
+            <DropdownItem key={0}>
                 <CSVLink data={payloads}>
                     Export CSV
                 </CSVLink>

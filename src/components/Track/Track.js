@@ -9,9 +9,7 @@ import {
     FlexItem,
     PageSection,
     Tab,
-    Tabs,
-    Text,
-    TextContent
+    Tabs
 } from '@patternfly/react-core';
 import React, { useEffect, useState } from 'react';
 
@@ -25,7 +23,7 @@ import TrackTable from './TrackTable';
 import { connect } from 'react-redux';
 import openSocket from 'socket.io-client';
 
-const socket = openSocket(`${ConstantTypes.API_URL}/`, {transports: ['websocket', 'polling', 'flashsocket']});
+const socket = openSocket(`${ConstantTypes.API_URL}/`, { transports: ['websocket', 'polling', 'flashsocket'] });
 const queryBase = `${ConstantTypes.API_URL}/v1/payloads/`;
 
 const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, addPayload, updateDurations }) => {
@@ -39,9 +37,9 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
         socket.on('payload', (incoming) => incoming.request_id === request_id && addPayload(incoming));
         socket.on('duration', (incoming) => {
             const { id, key, data } = incoming;
-            durations && id === request_id && updateDurations({ [key]: data })
+            durations && id === request_id && updateDurations({ [key]: data });
         });
-    }, [request_id, payloads, addPayload]);
+    }, [request_id, payloads, addPayload, durations, updateDurations]);
 
     return <PageSection>
         <TrackSearchBar/>
@@ -60,7 +58,7 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, durations, search, add
                 <Tab eventKey={1} title='Table'>
                     <Card>
                         <CardHeader>
-                            <Flex direction={{default: 'row'}}>
+                            <Flex direction={{ default: 'row' }}>
                                 <FlexItem>
                                     <OptionsContainer isDisabled={request_id ? false : true}/>
                                 </FlexItem>

@@ -19,13 +19,13 @@ const FilterToolbar = ({ options, filters, staged, stageFilters, unstageFilter, 
 
     const stringify = (filter) => {
         return Object.entries(filter).map(([key, value]) => `${key}=${value}`)[0];
-    }
+    };
 
     const removeFilter = (arr, toRemove) => {
         return arr.filter(item => stringify(item) !== stringify(toRemove));
-    }
+    };
 
-    const onToggleFn = (isOpen) => { setIsOpen(isOpen); !isModalOpen && setSelected([]); }
+    const onToggleFn = (isOpen) => { setIsOpen(isOpen); !isModalOpen && setSelected([]); };
 
     const onSelectFn = (e, selection) => {
         selected.filter(item => item === selection).length > 0 ?
@@ -99,7 +99,8 @@ FilterToolbar.propTypes = {
     filters: PropTypes.array,
     staged: PropTypes.array,
     stageFilters: PropTypes.func,
-    unstageFilter: PropTypes.func
+    unstageFilter: PropTypes.func,
+    updateFilters: PropTypes.func
 };
 
 const mapStateToProps = (state) => ({

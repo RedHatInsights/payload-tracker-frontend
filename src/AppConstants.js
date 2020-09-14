@@ -38,27 +38,27 @@ export const STATUS_FILTER_TYPES = [
     'service', 'source', 'status', 'status_msg', 'partition'
 ];
 
-export function GET_VALUE_FROM_URL(input) {
+export const getValueFromURL = (input) => {
     const [pathname, prop] = input.split('.');
-  
+
     const currentLocation = history.location;
-  
+
     if (currentLocation.pathname !== `${pathname}`) {
-      return null;
+        return null;
     }
 
     const query = queryString.parse(currentLocation.search);
     const targetProp = query[prop];
-  
+
     return targetProp === undefined ? null : targetProp;
 };
 
 export const getLocalDate = (date) => {
-    return date ? `${date.toLocaleString('en-US')} UTC-${date.getTimezoneOffset()/60}00` : null;
+    return date ? `${date.toLocaleString('en-US')} UTC-${date.getTimezoneOffset() / 60}00` : null;
 };
 
 export const PAYLOADS_ITEM = `itm1`;
-export const STATUSES_ITEM = `itm2`
+export const STATUSES_ITEM = `itm2`;
 export const TRACK_ITEM = `itm3`;
 export const DEFAULT_PAGE_STATE = {
     filters: [],
@@ -79,7 +79,7 @@ export const DEFAULT_DATA_REDUCER_STATE = {
     messages: [],
     payloads: [],
     count: 0,
-    durations: {},
+    durations: {}
 };
 export const DEFAULT_STATUSES_CELL_STATE = [
     {
@@ -87,49 +87,49 @@ export const DEFAULT_STATUSES_CELL_STATE = [
         isActive: true,
         isFilterable: false,
         isTrackable: true,
-        isDate: false,
-    },{
+        isDate: false
+    }, {
         title: 'service',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
         isDate: false,
-        transforms: [sortable],
-    },{
+        transforms: [sortable]
+    }, {
         title: 'source',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
         isDate: false,
-        transforms: [sortable],
-    },{
+        transforms: [sortable]
+    }, {
         title: 'status',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
         isDate: false,
-        transforms: [sortable],
-    },{
+        transforms: [sortable]
+    }, {
         title: 'status_msg',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
         isDate: false,
-        transforms: [sortable],
-    },{
+        transforms: [sortable]
+    }, {
         title: 'date',
         isActive: true,
         isFilterable: false,
         isTrackable: false,
         isDate: true,
-        transforms: [sortable],
-    },{
+        transforms: [sortable]
+    }, {
         title: 'created_at',
         isActive: true,
         isFilterable: false,
         isTrackable: false,
         isDate: true,
-        transforms: [sortable],
+        transforms: [sortable]
     }
 ];
 export const DEFAULT_PAYLOAD_CELL_STATE = [
@@ -138,33 +138,33 @@ export const DEFAULT_PAYLOAD_CELL_STATE = [
         isActive: true,
         isFilterable: false,
         isTrackable: true,
-        isDate: false,
-    },{
+        isDate: false
+    }, {
         title: 'account',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
-        transforms: [sortable],
-    },{
+        transforms: [sortable]
+    }, {
         title: 'inventory_id',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
         isDate: false,
-        transforms: [sortable],
-    },{
+        transforms: [sortable]
+    }, {
         title: 'system_id',
         isActive: true,
         isFilterable: true,
         isTrackable: false,
         isDate: false,
-        transforms: [sortable],
-    },{
+        transforms: [sortable]
+    }, {
         title: 'created_at',
         isActive: true,
         isFilterable: false,
         isTrackable: false,
         isDate: true,
-        transforms: [sortable],
+        transforms: [sortable]
     }
 ];

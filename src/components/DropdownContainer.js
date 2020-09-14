@@ -14,7 +14,7 @@ const DropdownContainer = ({ items, type, setSelected, position }) => {
     const [dropdownItems, setItems] = useState([]);
 
     useEffect(() => {
-        var mapped = items.map(function(item) {
+        let mapped = items.map(function(item) {
             return <DropdownItem
                 key={item}
                 component='button'

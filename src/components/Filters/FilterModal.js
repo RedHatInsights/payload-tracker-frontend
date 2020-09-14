@@ -42,7 +42,7 @@ const FilterModal = ({ isOpen, options, onStageFn, onCancelFn }) => {
         ]}
     >
         {toStage.length === options.length && <Form isHorizontal>
-            {options.map((option, index) => <FormGroup label={option} isRequired>
+            {options.map((option, index) => <FormGroup key={index} label={option} isRequired>
                 <TextInput
                     value={toStage[index].option}
                     type='text'
@@ -50,12 +50,13 @@ const FilterModal = ({ isOpen, options, onStageFn, onCancelFn }) => {
                 />
             </FormGroup>)}
         </Form>}
-    </Modal>
+    </Modal>;
 };
 
-FilterModal.propTypes ={
+FilterModal.propTypes = {
     isOpen: PropTypes.bool,
     options: PropTypes.array,
+    onStageFn: PropTypes.func,
     onCancelFn: PropTypes.func
 };
 

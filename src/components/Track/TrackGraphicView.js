@@ -1,60 +1,50 @@
+import React, { useEffect, useState } from 'react';
+
 import { Accordion } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import React from 'react';
 import TrackGraphic from './TrackGraphic';
 import { connect } from 'react-redux';
 
-function generateUniqueServices(payloads) {
-    var servicesSet = new Set()
-    payloads.map(payload => 
-        servicesSet.add(payload.service)
-    );
-    return (Array.from(servicesSet));
-}
-
-function getStatusesByService(payloads, services) {
-    var servicesToStatuses = {}
-    for (var i = 0; i < services.length; i++) {
-        var service = services[i];
-        servicesToStatuses[service] = []
-        for (var j = 0; j < payloads.length; j++) {
-            var payload = payloads[j];
-            if (payload.service === service) {
-                servicesToStatuses[service].push(payload.status)
-            }
-        }
-    }
-    return (servicesToStatuses);
-}
-
-function getMessagesFromService(payloads, services) {
-    var servicesToMessages = {}
-    for (var i = 0; i < services.length; i++) {
-        var service = services[i];
-        servicesToMessages[service] = []
-        for (var j = 0; j < payloads.length; j++) {
-            var payload = payloads[j];
-            if (payload.service === service) {
-                servicesToMessages[service].push({
-                    'message': payload.status_msg,
-                    'status': payload.status,
-                    'date': payload.date
-                })
-            }
-        }
-    }
-    return (servicesToMessages);
-}
-
 const TrackGraphicView = ({ payloads }) => {
 
-    var services = (payloads && generateUniqueServices(payloads)) || [];
-    var statuses = (payloads && getStatusesByService(payloads, services)) || [];
-    var messages = (payloads && getMessagesFromService(payloads, services)) || [];
+    const [services, setServices] = useState();
+    const [statuses, setStatuses] = useState();
+    const [messages, setMessages] = useState();
+
+    const generateUniqueServices = (payloads) => Array.from(new Set(payloads.map(p => p.service)));
+
+    const getStatusesByService = (payloads, services) => {
+        return services.reduce((obj, s) => {
+            return { ...obj, [s]: payloads.filter(p => p.service === s).map(p => p.status) };
+        }, {});
+    };
+
+    const getMessagesFromService = (payloads, services) => {
+        return services.reduce((obj, s) => {
+            return { ...obj, [s]: payloads.filter(p => p.service === s).map(p => ({
+                message: p.status_msg,
+                status: p.status,
+                date: p.date
+            })) };
+        }, {});
+    };
+
+    useEffect(() => {
+        if (services) {
+            setStatuses(getStatusesByService(payloads, services));
+            setMessages(getMessagesFromService(payloads, services));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [services]);
+
+    useEffect(() => {
+        setServices(generateUniqueServices(payloads));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return <Accordion>
-        {services.map(service =>
-            <div style={{padding: '10px'}}>
+        {messages && statuses && services.map((service, index) =>
+            <div key={index}>
                 <TrackGraphic
                     service={service}
                     statuses={statuses[service]}
@@ -62,7 +52,7 @@ const TrackGraphicView = ({ payloads }) => {
                 />
             </div>
         )}
-    </Accordion>
+    </Accordion>;
 };
 
 TrackGraphicView.propTypes = {
