@@ -27,7 +27,7 @@ const initialState = {
     startDate: startDate === null ? ConstantTypes.DEFAULT_PAGE_STATE.startDate : startDate,
     endDate: endDate === null ? ConstantTypes.DEFAULT_PAGE_STATE.endDate : endDate,
     recentTimeFilters: [{ start: null, end: null }],
-    recentTimeType: null,
+    recentTimeType: 'created_at',
     staged: [],
     path: `${location}`
 };
@@ -83,7 +83,7 @@ const PayloadsReducer = (state = initialState, action) => {
                 page: ConstantTypes.DEFAULT_PAGE_STATE.page,
                 page_size: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
                 path: action.payload.location.pathname,
-                recentTimeType: action.payload.location.pathname === '/payloads' ? 'created_at' : state.recentTimeType
+                recentTimeType: initialState.recentTimeType
             };
         default:
             return state;

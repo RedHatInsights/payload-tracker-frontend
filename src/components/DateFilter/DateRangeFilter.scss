@@ -1,3 +1,20 @@
 .pt-c-filters__date {
-    height: 50%;
+    height: 700px;
+    max-width: 700px;
+}
+
+.pt-c-filters__date--radio {
+    margin-bottom: 10px;
+    .pf-c-radio {
+        margin: 5px 0 5px 0;
+    }
+}
+
+.pf-c-filters__date--tab {
+    margin-top: 20px;
+    display: block;
+}
+
+.pt-c-filters__date--quick {
+    width: 100%;
 }
