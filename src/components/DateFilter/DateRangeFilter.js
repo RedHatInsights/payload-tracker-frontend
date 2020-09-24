@@ -100,7 +100,6 @@ const DateRangeFilter = ({
 
     return <React.Fragment>
         {isOpen && <Modal
-            className='pt-c-filters__date'
             isOpen={isOpen}
             onClose={() => setOpen(!isOpen)}
             title='Set time range'
