@@ -1,10 +1,12 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { getLocalDate } from '../../AppConstants';
+
+const compareDates = (a, b) => getLocalDate(a) === getLocalDate(b);
 
 const subtractMinutes = (minutes, dateObj = new Date()) => new Date(dateObj.getTime() - minutes * 60000);
 
-export const compareDates = (a, b) => getLocalDate(a) === getLocalDate(b);
-
-export const quickFilters = () => ([
+const quickFilters = () => ([
     {
         title: '15 minutes',
         start: subtractMinutes(15),
@@ -47,7 +49,25 @@ export const quickFilters = () => ([
     }
 ]);
 
-export const isQuickFilter = (curr, s, e) => {
-    const filters = curr.filter(({ title, start, end }) => compareDates(start, s) && compareDates(end, e) && title);
-    return filters?.[0]?.title;
+export const useQuickFilters = (callbackFn) => {
+    const [filters, setFilters] = useState(quickFilters());
+    const [lastClicked, setLastClicked] = useState();
+    const filterRef = useRef();
+
+    const getFilterTitle = (s, e) => filters.filter(({ title, start, end }) => {
+        return compareDates(start, s) && compareDates(end, e) && title;
+    })?.[0]?.title;
+
+    const updateFilters = (type) => { setFilters(quickFilters()); setLastClicked(type); };
+
+    const callback = useCallback(() => callbackFn(lastClicked), [callbackFn, lastClicked]);
+
+    useEffect(() => {
+        if (JSON.stringify(filterRef.current) !== JSON.stringify(filters)) {
+            callback();
+            filterRef.current = filters;
+        }
+    }, [callback, filters, filterRef]);
+
+    return [filters, getFilterTitle, updateFilters];
 };

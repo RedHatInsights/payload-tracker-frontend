@@ -19,13 +19,13 @@ import {
 } from '@patternfly/react-core';
 import { CaretLeftIcon, CaretRightIcon, ClockIcon } from '@patternfly/react-icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { isQuickFilter, quickFilters } from './utils';
 
 import DateTextInput from './DateTextInput';
 import DayPicker from 'react-day-picker';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getLocalDate } from '../../AppConstants';
+import { useQuickFilters } from './utils';
 
 const DateRangeFilter = ({
     updateDateRange, addNewTimeFilter, pathname, setStartDate, setEndDate,
@@ -36,10 +36,20 @@ const DateRangeFilter = ({
     const [start, setStart] = useState(startDate && new Date(startDate));
     const [end, setEnd] = useState(endDate && new Date(endDate));
     const [type, setType] = useState(recentTimeType);
-    const [filters] = useState(quickFilters());
     const [isValidated, setValidation] = useState(true);
     const [leftRecentsStack, setLeftRecentsStack] = useState([]);
     const [rightRecentsStack, setRightRecentsStack] = useState([]);
+    const [filters, getFilterTitle, updateFilters] = useQuickFilters((filter) => {
+        const res = filters.filter(({ title }) => title === filter)?.[0];
+        if (res) {
+            const { start, end } = res;
+            setStart(start);
+            setEnd(end);
+            type && addNewTimeFilter(type, start, end);
+            setOpen(!isOpen);
+            setActiveTab(0);
+        }
+    });
     const fromRef = useRef();
     const toRef = useRef();
 
@@ -58,14 +68,6 @@ const DateRangeFilter = ({
         } else {
             addMessage('danger', 'Date range error', `${getLocalDate(start)} is not before ${getLocalDate(end)}`);
         }
-    };
-
-    const quickClickHanlder = (start, end) => {
-        setStart(start);
-        setEnd(end);
-        type && addNewTimeFilter(type, start, end);
-        setOpen(!isOpen);
-        setActiveTab(0);
     };
 
     const rightRecentHandler = () => {
@@ -138,12 +140,12 @@ const DateRangeFilter = ({
             <Tabs activeKey={activeTab} onSelect={(e, index) => setActiveTab(index)}>
                 <Tab eventKey={0} title='Quick'>
                     <Flex className='pf-c-filters__date--tab' direction={{ default: 'column' }}>
-                        {filters.map(({ start, end, title }, index) =>
+                        {filters.map(({ title }, index) =>
                             <FlexItem className='pt-c-filters__date--quick' key={ index }>
                                 <Button
                                     variant='link'
                                     isDisabled={!type}
-                                    onClick={() => quickClickHanlder(start, end)}
+                                    onClick={() => updateFilters(title)}
                                 >
                                     <Text>{title}</Text>
                                 </Button>
@@ -204,7 +206,7 @@ const DateRangeFilter = ({
                 </FlexItem>
                 <FlexItem>
                     {start && end ? <span>
-                        { isQuickFilter(filters, start, end) || `${getLocalDate(start)} to ${getLocalDate(end)}`}
+                        { getFilterTitle(start, end) || `${getLocalDate(start)} to ${getLocalDate(end)}`}
                     </span> : <Text component='p'> All time </Text>}
                 </FlexItem>
             </Flex>
