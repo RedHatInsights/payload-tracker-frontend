@@ -3,7 +3,7 @@ import { PageHeader, PageHeaderTools } from '@patternfly/react-core';
 import DateRangeFilter from './DateFilter/DateRangeFilter';
 import PropTypes from 'prop-types';
 import React from 'react';
-import newlogo from './static/images/rh-new-logo.svg';
+import newlogo from '../static/images/rh-new-logo.svg';
 
 const MainHeader = ({ isNavOpen, toggleNav, pathname }) => {
 
