@@ -17,8 +17,8 @@ const determineFilters = () => {
 const filters = determineFilters();
 const page = ConstantTypes.getValueFromURL(`${location}.page`);
 const page_size = ConstantTypes.getValueFromURL(`${location}.page_size`);
-const startDate = ConstantTypes.getValueFromURL(`${location}.startDate`);
-const endDate = ConstantTypes.getValueFromURL(`${location}.endDate`);
+const startDate = ConstantTypes.getValueFromURL(`${location}.start_date`);
+const endDate = ConstantTypes.getValueFromURL(`${location}.end_date`);
 
 const initialState = {
     filters: filters === null ? ConstantTypes.DEFAULT_PAGE_STATE.filters : filters,

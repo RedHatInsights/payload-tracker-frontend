@@ -13,7 +13,6 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@manaflair/redux-batch": "1.0.0",
     "@patternfly/react-charts": "6.9.6",
     "@patternfly/react-core": "4.47.0",
     "@patternfly/react-icons": "4.7.4",

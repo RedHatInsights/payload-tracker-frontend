@@ -28,7 +28,7 @@ import { getLocalDate } from '../../AppConstants';
 import { useQuickFilters } from './utils';
 
 const DateRangeFilter = ({
-    updateDateRange, addNewTimeFilter, pathname, setStartDate, setEndDate,
+    updateDateRange, addNewTimeFilter, pathname,
     addMessage, startDate, endDate, recentTimeFilters, recentTimeType
 }) => {
     const [isOpen, setOpen] = useState(false);
@@ -96,7 +96,7 @@ const DateRangeFilter = ({
     }, [recentTimeFilters]);
 
     useEffect(() => {
-        type && (start && end ? updateState(start, end) : (setStartDate(start), setEndDate(end)));
+        type && updateState(start, end);
     //eslint-disable-next-line
     }, [start, end, type]);
 

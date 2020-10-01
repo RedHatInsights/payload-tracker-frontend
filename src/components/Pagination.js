@@ -75,14 +75,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    updatePageSize: (perPage) => dispatch([
-        AppActions.removePageSize(),
-        AppActions.setPageSize(perPage)
-    ]),
-    updatePageNumber: (pageNumber) => dispatch([
-        AppActions.removePage(),
-        AppActions.setPage(pageNumber)
-    ])
+    updatePageSize: (perPage) => dispatch(AppActions.setPageSize(perPage)),
+    updatePageNumber: (pageNumber) => dispatch(AppActions.setPage(pageNumber))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PayloadsPagination);

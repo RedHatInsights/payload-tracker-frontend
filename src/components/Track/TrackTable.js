@@ -1,3 +1,5 @@
+import * as ActionTypes from '../../actions';
+
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableHeader, TableVariant } from '@patternfly/react-table';
 
@@ -6,7 +8,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getLocalDate } from '../../AppConstants';
 
-const TrackTable = ({ payloads, cells }) => {
+const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrackSortDir }) => {
 
     const [rows, setRows] = useState([]);
     const [cols, setCols] = useState([]);
@@ -38,6 +40,11 @@ const TrackTable = ({ payloads, cells }) => {
         });
     };
 
+    const onSort = (_event, title, direction) => {
+        setTrackSortBy(title);
+        setTrackSortDir(direction);
+    };
+
     useEffect(() => {
         const cols = generateCells(cells);
         setCols(cols);
@@ -49,6 +56,11 @@ const TrackTable = ({ payloads, cells }) => {
         cells={cols}
         rows={rows}
         variant={TableVariant.compact}
+        sortBy={{
+            index: cols.findIndex(x => x.title === sortBy),
+            direction: sortDir
+        }}
+        onSort={(e, index, direction) => onSort(e, cols.title, direction)}
     >
         <TableHeader/>
         <TableBody/>
@@ -57,12 +69,19 @@ const TrackTable = ({ payloads, cells }) => {
 
 TrackTable.propTypes = {
     payloads: PropTypes.array,
-    cells: PropTypes.array
+    cells: PropTypes.array,
+    sortBy: PropTypes.string,
+    sortDir: PropTypes.string,
+    setTrackSortBy: PropTypes.func,
+    setTrackSortDir: PropTypes.func
 };
 
-const mapStateToProps = state => ({
+export default connect((state) => ({
     payloads: state.data.payloads,
-    cells: state.cell.cells
-});
-
-export default connect(mapStateToProps, null)(TrackTable);
+    cells: state.cell.cells,
+    sortBy: state.track.sort_by,
+    sortDir: state.track.sort_dir
+}), (dispatch) => ({
+    setTrackSortBy: (title) => dispatch(ActionTypes.setTrackSortBy(title)),
+    setTrackSortDir: (dir) => dispatch(ActionTypes.setTrackSortDir(dir))
+}))(TrackTable);
