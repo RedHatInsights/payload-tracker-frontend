@@ -73,7 +73,6 @@ export default store => next => action => {
         }));
     }
 
-    console.error(action);
     return next(action);
 
 };

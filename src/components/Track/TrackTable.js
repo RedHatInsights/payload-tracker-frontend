@@ -60,7 +60,7 @@ const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrack
             index: cols.findIndex(x => x.title === sortBy),
             direction: sortDir
         }}
-        onSort={(e, index, direction) => onSort(e, cols.title, direction)}
+        onSort={(e, index, direction) => onSort(e, cols[index].title, direction)}
     >
         <TableHeader/>
         <TableBody/>
