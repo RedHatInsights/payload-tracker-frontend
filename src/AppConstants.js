@@ -1,5 +1,3 @@
-import history from './history';
-import queryString from 'query-string';
 import { sortable } from '@patternfly/react-table';
 
 export const API_URL = process.env.ENV === 'development' ? 'http://localhost:8080' : '';
@@ -37,25 +35,6 @@ export const PAYLOAD_FILTER_TYPES = [
 export const STATUS_FILTER_TYPES = [
     'service', 'source', 'status', 'status_msg'
 ];
-
-export const getValueFromURL = (input) => {
-    const [pathname, prop] = input.split('.');
-
-    const currentLocation = history.location;
-
-    if (currentLocation.pathname !== `${pathname}`) {
-        return null;
-    }
-
-    const query = queryString.parse(currentLocation.search);
-    const targetProp = query[prop];
-
-    return targetProp === undefined ? null : targetProp;
-};
-
-export const getLocalDate = (date) => {
-    return date ? `${date.toLocaleString('en-US')} UTC-${date.getTimezoneOffset() / 60}00` : null;
-};
 
 export const PAYLOADS_ITEM = `itm1`;
 export const STATUSES_ITEM = `itm2`;

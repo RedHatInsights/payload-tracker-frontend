@@ -1,35 +1,29 @@
 import * as ConstantTypes from '../AppConstants';
 
+import { getFilterTypes, getValueFromURL } from '../utilities/Common';
+
 import { LOCATION_CHANGE } from 'connected-react-router';
 import history from '../history';
 
-const location = history.location.pathname;
-
-const FILTER_TYPES = ConstantTypes.PAYLOAD_FILTER_TYPES.concat(ConstantTypes.STATUS_FILTER_TYPES);
+const { location } = history;
 
 const determineFilters = () => {
-    return FILTER_TYPES.reduce((arr, filter) => {
-        const value = ConstantTypes.getValueFromURL(`${location}.${filter}`);
+    return getFilterTypes(location.pathname).reduce((arr, filter) => {
+        const value = getValueFromURL(location, filter);
         return value ? [...arr, { [filter]: value }] : arr;
     }, []);
 };
 
-const filters = determineFilters();
-const page = ConstantTypes.getValueFromURL(`${location}.page`);
-const page_size = ConstantTypes.getValueFromURL(`${location}.page_size`);
-const startDate = ConstantTypes.getValueFromURL(`${location}.start_date`);
-const endDate = ConstantTypes.getValueFromURL(`${location}.end_date`);
-
 const initialState = {
-    filters: filters === null ? ConstantTypes.DEFAULT_PAGE_STATE.filters : filters,
-    page: page === null ? ConstantTypes.DEFAULT_PAGE_STATE.page : page,
-    page_size: page_size === null ? ConstantTypes.DEFAULT_PAGE_STATE.page_size : page_size,
-    startDate: startDate || ConstantTypes.DEFAULT_PAGE_STATE.startDate,
-    endDate: endDate || ConstantTypes.DEFAULT_PAGE_STATE.endDate,
+    filters: determineFilters() || ConstantTypes.DEFAULT_PAGE_STATE.filters,
+    page: getValueFromURL(location, 'page') || ConstantTypes.DEFAULT_PAGE_STATE.page,
+    page_size: getValueFromURL(location, 'page_size') || ConstantTypes.DEFAULT_PAGE_STATE.page_size,
+    startDate: getValueFromURL(location, 'start_date') || ConstantTypes.DEFAULT_PAGE_STATE.startDate,
+    endDate: getValueFromURL(location, 'end_date') || ConstantTypes.DEFAULT_PAGE_STATE.endDate,
     recentTimeFilters: [{ start: null, end: null }],
     recentTimeType: 'created_at',
     staged: [],
-    path: `${location}`
+    location
 };
 
 const PayloadsReducer = (state = initialState, action) => {
@@ -77,12 +71,12 @@ const PayloadsReducer = (state = initialState, action) => {
                 staged: []
             };
         case LOCATION_CHANGE:
-            return action.payload.location.pathname === state.path ? state : {
+            return action.payload.location.pathname === state.location.pathname ? state : {
                 ...state,
                 filters: determineFilters(),
                 page: ConstantTypes.DEFAULT_PAGE_STATE.page,
                 page_size: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
-                path: action.payload.location.pathname,
+                location: action.payload.location,
                 recentTimeType: initialState.recentTimeType
             };
         default:

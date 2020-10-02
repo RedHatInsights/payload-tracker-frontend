@@ -18,7 +18,7 @@ import {
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { getLocalDate } from '../../AppConstants';
+import { getLocalDate } from '../../utilities/Common';
 
 const TrackGraphic = ({ service, statuses, messages }) => {
 

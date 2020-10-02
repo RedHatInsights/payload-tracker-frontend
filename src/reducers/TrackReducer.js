@@ -1,14 +1,14 @@
 import * as ConstantTypes from '../AppConstants';
 
 import { LOCATION_CHANGE } from 'connected-react-router';
+import { getValueFromURL } from '../utilities/Common';
 import history from '../history';
 
-const sort_dir = ConstantTypes.getValueFromURL('/track.sort_dir');
-const sort_by = ConstantTypes.getValueFromURL('/track.sort_by');
+const { location } = history;
 
 const initialState = {
-    sort_dir: sort_dir === null ? ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir : sort_dir,
-    sort_by: sort_by === null ? ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by : sort_by,
+    sort_dir: getValueFromURL(location, 'sort_dir') || ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir,
+    sort_by: getValueFromURL(location, 'sort_by') || ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by,
     request_id: history.location.pathname.split('/')[1] !== 'track' ?
         ConstantTypes.DEFAULT_TRACK_PAGE_STATE.request_id :
         history.location.pathname.split('/')[2]

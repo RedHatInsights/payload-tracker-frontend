@@ -19,7 +19,7 @@ import HoverableAttribute from './HoverableAttribute';
 import PropTypes from 'prop-types';
 import { SearchIcon } from '@patternfly/react-icons';
 import { connect } from 'react-redux';
-import { getLocalDate } from '../AppConstants';
+import { getLocalDate } from '../utilities/Common';
 
 const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, setSortBy }) => {
 

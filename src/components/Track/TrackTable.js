@@ -6,7 +6,7 @@ import { Table, TableBody, TableHeader, TableVariant } from '@patternfly/react-t
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getLocalDate } from '../../AppConstants';
+import { getLocalDate } from '../../utilities/Common';
 
 const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrackSortDir }) => {
 

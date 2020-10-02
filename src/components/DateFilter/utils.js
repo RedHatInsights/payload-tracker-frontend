@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { getLocalDate } from '../../AppConstants';
+import { getLocalDate } from '../../utilities/Common';
 
 const compareDates = (a, b) => getLocalDate(a) === getLocalDate(b);
 

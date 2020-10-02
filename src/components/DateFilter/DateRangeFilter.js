@@ -24,7 +24,7 @@ import DateTextInput from './DateTextInput';
 import DayPicker from 'react-day-picker';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getLocalDate } from '../../AppConstants';
+import { getLocalDate } from '../../utilities/Common';
 import { useQuickFilters } from './utils';
 
 const DateRangeFilter = ({
@@ -111,6 +111,7 @@ const DateRangeFilter = ({
             setStart(start);
             setEnd(end);
         }
+    //eslint-disable-next-line
     }, [startDate, endDate]);
 
     return <React.Fragment>

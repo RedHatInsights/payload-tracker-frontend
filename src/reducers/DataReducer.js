@@ -3,6 +3,8 @@ import * as ConstantTypes from '../AppConstants';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import history from '../history';
 
+const { location } = history;
+
 const initialState = {
     loading: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loading,
     loaded: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loaded,
@@ -11,7 +13,7 @@ const initialState = {
     payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
     count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
     durations: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.durations,
-    path: `${history.location.pathname}`
+    location
 };
 
 const DataReducer = (state = initialState, action) => {
@@ -72,7 +74,7 @@ const DataReducer = (state = initialState, action) => {
                 messages: [...state.messages, action.payload]
             };
         case LOCATION_CHANGE:
-            return action.payload.location.pathname === state.path ? state : {
+            return action.payload.location.pathname === state.location.pathname ? state : {
                 ...state,
                 loading: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loading,
                 loaded: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.loaded,
@@ -81,7 +83,7 @@ const DataReducer = (state = initialState, action) => {
                 payloads: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.payloads,
                 count: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.count,
                 durations: ConstantTypes.DEFAULT_DATA_REDUCER_STATE.durations,
-                path: action.payload.location.pathname
+                location: action.payload.location
             };
         default:
             return state;
