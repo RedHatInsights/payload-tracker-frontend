@@ -35,7 +35,7 @@ export const PAYLOAD_FILTER_TYPES = [
 ];
 
 export const STATUS_FILTER_TYPES = [
-    'service', 'source', 'status', 'status_msg', 'partition'
+    'service', 'source', 'status', 'status_msg'
 ];
 
 export const getValueFromURL = (input) => {

@@ -33,13 +33,13 @@ const DateRangeFilter = ({
 }) => {
     const [isOpen, setOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-    const [start, setStart] = useState(startDate && new Date(startDate));
-    const [end, setEnd] = useState(endDate && new Date(endDate));
+    const [start, setStart] = useState();
+    const [end, setEnd] = useState();
     const [type, setType] = useState(recentTimeType);
     const [isValidated, setValidation] = useState(true);
     const [leftRecentsStack, setLeftRecentsStack] = useState([]);
     const [rightRecentsStack, setRightRecentsStack] = useState([]);
-    const [filters, getFilterTitle, updateFilters] = useQuickFilters((filter) => {
+    const { filters, getFilterTitle, getFilterFromTitle, updateFilters } = useQuickFilters((filter) => {
         const res = filters.filter(({ title }) => title === filter)?.[0];
         if (res) {
             const { start, end } = res;
@@ -99,6 +99,19 @@ const DateRangeFilter = ({
         type && updateState(start, end);
     //eslint-disable-next-line
     }, [start, end, type]);
+
+    useEffect(() => {
+        if (startDate && endDate) {
+            updateState(new Date(startDate), new Date(endDate));
+            setStart(new Date(startDate));
+            setEnd(new Date(endDate));
+        } else {
+            const { start, end } = getFilterFromTitle('24 hours');
+            updateState(start, end);
+            setStart(start);
+            setEnd(end);
+        }
+    }, [startDate, endDate]);
 
     return <React.Fragment>
         {isOpen && <Modal

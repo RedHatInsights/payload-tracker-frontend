@@ -54,6 +54,10 @@ export const useQuickFilters = (callbackFn) => {
     const [lastClicked, setLastClicked] = useState();
     const filterRef = useRef();
 
+    const getFilterFromTitle = (value) => filters.filter(({ title, start, end }) => {
+        return value === title && ({ start, end });
+    })?.[0];
+
     const getFilterTitle = (s, e) => filters.filter(({ title, start, end }) => {
         return compareDates(start, s) && compareDates(end, e) && title;
     })?.[0]?.title;
@@ -69,5 +73,5 @@ export const useQuickFilters = (callbackFn) => {
         }
     }, [callback, filters, filterRef]);
 
-    return [filters, getFilterTitle, updateFilters];
+    return { filters, getFilterTitle, getFilterFromTitle, updateFilters };
 };

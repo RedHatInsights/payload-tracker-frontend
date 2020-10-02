@@ -10,6 +10,7 @@ import { Page } from '@patternfly/react-core';
 import Payloads from './components/Payloads/Payloads';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
+import Statuses from './components/Statuses/Statuses';
 import Track from './components/Track/Track';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -35,7 +36,7 @@ const App = ({ pathname, push }) => {
         <Switch>
             <Route path='/' exact render={() => <Redirect to='/payloads'/>}/>
             <Route path='/payloads' component={Payloads}/>
-            <Route path='/statuses' render={() => <Redirect to='/payloads'/>}/>
+            <Route path='/statuses' component={Statuses}/>
             <Route exact path='/track' component={Track}/>
             <Route path='/track/:request_id' component={Track}/>
         </Switch>
