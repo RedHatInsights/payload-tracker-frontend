@@ -18,34 +18,28 @@ import {
     Text
 } from '@patternfly/react-core';
 import { CaretLeftIcon, CaretRightIcon, ClockIcon } from '@patternfly/react-icons';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { quickFilters, useQuickFilters, useStacks } from './utils';
 
 import DateTextInput from './DateTextInput';
 import DayPicker from 'react-day-picker';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getLocalDate } from '../../utilities/Common';
-import { useQuickFilters } from './utils';
 
-const DateRangeFilter = ({
-    updateDateRange, addNewTimeFilter, pathname,
-    addMessage, startDate, endDate, recentTimeFilters, recentTimeType
-}) => {
+const defaultFilters = quickFilters();
+const oneDayRange = defaultFilters.filter(({ start, end, title }) => title === '24 hours' && ({ start, end }))?.[0];
+
+const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMessage, startDate, endDate, recentTimeType }) => {
     const [isOpen, setOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-    const [start, setStart] = useState();
-    const [end, setEnd] = useState();
     const [type, setType] = useState(recentTimeType);
     const [isValidated, setValidation] = useState(true);
-    const [leftRecentsStack, setLeftRecentsStack] = useState([]);
-    const [rightRecentsStack, setRightRecentsStack] = useState([]);
-    const { filters, getFilterTitle, getFilterFromTitle, updateFilters } = useQuickFilters((filter) => {
+    const { active, leftStack, toggleLeft, rightStack, toggleRight, updateData } = useStacks(oneDayRange);
+    const { filters, getFilterTitle, updateFilters } = useQuickFilters(defaultFilters, (filter) => {
         const res = filters.filter(({ title }) => title === filter)?.[0];
         if (res) {
-            const { start, end } = res;
-            setStart(start);
-            setEnd(end);
-            type && addNewTimeFilter(type, start, end);
+            updateData(res?.start, res?.end);
             setOpen(!isOpen);
             setActiveTab(0);
         }
@@ -53,63 +47,27 @@ const DateRangeFilter = ({
     const fromRef = useRef();
     const toRef = useRef();
 
-    const updateState = useCallback((s, e) => {
-        updateDateRange(s, e);
-    }, [updateDateRange]);
-
     const setDates = () => {
         setOpen(!isOpen);
         const start = fromRef.current.getValue();
         const end = toRef.current.getValue();
         if (end >= start) {
-            setStart(start);
-            setEnd(end);
-            type && addNewTimeFilter(type, start, end);
+            updateData(start, end);
         } else {
             addMessage('danger', 'Date range error', `${getLocalDate(start)} is not before ${getLocalDate(end)}`);
         }
     };
 
-    const rightRecentHandler = () => {
-        const [rightRecent, ...moreRecents] = rightRecentsStack;
-        setLeftRecentsStack([{ start, end }, ...leftRecentsStack]);
-        setStart(rightRecent.start);
-        setEnd(rightRecent.end);
-        setRightRecentsStack(moreRecents);
-    };
-
-    const leftRecentHandler = () => {
-        const [leftRecent, ...moreRecents] = leftRecentsStack;
-        setRightRecentsStack([{ start, end }, ...rightRecentsStack]);
-        setStart(leftRecent.start);
-        setEnd(leftRecent.end);
-        setLeftRecentsStack(moreRecents);
-    };
-
     useEffect(() => {
-        const [mostRecent, ...more] = recentTimeFilters;
-        setRightRecentsStack(more);
-        setLeftRecentsStack([]);
-        setStart(mostRecent.start);
-        setEnd(mostRecent.end);
+        type !== recentTimeType && setRecentTimeType(type);
+        type && updateDateRange(active?.start, active?.end);
     //eslint-disable-next-line
-    }, [recentTimeFilters]);
+    }, [active, type]);
 
     useEffect(() => {
-        type && updateState(start, end);
-    //eslint-disable-next-line
-    }, [start, end, type]);
-
-    useEffect(() => {
-        if (startDate && endDate) {
-            updateState(new Date(startDate), new Date(endDate));
-            setStart(new Date(startDate));
-            setEnd(new Date(endDate));
-        } else {
-            const { start, end } = getFilterFromTitle('24 hours');
-            updateState(start, end);
-            setStart(start);
-            setEnd(end);
+        if (startDate && endDate && JSON.stringify(active) !== JSON.stringify({ start: new Date(startDate), end: new Date(endDate) })) {
+            updateDateRange(new Date(startDate), new Date(endDate));
+            updateData(new Date(startDate), new Date(endDate));
         }
     //eslint-disable-next-line
     }, [startDate, endDate]);
@@ -177,7 +135,7 @@ const DateRangeFilter = ({
                                             <FlexItem>
                                                 <DateTextInput
                                                     ref={ fromRef }
-                                                    val={ start }
+                                                    val={ active?.start }
                                                     setValidation={ setValidation }
                                                 />
                                             </FlexItem>
@@ -191,7 +149,7 @@ const DateRangeFilter = ({
                                             <FlexItem>
                                                 <DateTextInput
                                                     ref={ toRef }
-                                                    val={ end }
+                                                    val={ active?.end }
                                                     setValidation={ setValidation }
                                                 />
                                             </FlexItem>
@@ -209,9 +167,9 @@ const DateRangeFilter = ({
                 </Tab>
             </Tabs>
         </Modal>}
-        {leftRecentsStack && leftRecentsStack.length !== 0 && <Button
+        {leftStack && leftStack.length !== 0 && <Button
             variant='inline'
-            onClick={ leftRecentHandler }
+            onClick={ toggleLeft }
         > <CaretLeftIcon/> </Button>}
         <Button variant='inline' onClick={() => setOpen(!isOpen)}>
             <Flex direction={{ default: 'row' }} >
@@ -219,22 +177,20 @@ const DateRangeFilter = ({
                     <ClockIcon/>
                 </FlexItem>
                 <FlexItem>
-                    {start && end ? <span>
-                        { getFilterTitle(start, end) || `${getLocalDate(start)} to ${getLocalDate(end)}`}
-                    </span> : <Text component='p'> All time </Text>}
+                    {getFilterTitle(active?.start, active?.end) || `${getLocalDate(active?.start)} to ${getLocalDate(active?.end)}`}
                 </FlexItem>
             </Flex>
         </Button>
-        {rightRecentsStack && rightRecentsStack.length !== 0 && <Button
+        {rightStack && rightStack.length !== 0 && <Button
             variant='inline'
-            onClick={ rightRecentHandler }
+            onClick={ toggleRight }
         > <CaretRightIcon/> </Button>}
     </React.Fragment>;
 };
 
 DateRangeFilter.propTypes = {
     updateDateRange: PropTypes.func,
-    addNewTimeFilter: PropTypes.func,
+    setRecentTimeType: PropTypes.func,
     setStartDate: PropTypes.func,
     setEndDate: PropTypes.func,
     addMessage: PropTypes.func,
@@ -255,7 +211,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     updateDateRange: (start, end) => dispatch(AppActions.updateDateRange(start, end)),
-    addNewTimeFilter: (type, start, end) => dispatch(AppActions.addNewTimeFilter(type, start, end)),
+    setRecentTimeType: (type) => dispatch(AppActions.setRecentTimeType(type)),
     setStartDate: (start) => dispatch(AppActions.setStartDate(start)),
     setEndDate: (end) => dispatch(AppActions.setEndDate(end)),
     addMessage: (type, title, content) => dispatch(AppActions.addMessage(type, title, content))

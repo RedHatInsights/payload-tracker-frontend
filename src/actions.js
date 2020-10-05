@@ -30,21 +30,15 @@ export const setCellActivity = (title, bool = false) => ({
     payload: bool
 });
 
+export const setRecentTimeType = (type) => ({
+    type: ActionTypes.SET_RECENT_TIME_TYPE,
+    payload: type
+});
+
 export const addMessage = (type, title, content) => ({
     type: ActionTypes.ADD_MESSAGE,
     payload: {
         type, title, content
-    }
-});
-
-export const addNewTimeFilter = (currentType, start, end) => ({
-    type: ActionTypes.ADD_RECENT_TIME_FILTER,
-    payload: {
-        type: currentType,
-        obj: {
-            start,
-            end
-        }
     }
 });
 

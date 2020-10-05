@@ -6,7 +6,7 @@ const compareDates = (a, b) => getLocalDate(a) === getLocalDate(b);
 
 const subtractMinutes = (minutes, dateObj = new Date()) => new Date(dateObj.getTime() - minutes * 60000);
 
-const quickFilters = () => ([
+export const quickFilters = () => ([
     {
         title: '15 minutes',
         start: subtractMinutes(15),
@@ -49,14 +49,10 @@ const quickFilters = () => ([
     }
 ]);
 
-export const useQuickFilters = (callbackFn) => {
-    const [filters, setFilters] = useState(quickFilters());
+export const useQuickFilters = (defaultValue, callbackFn) => {
+    const [filters, setFilters] = useState(defaultValue);
     const [lastClicked, setLastClicked] = useState();
     const filterRef = useRef();
-
-    const getFilterFromTitle = (value) => filters.filter(({ title, start, end }) => {
-        return value === title && ({ start, end });
-    })?.[0];
 
     const getFilterTitle = (s, e) => filters.filter(({ title, start, end }) => {
         return compareDates(start, s) && compareDates(end, e) && title;
@@ -73,5 +69,46 @@ export const useQuickFilters = (callbackFn) => {
         }
     }, [callback, filters, filterRef]);
 
-    return { filters, getFilterTitle, getFilterFromTitle, updateFilters };
+    return { filters, getFilterTitle, updateFilters };
+};
+
+export const useStacks = (defaultValue = null) => {
+    const [data, setData] = useState([]);
+    const [active, setActive] = useState();
+    const [leftStack, setLeftStack] = useState([]);
+    const [rightStack, setRightStack] = useState([]);
+
+    const updateData = (start, end) => setData([{ start, end }, ...data]);
+
+    const toggleLeft = () => {
+        const [{ start, end }, ...more] = leftStack;
+        setLeftStack(more);
+        setRightStack([active, ...rightStack]);
+        setActive({ start, end });
+    };
+
+    const toggleRight = () => {
+        const [{ start, end }, ...more] = rightStack;
+        setRightStack(more);
+        setLeftStack([active, ...leftStack]);
+        setActive({ start, end });
+    };
+
+    useEffect(() => {
+        const [recent, ...more] = data;
+        setLeftStack([]);
+        setRightStack(more);
+        setActive(recent);
+    //eslint-disable-next-line
+    }, [data]);
+
+    useEffect(() => {
+        if (defaultValue?.start && defaultValue?.end) {
+            setData([{ start: defaultValue.start, end: defaultValue.end }]);
+            setActive([{ start: defaultValue.start, end: defaultValue.end }]);
+        }
+    //eslint-disable-next-line
+    }, []);
+
+    return { active, leftStack, toggleLeft, rightStack, toggleRight, updateData };
 };

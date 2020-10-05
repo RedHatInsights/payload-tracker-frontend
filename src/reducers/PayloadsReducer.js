@@ -20,7 +20,6 @@ const initialState = {
     page_size: getValueFromURL(location, 'page_size') || ConstantTypes.DEFAULT_PAGE_STATE.page_size,
     startDate: getValueFromURL(location, 'start_date') || ConstantTypes.DEFAULT_PAGE_STATE.startDate,
     endDate: getValueFromURL(location, 'end_date') || ConstantTypes.DEFAULT_PAGE_STATE.endDate,
-    recentTimeFilters: [{ start: null, end: null }],
     recentTimeType: 'created_at',
     staged: [],
     location
@@ -38,11 +37,10 @@ const PayloadsReducer = (state = initialState, action) => {
                 ...state,
                 endDate: action.payload
             };
-        case ConstantTypes.ADD_RECENT_TIME_FILTER:
+        case ConstantTypes.SET_RECENT_TIME_TYPE:
             return {
                 ...state,
-                recentTimeType: action.payload.type,
-                recentTimeFilters: [action.payload.obj, ...state.recentTimeFilters]
+                recentTimeType: action.payload
             };
         case ConstantTypes.SET_PAGE:
             return {
