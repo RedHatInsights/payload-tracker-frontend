@@ -1,7 +1,7 @@
 import * as AppActions from '../actions';
 
 import { Nav, NavItem, NavList, PageSidebar } from '@patternfly/react-core';
-import { PAYLOADS_ITEM, TRACK_ITEM } from '../AppConstants';
+import { PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from '../AppConstants';
 import { contains, getFilterTypes, getObjFromSearch, getSearchFromObj } from '../utilities/Common';
 
 import PropTypes from 'prop-types';
@@ -36,7 +36,7 @@ const MainSidebar = ({ activeItem, onClickFn, isNavOpen, setTrackRequestID, loca
                 >
                     Payloads
                 </NavItem>
-                {/* <NavItem
+                <NavItem
                     to='/statuses'
                     itemId={ STATUSES_ITEM }
                     preventDefault
@@ -44,7 +44,7 @@ const MainSidebar = ({ activeItem, onClickFn, isNavOpen, setTrackRequestID, loca
                     onClick={ () => clickHandler('/statuses', search) }
                 >
                     Statuses
-                </NavItem> */}
+                </NavItem>
                 <NavItem
                     to='/track'
                     itemId={ TRACK_ITEM }
