@@ -2,20 +2,29 @@ import * as ActionTypes from './AppConstants';
 
 import axios from 'axios';
 
+let call;
+const get = (url, config = {}) => {
+    call && call.cancel();
+    call = axios.CancelToken.source();
+    return axios.get(url, { ...config, cancelToken: call.token });
+};
+
 export const getData = (url) => dispatch => {
     dispatch({ type: `${ActionTypes.GET_DATA}_PENDING` });
-    axios.get(url)
+    get(url)
     .then((response) => {
         dispatch({ type: `${ActionTypes.GET_DATA}_FULFILLED`, payload: response.data });
     })
     .catch((error) => {
-        dispatch({ type: `${ActionTypes.GET_DATA}_REJECTED`, payload: error });
+        if (!axios.isCancel(error)) {
+            dispatch({ type: `${ActionTypes.GET_DATA}_REJECTED`, payload: error });
+        }
     });
 };
 
 export const getPayloadTrack = (url) => dispatch => {
     dispatch({ type: `${ActionTypes.GET_PAYLOAD_TRACK}_PENDING` });
-    axios.get(url)
+    get(url)
     .then((response) => {
         dispatch({ type: `${ActionTypes.GET_PAYLOAD_TRACK}_FULFILLED`, payload: response.data });
     })
