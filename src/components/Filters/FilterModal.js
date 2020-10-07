@@ -14,14 +14,14 @@ const FilterModal = ({ isOpen, options, onStageFn, onCancelFn }) => {
         setToStage(toStage.flatMap(item => Object.keys(item).map(key => key === option ? { [key]: value } : item)));
     };
 
+    const checkForEmptyValues = () => toStage.flatMap(item => Object.values(item).filter(value => value === '')).length > 0;
+
     useEffect(() => {
         setToStage(options.map(option => ({ [option]: '' })));
     }, [options]);
 
     useEffect(() => {
-        toStage.flatMap(item => Object.values(item).filter(value => value === '')).length > 0 ?
-            setCanStage(false) :
-            setCanStage(true);
+        checkForEmptyValues() ? setCanStage(false) : setCanStage(true);
     }, [toStage]);
 
     return <Modal
@@ -47,6 +47,12 @@ const FilterModal = ({ isOpen, options, onStageFn, onCancelFn }) => {
                     value={toStage[index].option}
                     type='text'
                     onChange={(value) => updateValue(value, option)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            !checkForEmptyValues() && onStageFn(toStage);
+                        }
+                    }}
                 />
             </FormGroup>)}
         </Form>}
