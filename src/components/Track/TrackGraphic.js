@@ -75,7 +75,7 @@ const TrackGraphic = ({ service, statuses, messages }) => {
     };
 
     useEffect(() => {
-        setRows(generateRows(messages));
+        messages && setRows(generateRows(messages));
         setCells([
             'status',
             {
@@ -87,8 +87,8 @@ const TrackGraphic = ({ service, statuses, messages }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [messages]);
 
-    return (
-        <AccordionItem>
+    return <React.Fragment>
+        {service && statuses && <AccordionItem>
             <AccordionToggle
                 id={service}
                 onClick={ () => toggleOpen(!isOpen)}
@@ -133,8 +133,8 @@ const TrackGraphic = ({ service, statuses, messages }) => {
                     <TableBody/>
                 </Table>
             </AccordionContent>
-        </AccordionItem>
-    );
+        </AccordionItem>}
+    </React.Fragment>;
 };
 
 TrackGraphic.propTypes = {

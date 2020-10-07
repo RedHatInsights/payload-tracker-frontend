@@ -26,10 +26,7 @@ import openSocket from 'socket.io-client';
 const socket = openSocket(`${ConstantTypes.API_URL}/`, { transports: ['websocket', 'polling', 'flashsocket'] });
 const queryBase = `${ConstantTypes.API_URL}/v1/payloads/`;
 
-const Track = ({
-    request_id, sort_by, sort_dir, payloads, durations, getPayloads,
-    setRequestID, addPayload, updateDurations
-}) => {
+const Track = ({ request_id, sort_by, sort_dir, payloads, getPayloads, setRequestID, addPayload, updateDurations }) => {
     const [activeTabKey, setActiveTabKey] = useState(0);
 
     useEffect(() => {
@@ -41,11 +38,8 @@ const Track = ({
 
     useEffect(() => {
         socket.on('payload', (incoming) => incoming.request_id === request_id && addPayload(incoming));
-        socket.on('duration', (incoming) => {
-            const { id, key, data } = incoming;
-            durations && id === request_id && updateDurations({ [key]: data });
-        });
-    }, [request_id, payloads, addPayload, durations, updateDurations]);
+        socket.on('duration', ({ id, key, data }) => id === request_id && updateDurations({ [key]: data }));
+    }, [request_id, payloads, addPayload, updateDurations]);
 
     return <PageSection>
         <TrackSearchBar/>
@@ -88,7 +82,6 @@ Track.propTypes = {
     sort_by: PropTypes.string,
     sort_dir: PropTypes.string,
     payloads: PropTypes.array,
-    durations: PropTypes.array,
     getPayloads: PropTypes.func,
     setRequestID: PropTypes.func,
     addPayload: PropTypes.func,
@@ -99,8 +92,7 @@ const mapStateToProps = state => ({
     request_id: state.track.request_id,
     sort_by: state.track.sort_by,
     sort_dir: state.track.sort_dir,
-    payloads: state.data.payloads,
-    durations: state.data.durations
+    payloads: state.data.payloads
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -40,7 +40,7 @@ const TrackGraphicView = ({ payloads }) => {
     useEffect(() => {
         setServices(generateUniqueServices(payloads));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [payloads]);
 
     return <Accordion>
         {messages && statuses && services.map((service, index) =>

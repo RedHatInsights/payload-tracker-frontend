@@ -22,6 +22,7 @@ const FilterModal = ({ isOpen, options, onStageFn, onCancelFn }) => {
 
     useEffect(() => {
         checkForEmptyValues() ? setCanStage(false) : setCanStage(true);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [toStage]);
 
     return <Modal

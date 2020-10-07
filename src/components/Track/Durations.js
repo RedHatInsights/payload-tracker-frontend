@@ -35,15 +35,7 @@ const Durations = ({ payloads, durations }) => {
 
     const computeServiceWidth = (duration, width) => width * (getSeconds(duration) / totalTime);
 
-    const handleResize = () => {
-        if (chartRef.current) {
-            while (chartRef.current.clientWidth === 0) {
-                handleResize();
-            }
-
-            setWidth(chartRef.current.clientWidth);
-        }
-    };
+    const handleResize = () => chartRef.current && setWidth(chartRef.current.clientWidth);
 
     useEffect(() => {
         handleResize();
