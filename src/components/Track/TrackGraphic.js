@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { getLocalDate } from '../../utilities/Common';
 
-const TrackGraphic = ({ service, statuses, messages }) => {
+const TrackGraphic = ({ service, source, statuses, messages }) => {
 
     const [isOpen, toggleOpen] = useState(false);
     const [rows, setRows] = useState([]);
@@ -90,36 +90,18 @@ const TrackGraphic = ({ service, statuses, messages }) => {
     return <React.Fragment>
         {service && statuses && <AccordionItem>
             <AccordionToggle
-                id={service}
+                id={`${service}:${source}`}
                 onClick={ () => toggleOpen(!isOpen)}
                 isExpanded={isOpen}
             >
                 <Progress
-                    value={
-                        (statuses.includes('success') ||
-                        statuses.includes('202') ||
-                        statuses.includes('error') ||
-                        statuses.includes('failure') ||
-                        statuses.includes('announced')) ?
-                            100 : (
-                                statuses.includes('processing') ?
-                                    50 :
-                                    25
-                            )
-                    }
-                    title={service}
+                    value={statuses.includes('success') ? 100 :
+                        statuses.includes('processing') ? 50 : 25}
+                    title={ source !== 'undefined' ? `${service} from ${source}` : service}
                     measureLocation={ProgressMeasureLocation.none}
                     variant={
-                        (statuses.includes('success') ||
-                        statuses.includes('202') ||
-                        statuses.includes('announced')) ?
-                            ProgressVariant.success : (
-                                (statuses.includes('error') ||
-                                statuses.includes('failure')) ?
-                                    ProgressVariant.danger :
-                                    ProgressVariant.info
-                            )
-                    }
+                        statuses.includes('success') ? ProgressVariant.success :
+                            statuses.includes('error') ? ProgressVariant.danger : ProgressVariant.info}
                 />
             </AccordionToggle>
             <AccordionContent isHidden={!isOpen}>
@@ -139,6 +121,7 @@ const TrackGraphic = ({ service, statuses, messages }) => {
 
 TrackGraphic.propTypes = {
     service: PropTypes.string.isRequired,
+    source: PropTypes.string.isRequired,
     statuses: PropTypes.array.isRequired,
     messages: PropTypes.array.isRequired
 };

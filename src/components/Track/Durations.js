@@ -63,9 +63,10 @@ const Durations = ({ payloads, durations }) => {
         </CardHeader>
         <CardBody>
             <div ref={chartRef} className={`pt-c-durations__chart ${!isReadyToRender() && 'hide'}`}>
-                {isReadyToRender() && Object.entries(durations).map(([service, duration]) => {
+                {isReadyToRender() && Object.entries(durations).map(([key, duration]) => {
+                    const [service, source] = key.split(':');
                     if (!contains(service, ['total_time', 'total_time_in_services'])) {
-                        return <Tooltip content={service}>
+                        return <Tooltip content={source !== 'undefined' ? `${service} from ${source}` : service}>
                             <div style={{ width: `${computeServiceWidth(duration, width)}px` }}
                                 className={`pt-c-durations__service ${getStatus(service)}`}
                             />
@@ -74,12 +75,15 @@ const Durations = ({ payloads, durations }) => {
                 })}
             </div>
             <div className='pt-c-durations__legend'>
-                {Object.entries(durations).map(([service, duration]) => {
+                {Object.entries(durations).map(([key, duration]) => {
+                    const [service, source] = key.split(':');
                     if (!contains(service, ['total_time', 'total_time_in_services'])) {
                         return <div className='pt-c-durations__legend--item'>
                             <div className={`pt-c-durations__legend--circle ${getStatus(service)}`}/>
                             <div className='pt-c-durations__legend--label'>
-                                {`${service} | ${duration}`}
+                                {source !== 'undefined' ?
+                                    `${service} from ${source} | ${duration}` :
+                                    `${service} | ${duration}`}
                             </div>
                         </div>;
                     }

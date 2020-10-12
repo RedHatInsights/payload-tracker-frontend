@@ -11,7 +11,7 @@ import {
     Tab,
     Tabs
 } from '@patternfly/react-core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Durations from './Durations';
 import ExportsDropdown from '../ExportsDropdown';
@@ -28,6 +28,7 @@ const queryBase = `${ConstantTypes.API_URL}/v1/payloads/`;
 
 const Track = ({ request_id, sort_by, sort_dir, payloads, getPayloads, setRequestID, addPayload, updateDurations }) => {
     const [activeTabKey, setActiveTabKey] = useState(0);
+    const currentPayloads = useRef();
 
     useEffect(() => {
         if (request_id) {
@@ -40,6 +41,14 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, getPayloads, setReques
         socket.on('payload', (incoming) => incoming.request_id === request_id && addPayload(incoming));
         socket.on('duration', ({ id, key, data }) => id === request_id && updateDurations({ [key]: data }));
     }, [request_id, payloads, addPayload, updateDurations]);
+
+    useEffect(() => {
+        if (request_id && JSON.stringify(currentPayloads.current) !== JSON.stringify(payloads)) {
+            setTimeout(() => getPayloads(queryBase + `${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`), 1000);
+            currentPayloads.current = payloads;
+        }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [payloads]);
 
     return <PageSection>
         <TrackSearchBar/>
