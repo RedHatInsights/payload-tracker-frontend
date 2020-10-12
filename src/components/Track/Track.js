@@ -21,12 +21,10 @@ import TrackGraphic from './TrackGraphicView';
 import TrackSearchBar from './TrackSearchBar';
 import TrackTable from './TrackTable';
 import { connect } from 'react-redux';
-import openSocket from 'socket.io-client';
 
-const socket = openSocket(`${ConstantTypes.API_URL}/`, { transports: ['websocket', 'polling', 'flashsocket'] });
 const queryBase = `${ConstantTypes.API_URL}/v1/payloads/`;
 
-const Track = ({ request_id, sort_by, sort_dir, payloads, getPayloads, setRequestID, addPayload, updateDurations }) => {
+const Track = ({ request_id, sort_by, sort_dir, payloads, getPayloads, setRequestID }) => {
     const [activeTabKey, setActiveTabKey] = useState(0);
     const currentPayloads = useRef();
 
@@ -36,11 +34,6 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, getPayloads, setReques
             setRequestID(request_id);
         }
     }, [request_id, sort_by, sort_dir, getPayloads, setRequestID]);
-
-    useEffect(() => {
-        socket.on('payload', (incoming) => incoming.request_id === request_id && addPayload(incoming));
-        socket.on('duration', ({ id, key, data }) => id === request_id && updateDurations({ [key]: data }));
-    }, [request_id, payloads, addPayload, updateDurations]);
 
     useEffect(() => {
         if (request_id && JSON.stringify(currentPayloads.current) !== JSON.stringify(payloads)) {
@@ -92,9 +85,7 @@ Track.propTypes = {
     sort_dir: PropTypes.string,
     payloads: PropTypes.array,
     getPayloads: PropTypes.func,
-    setRequestID: PropTypes.func,
-    addPayload: PropTypes.func,
-    updateDurations: PropTypes.func
+    setRequestID: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -106,9 +97,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     getPayloads: (url) => dispatch(AppActions.getPayloadTrack(url)),
-    setRequestID: (request_id) => dispatch(AppActions.setTrackRequestID(request_id)),
-    addPayload: (data) => dispatch(AppActions.addPayloadFromSocket(data)),
-    updateDurations: (data) => dispatch(AppActions.updateDurationsFromSocket(data))
+    setRequestID: (request_id) => dispatch(AppActions.setTrackRequestID(request_id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Track);
