@@ -11,17 +11,23 @@ const TrackGraphicView = ({ payloads }) => {
     const [statuses, setStatuses] = useState();
     const [messages, setMessages] = useState();
 
-    const generateUniqueServices = (payloads) => Array.from(new Set(payloads.map(p => p.service)));
+    const generateUniqueServices = (payloads) => Array.from(new Set(payloads.map(p => `${p.service}:${p?.source}`)));
 
     const getStatusesByService = (payloads, services) => {
         return services.reduce((obj, s) => {
-            return { ...obj, [s]: payloads.filter(p => p.service === s).map(p => p.status) };
+            const [service, source] = s.split(':');
+            return { ...obj, [s]: payloads.filter(
+                p => p.service === service && (p?.source || 'undefined') === source
+            ).map(p => p.status) };
         }, {});
     };
 
     const getMessagesFromService = (payloads, services) => {
         return services.reduce((obj, s) => {
-            return { ...obj, [s]: payloads.filter(p => p.service === s).map(p => ({
+            const [service, source] = s.split(':');
+            return { ...obj, [s]: payloads.filter(
+                p => p.service === service && (p?.source || 'undefined') === source
+            ).map(p => ({
                 message: p.status_msg,
                 status: p.status,
                 date: p.date
@@ -43,15 +49,17 @@ const TrackGraphicView = ({ payloads }) => {
     }, [payloads]);
 
     return <Accordion>
-        {messages && statuses && services.map((service, index) =>
-            <div key={index}>
+        {messages && statuses && services.map((key, index) => {
+            const [service, source] = key.split(':');
+            return <div key={index}>
                 <TrackGraphic
                     service={service}
-                    statuses={statuses[service]}
-                    messages={messages[service]}
+                    source={source}
+                    statuses={statuses[key]}
+                    messages={messages[key]}
                 />
-            </div>
-        )}
+            </div>;
+        })}
     </Accordion>;
 };
 
