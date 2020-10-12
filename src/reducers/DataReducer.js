@@ -56,18 +56,6 @@ const DataReducer = (state = initialState, action) => {
                 payloads: action.payload.data,
                 durations: action.payload.duration
             };
-        case ConstantTypes.UPDATE_DURATIONS_FROM_SOCKET:
-            return {
-                ...state,
-                durations: { ...state.durations, ...action.payload }
-            };
-        case ConstantTypes.ADD_PAYLOAD_FROM_SOCKET:
-            return {
-                ...state,
-                payloads: state.payloads.filter(
-                    p => p.id === action.payload.id
-                ).length === 0 ? [action.payload, ...state.payloads] : state.payloads
-            };
         case ConstantTypes.ADD_MESSAGE:
             return {
                 ...state,

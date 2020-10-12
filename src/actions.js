@@ -76,16 +76,6 @@ export const setPageSize = (page_size) => ({
     payload: page_size
 });
 
-export const addPayloadFromSocket = (request) => ({
-    type: ActionTypes.ADD_PAYLOAD_FROM_SOCKET,
-    payload: request
-});
-
-export const updateDurationsFromSocket = (duration) => ({
-    type: ActionTypes.UPDATE_DURATIONS_FROM_SOCKET,
-    payload: duration
-});
-
 export const updateFilters = (filters) => ({
     type: ActionTypes.UPDATE_FILTERS,
     payload: filters

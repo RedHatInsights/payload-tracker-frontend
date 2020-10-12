@@ -49,13 +49,6 @@ Prequisites
     docker-compose
 
 
-
-Socket Updates
---------------------
-
-We are using the socket.io client to grab data as it changes within the service. This functionality is currently supported within the `/track/:payload_id` route, and will refresh as new payloads are picked up with the same payload_id as the one that is currently being viewed.
-
-
 Dev Setup
 --------------------
 1. Install dependencies
