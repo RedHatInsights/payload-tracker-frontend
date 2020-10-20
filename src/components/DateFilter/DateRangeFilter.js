@@ -27,10 +27,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getLocalDate } from '../../utilities/Common';
 
-const defaultFilters = quickFilters();
-const oneDayRange = defaultFilters.filter(({ start, end, title }) => title === '24 hours' && ({ start, end }))?.[0];
-
 const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMessage, startDate, endDate, recentTimeType }) => {
+    const defaultFilters = quickFilters();
+    const oneDayRange = defaultFilters.filter(({ start, end, title }) => title === '24 hours' && ({ start, end }))?.[0];
     const [isOpen, setOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
     const [type, setType] = useState(recentTimeType);
@@ -60,7 +59,7 @@ const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMess
 
     useEffect(() => {
         type !== recentTimeType && setRecentTimeType(type);
-        type && updateDateRange(active?.start, active?.end);
+        type && !(startDate && endDate) && updateDateRange(active?.start, active?.end);
     //eslint-disable-next-line
     }, [active, type]);
 

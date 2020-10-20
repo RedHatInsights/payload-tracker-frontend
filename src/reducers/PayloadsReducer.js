@@ -75,6 +75,8 @@ const PayloadsReducer = (state = initialState, action) => {
                 page: ConstantTypes.DEFAULT_PAGE_STATE.page,
                 page_size: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
                 location: action.payload.location,
+                startDate: action.payload.location.pathname.includes('track') ? ConstantTypes.DEFAULT_PAGE_STATE.startDate : state.startDate,
+                endDate: action.payload.location.pathname.includes('track') ? ConstantTypes.DEFAULT_PAGE_STATE.endDate : state.endDate,
                 recentTimeType: initialState.recentTimeType
             };
         default:
