@@ -21,31 +21,30 @@ import TrackGraphic from './TrackGraphicView';
 import TrackSearchBar from './TrackSearchBar';
 import TrackTable from './TrackTable';
 import { connect } from 'react-redux';
+import { usePolling } from '../../utilities/Common';
 
-const queryBase = `${ConstantTypes.API_URL}/v1/payloads/`;
-
-const Track = ({ request_id, sort_by, sort_dir, payloads, getPayloads, setRequestID }) => {
+const Track = ({ payloads, request_id, sort_by, sort_dir, getPayloads }) => {
     const [activeTabKey, setActiveTabKey] = useState(0);
-    const currentPayloads = useRef();
+    const currPayloads = useRef();
+    const retryCounter = useRef();
 
     useEffect(() => {
-        if (request_id) {
-            getPayloads(queryBase + `${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
-            setRequestID(request_id);
-        }
-    }, [request_id, sort_by, sort_dir, getPayloads, setRequestID]);
+        request_id && getPayloads(`${ConstantTypes.API_URL}/v1/payloads/${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
+        retryCounter.current = 0;
+    }, [request_id, sort_dir, sort_by, getPayloads]);
 
-    useEffect(() => {
-        if (request_id && JSON.stringify(currentPayloads.current) !== JSON.stringify(payloads)) {
-            setTimeout(() => getPayloads(queryBase + `${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`), 1000);
-            currentPayloads.current = payloads;
+    usePolling(() => {
+        if ((!retryCounter.current || retryCounter.current < 10) && payloads && request_id) {
+            retryCounter.current = retryCounter.current || 0;
+            retryCounter.current = JSON.stringify(currPayloads.current) !== JSON.stringify(payloads) ? 0 : retryCounter.current + 1;
+            currPayloads.current = payloads;
+            getPayloads(`${ConstantTypes.API_URL}/v1/payloads/${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
         }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [payloads]);
+    }, 2000);
 
     return <PageSection>
         <TrackSearchBar/>
-        { request_id && payloads.length > 0 && <React.Fragment>
+        {request_id && payloads?.length > 0 && <React.Fragment>
             <Durations/>
             <Tabs activeKey={activeTabKey} onSelect={ (e, index) => setActiveTabKey(index) }>
                 <Tab eventKey={0} title='Status'>
@@ -80,24 +79,18 @@ const Track = ({ request_id, sort_by, sort_dir, payloads, getPayloads, setReques
 };
 
 Track.propTypes = {
+    payloads: PropTypes.array,
     request_id: PropTypes.any,
     sort_by: PropTypes.string,
     sort_dir: PropTypes.string,
-    payloads: PropTypes.array,
-    getPayloads: PropTypes.func,
-    setRequestID: PropTypes.func
+    getPayloads: PropTypes.func
 };
 
-const mapStateToProps = state => ({
+export default connect((state) => ({
     request_id: state.track.request_id,
     sort_by: state.track.sort_by,
     sort_dir: state.track.sort_dir,
     payloads: state.data.payloads
-});
-
-const mapDispatchToProps = dispatch => ({
-    getPayloads: (url) => dispatch(AppActions.getPayloadTrack(url)),
-    setRequestID: (request_id) => dispatch(AppActions.setTrackRequestID(request_id))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Track);
+}), (dispatch) => ({
+    getPayloads: (url) => dispatch(AppActions.getPayloadTrack(url))
+}))(Track);

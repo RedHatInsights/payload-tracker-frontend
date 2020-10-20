@@ -1,6 +1,7 @@
 import * as ConstantTypes from '../AppConstants';
 
 import history from '../history';
+import { useEffect } from 'react';
 
 export const contains = (arr, n) => arr.filter(v => v === n).length > 0;
 
@@ -36,4 +37,13 @@ export const getValueFromURL = (location, prop) => {
         const value = getObjFromSearch(search)?.[prop];
         return value || null;
     } else { return null; }
+};
+
+export const usePolling = (callback, delay) => {
+    useEffect(() => {
+        if (delay) {
+            const id = setInterval(callback, delay);
+            return () => clearInterval(id);
+        }
+    }, [callback, delay]);
 };
