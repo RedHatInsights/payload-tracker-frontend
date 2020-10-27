@@ -76,6 +76,16 @@ export const setPageSize = (page_size) => ({
     payload: page_size
 });
 
+export const setSortBy = (sort_by) => ({
+    type: ActionTypes.SET_SORT_BY,
+    payload: sort_by
+});
+
+export const setSortDir = (sort_dir) => ({
+    type: ActionTypes.SET_SORT_DIR,
+    payload: sort_dir
+});
+
 export const updateFilters = (filters) => ({
     type: ActionTypes.UPDATE_FILTERS,
     payload: filters

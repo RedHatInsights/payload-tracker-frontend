@@ -15,9 +15,11 @@ import { getValueFromURL } from '../../utilities/Common';
 
 const queryBase = `${ConstantTypes.API_URL}/v1/statuses?`;
 
-const Statuses = ({ getStatuses, location, page, page_size, filters, startDate, endDate, recentTimeType }) => {
-    const [sortDir, setSortDir] = useState(getValueFromURL(location, 'sort_dir') || 'desc');
-    const [sortBy, setSortBy] = useState(getValueFromURL(location, 'sort_by') || 'date');
+const Statuses = ({
+    getStatuses, setSortDir, setSortBy, location, page, page_size, filters, startDate, endDate, recentTimeType
+}) => {
+    const [sortDir, updateDir] = useState(getValueFromURL(location, 'sort_dir') || 'desc');
+    const [sortBy, updateBy] = useState(getValueFromURL(location, 'sort_by') || 'date');
 
     const search = useCallback(() => {
         let query = queryBase;
@@ -44,9 +46,9 @@ const Statuses = ({ getStatuses, location, page, page_size, filters, startDate, 
             <Pagination>
                 <Table
                     sortDir={sortDir}
-                    setSortDir={setSortDir}
+                    setSortDir={(dir) => (setSortDir(dir), updateDir(dir))}
                     sortBy={sortBy}
-                    setSortBy={setSortBy}
+                    setSortBy={(by) => (setSortBy(by), updateBy(by))}
                 />
             </Pagination>
         </PageSection>
@@ -55,6 +57,8 @@ const Statuses = ({ getStatuses, location, page, page_size, filters, startDate, 
 
 Statuses.propTypes = {
     getStatuses: PropTypes.func,
+    setSortDir: PropTypes.func,
+    setSortBy: PropTypes.func,
     location: PropTypes.object,
     page: PropTypes.number,
     page_size: PropTypes.number,
@@ -75,7 +79,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    getStatuses: (url) => dispatch(AppActions.getData(url))
+    getStatuses: (url) => dispatch(AppActions.getData(url)),
+    setSortDir: (dir) => dispatch(AppActions.setSortDir(dir)),
+    setSortBy: (by) => dispatch(AppActions.setSortBy(by))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Statuses);

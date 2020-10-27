@@ -15,9 +15,11 @@ import { getValueFromURL } from '../../utilities/Common';
 
 const queryBase = `${ConstantTypes.API_URL}/v1/payloads?`;
 
-const Payloads = ({ getPayloads, location, page, page_size, filters, startDate, endDate, recentTimeType }) => {
-    const [sortDir, setSortDir] = useState(getValueFromURL(location, 'sort_dir') || 'desc');
-    const [sortBy, setSortBy] = useState(getValueFromURL(location, 'sort_by') || 'created_at');
+const Payloads = ({
+    getPayloads, setSortDir, setSortBy, location, page, page_size, filters, startDate, endDate, recentTimeType
+}) => {
+    const [sortDir, updateDir] = useState(getValueFromURL(location, 'sort_dir') || 'desc');
+    const [sortBy, updateBy] = useState(getValueFromURL(location, 'sort_by') || 'created_at');
 
     const search = useCallback(() => {
         let query = queryBase;
@@ -44,9 +46,9 @@ const Payloads = ({ getPayloads, location, page, page_size, filters, startDate, 
             <Pagination>
                 <Table
                     sortDir={sortDir}
-                    setSortDir={setSortDir}
+                    setSortDir={(dir) => (setSortDir(dir), updateDir(dir))}
                     sortBy={sortBy}
-                    setSortBy={setSortBy}
+                    setSortBy={(by) => (setSortBy(by), updateBy(by))}
                 />
             </Pagination>
         </PageSection>
@@ -55,6 +57,8 @@ const Payloads = ({ getPayloads, location, page, page_size, filters, startDate, 
 
 Payloads.propTypes = {
     getPayloads: PropTypes.func,
+    setSortDir: PropTypes.func,
+    setSortBy: PropTypes.func,
     location: PropTypes.object,
     page: PropTypes.number,
     page_size: PropTypes.number,
@@ -76,7 +80,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    getPayloads: (url) => dispatch(AppActions.getData(url))
+    getPayloads: (url) => dispatch(AppActions.getData(url)),
+    setSortDir: (dir) => dispatch(AppActions.setSortDir(dir)),
+    setSortBy: (by) => dispatch(AppActions.setSortBy(by))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Payloads);

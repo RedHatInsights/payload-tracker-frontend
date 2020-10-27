@@ -17,6 +17,16 @@ export default store => next => action => {
                     pathname: `/track/${action.payload}`
                 }));
                 return;
+            case ConstantTypes.SET_TRACK_SORT_DIR:
+                return {
+                    ...search,
+                    ['sort_dir']: action.payload
+                };
+            case ConstantTypes.SET_TRACK_SORT_BY:
+                return {
+                    ...search,
+                    ['sort_by']: action.payload
+                };
             case ConstantTypes.SET_CELL_ACTIVITY:
                 return {
                     ...search,
@@ -41,6 +51,16 @@ export default store => next => action => {
                 return {
                     ...search,
                     ['page_size']: action.payload
+                };
+            case ConstantTypes.SET_SORT_DIR:
+                return {
+                    ...search,
+                    ['sort_dir']: action.payload
+                };
+            case ConstantTypes.SET_SORT_BY:
+                return {
+                    ...search,
+                    ['sort_by']: action.payload
                 };
             case ConstantTypes.UPDATE_FILTERS:
                 // first we remove any existing filters from the search object
