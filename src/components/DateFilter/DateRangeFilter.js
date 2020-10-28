@@ -59,7 +59,7 @@ const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMess
 
     useEffect(() => {
         type !== recentTimeType && setRecentTimeType(type);
-        type && !(startDate && endDate) && updateDateRange(active?.start, active?.end);
+        type && updateDateRange(active?.start, active?.end);
     //eslint-disable-next-line
     }, [active, type]);
 
