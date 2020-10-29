@@ -10,6 +10,7 @@ import {
     EmptyStateBody,
     EmptyStateIcon,
     EmptyStateVariant,
+    Spinner,
     Text,
     TextContent,
     TextInput,
@@ -72,7 +73,12 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
             </Text>
         </TextContent>
         <Card className='pt-c-track__header'>
-            {request_id && payloads.length > 0 ? <div className='pt-c-track__header--content'>
+            {loading === 'pending' && <div className='pt-c-track__header--content'>
+                <Bullseye>
+                    <Spinner size='xl'/>
+                </Bullseye>
+            </div>}
+            {loading === 'fulfilled' && <div className='pt-c-track__header--content'>
                 <div className='pt-c-track__header--item'>
                     <span className='pt-c-track__header--title'> request_id: </span>
                     <span> {request_id} </span>
@@ -109,7 +115,8 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                         </Button>
                     </div>
                 </div>}
-            </div> : !loading && <Bullseye>
+            </div>}
+            {(!loading || loading === 'rejected') && <Bullseye>
                 <EmptyState variant={EmptyStateVariant.lg}>
                     <EmptyStateIcon icon={TimesCircleIcon} color='#c9190b'/>
                     {request_id ? <Title headingLevel='h1'>
@@ -129,15 +136,13 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
 TrackSearchBar.propTypes = {
     push: PropTypes.func,
     request_id: PropTypes.string,
-    payloads: PropTypes.array,
-    loading: PropTypes.bool,
+    payloads: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
     setRequestID: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-    request_id: state.track.request_id,
-    payloads: state.data.payloads,
-    loading: state.data.loading
+    request_id: state.track.request_id
 });
 
 const mapDispatchToProps = dispatch => ({

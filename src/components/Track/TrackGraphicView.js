@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Accordion } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import TrackGraphic from './TrackGraphic';
-import { connect } from 'react-redux';
 
 const TrackGraphicView = ({ payloads }) => {
 
@@ -64,11 +63,7 @@ const TrackGraphicView = ({ payloads }) => {
 };
 
 TrackGraphicView.propTypes = {
-    payloads: PropTypes.array
+    payloads: PropTypes.array.isRequired
 };
 
-const mapStateToProps = state => ({
-    payloads: state.data.payloads
-});
-
-export default connect(mapStateToProps, null)(TrackGraphicView);
+export default TrackGraphicView;

@@ -2,6 +2,8 @@ import {
     AccordionContent,
     AccordionItem,
     AccordionToggle,
+    ClipboardCopy,
+    ClipboardCopyVariant,
     Progress,
     ProgressMeasureLocation,
     ProgressVariant
@@ -17,7 +19,6 @@ import {
 
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { getLocalDate } from '../../utilities/Common';
 
 const TrackGraphic = ({ service, source, statuses, messages }) => {
@@ -30,6 +31,7 @@ const TrackGraphic = ({ service, source, statuses, messages }) => {
 
     const generateRows = useCallback((messages) => {
         return messages.flatMap((message, index) => {
+            message.status === 'error' && toggleOpen(true);
             return [
                 {
                     cells: [
@@ -38,7 +40,7 @@ const TrackGraphic = ({ service, source, statuses, messages }) => {
                         },
                         {
                             title: message.message ? truncateString(message.message, 80) : '',
-                            props: { isOpen: false, ariaControls: 'compound-expansion-table-1' }
+                            props: { isOpen: message.message?.length > 0, ariaControls: 'compound-expansion-table-1' }
                         },
                         {
                             title: getLocalDate(
@@ -54,9 +56,9 @@ const TrackGraphic = ({ service, source, statuses, messages }) => {
                     compoundParent: 1,
                     cells: [
                         {
-                            title: <SyntaxHighlighter language='python'>
+                            title: <ClipboardCopy isCode isReadOnly isExpanded variant={ClipboardCopyVariant.expansion}>
                                 {message.message}
-                            </SyntaxHighlighter>,
+                            </ClipboardCopy>,
                             props: { colSpan: 6, className: 'pf-m-no-padding' }
                         }
                     ]
