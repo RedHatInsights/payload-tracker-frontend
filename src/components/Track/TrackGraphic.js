@@ -40,7 +40,7 @@ const TrackGraphic = ({ service, source, statuses, messages }) => {
                         },
                         {
                             title: message.message ? truncateString(message.message, 80) : '',
-                            props: { isOpen: message.message?.length > 0, ariaControls: 'compound-expansion-table-1' }
+                            props: { isOpen: message.status === 'error', ariaControls: 'compound-expansion-table-1' }
                         },
                         {
                             title: getLocalDate(
