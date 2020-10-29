@@ -4,7 +4,6 @@ import { Card, CardBody, CardHeader, Tooltip } from '@patternfly/react-core';
 import React, { useEffect, useRef, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 const SUCCESS_STATUSES = ['success'];
 const ERROR_STATUSES = ['error', 'failed', 'processing_error'];
@@ -94,11 +93,8 @@ const Durations = ({ payloads, durations }) => {
 };
 
 Durations.propTypes = {
-    payloads: PropTypes.array,
-    durations: PropTypes.array
+    payloads: PropTypes.array.isRequired,
+    durations: PropTypes.array.isRequired
 };
 
-export default connect((state) => ({
-    payloads: state.data.payloads,
-    durations: state.data.durations
-}), undefined)(Durations);
+export default Durations;

@@ -45,7 +45,7 @@ export const DEFAULT_PAGE_STATE = {
     endDate: null
 };
 export const DEFAULT_TRACK_PAGE_STATE = {
-    request_id: '',
+    request_id: undefined,
     sort_by: 'date',
     sort_dir: 'desc'
 };

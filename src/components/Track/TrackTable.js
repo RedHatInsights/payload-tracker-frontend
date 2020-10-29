@@ -68,7 +68,7 @@ const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrack
 };
 
 TrackTable.propTypes = {
-    payloads: PropTypes.array,
+    payloads: PropTypes.array.isRequired,
     cells: PropTypes.array,
     sortBy: PropTypes.string,
     sortDir: PropTypes.string,
@@ -77,7 +77,6 @@ TrackTable.propTypes = {
 };
 
 export default connect((state) => ({
-    payloads: state.data.payloads,
     cells: state.cell.cells,
     sortBy: state.track.sort_by,
     sortDir: state.track.sort_dir

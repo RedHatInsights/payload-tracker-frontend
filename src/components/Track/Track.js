@@ -13,6 +13,7 @@ import {
 } from '@patternfly/react-core';
 import React, { useEffect, useRef, useState } from 'react';
 
+import API from '../../utilities/Api';
 import Durations from './Durations';
 import ExportsDropdown from '../ExportsDropdown';
 import OptionsContainer from '../OptionsContainer';
@@ -23,36 +24,63 @@ import TrackTable from './TrackTable';
 import { connect } from 'react-redux';
 import { usePolling } from '../../utilities/Common';
 
-const Track = ({ payloads, request_id, sort_by, sort_dir, getPayloads }) => {
+const Track = ({ request_id, sort_by, sort_dir, addNotification }) => {
     const [activeTabKey, setActiveTabKey] = useState(0);
+    const [payloads, setPayloads] = useState();
+    const [durations, setDurations] = useState();
+    const [loading, setLoading] = useState();
     const currPayloads = useRef();
     const retryCounter = useRef();
 
+    const getData = async (restartCounter = false) => {
+        const resp = await API.get(`${ConstantTypes.API_URL}/v1/payloads/${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
+        if (resp.status === 200) {
+            const { data, duration } = resp.data;
+            if (!currPayloads?.current || JSON.stringify(data) !== JSON.stringify(currPayloads.current)) {
+                setPayloads(data);
+                setDurations(duration);
+                setLoading(data?.length > 0 ? 'fulfilled' : 'rejected');
+                currPayloads.current = data;
+                retryCounter.current = restartCounter ? 0 : retryCounter.current;
+            } else {
+                retryCounter.current += 1;
+            }
+        } else {
+            addNotification('danger', 'Error fetching data', `Request failed with status code ${resp.status}`);
+            setLoading('rejected');
+        }
+    };
+
     useEffect(() => {
-        request_id && getPayloads(`${ConstantTypes.API_URL}/v1/payloads/${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
-        retryCounter.current = 0;
-    }, [request_id, sort_dir, sort_by, getPayloads]);
+        setLoading(request_id && 'pending');
+        currPayloads.current = undefined;
+        request_id && (async () => await getData(true))();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currPayloads, request_id]);
+
+    useEffect(() => {
+        request_id && (async () => await getData())();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sort_by, sort_dir]);
 
     usePolling(() => {
         if ((!retryCounter.current || retryCounter.current < 10) && payloads && request_id) {
             retryCounter.current = retryCounter.current || 0;
-            retryCounter.current = JSON.stringify(currPayloads.current) !== JSON.stringify(payloads) ? 0 : retryCounter.current + 1;
-            currPayloads.current = payloads;
-            getPayloads(`${ConstantTypes.API_URL}/v1/payloads/${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
+            (async () => await getData(true))();
         }
     }, 2000);
 
     return <PageSection>
-        <TrackSearchBar/>
+        <TrackSearchBar loading={loading} payloads={payloads}/>
         {request_id && payloads?.length > 0 && <React.Fragment>
-            <Durations/>
+            {durations && <Durations durations={durations} payloads={payloads}/>}
             <Tabs activeKey={activeTabKey} onSelect={ (e, index) => setActiveTabKey(index) }>
                 <Tab eventKey={0} title='Status'>
                     <Card>
                         <CardHeader>
                         </CardHeader>
                         <CardBody>
-                            <TrackGraphic/>
+                            <TrackGraphic payloads={payloads}/>
                         </CardBody>
                     </Card>
                 </Tab>
@@ -69,7 +97,7 @@ const Track = ({ payloads, request_id, sort_by, sort_dir, getPayloads }) => {
                             </Flex>
                         </CardHeader>
                         <CardBody>
-                            <TrackTable/>
+                            <TrackTable payloads={payloads}/>
                         </CardBody>
                     </Card>
                 </Tab>
@@ -79,18 +107,16 @@ const Track = ({ payloads, request_id, sort_by, sort_dir, getPayloads }) => {
 };
 
 Track.propTypes = {
-    payloads: PropTypes.array,
     request_id: PropTypes.any,
     sort_by: PropTypes.string,
     sort_dir: PropTypes.string,
-    getPayloads: PropTypes.func
+    addNotification: PropTypes.func
 };
 
 export default connect((state) => ({
     request_id: state.track.request_id,
     sort_by: state.track.sort_by,
-    sort_dir: state.track.sort_dir,
-    payloads: state.data.payloads
+    sort_dir: state.track.sort_dir
 }), (dispatch) => ({
-    getPayloads: (url) => dispatch(AppActions.getPayloadTrack(url))
+    addNotification: (type, title, content) => dispatch(AppActions.addMessage(type, title, content))
 }))(Track);
