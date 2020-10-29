@@ -72,7 +72,7 @@ const Track = ({ request_id, sort_by, sort_dir, addNotification }) => {
 
     return <PageSection>
         <TrackSearchBar loading={loading} payloads={payloads}/>
-        {request_id && payloads?.length > 0 && <React.Fragment>
+        {loading === 'fulfilled' && <React.Fragment>
             {durations && <Durations durations={durations} payloads={payloads}/>}
             <Tabs activeKey={activeTabKey} onSelect={ (e, index) => setActiveTabKey(index) }>
                 <Tab eventKey={0} title='Status'>
