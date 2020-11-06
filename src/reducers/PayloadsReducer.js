@@ -7,7 +7,7 @@ import history from '../history';
 
 const { location } = history;
 
-const determineFilters = () => {
+const determineFilters = (location) => {
     return getFilterTypes(location.pathname).reduce((arr, filter) => {
         const value = getValueFromURL(location, filter);
         return value ? [...arr, { [filter]: value }] : arr;
@@ -15,7 +15,7 @@ const determineFilters = () => {
 };
 
 const initialState = {
-    filters: determineFilters() || ConstantTypes.DEFAULT_PAGE_STATE.filters,
+    filters: determineFilters(location) || ConstantTypes.DEFAULT_PAGE_STATE.filters,
     page: getValueFromURL(location, 'page') || ConstantTypes.DEFAULT_PAGE_STATE.page,
     page_size: getValueFromURL(location, 'page_size') || ConstantTypes.DEFAULT_PAGE_STATE.page_size,
     startDate: getValueFromURL(location, 'start_date') || ConstantTypes.DEFAULT_PAGE_STATE.startDate,
@@ -71,7 +71,7 @@ const PayloadsReducer = (state = initialState, action) => {
         case LOCATION_CHANGE:
             return action.payload.location.pathname === state.location.pathname ? state : {
                 ...state,
-                filters: determineFilters(),
+                filters: determineFilters(action.payload.location),
                 page: ConstantTypes.DEFAULT_PAGE_STATE.page,
                 page_size: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
                 location: action.payload.location,

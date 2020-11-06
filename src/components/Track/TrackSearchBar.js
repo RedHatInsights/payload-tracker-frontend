@@ -30,8 +30,6 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
     const [account, setAccount] = useState('');
     const [inventory_id, setInventoryID] = useState('');
 
-    const clickHandler = (url) => push(url);
-
     const getAccount = useCallback(() => {
         const payloadsWithAccount = payloads.filter(p => p.account);
         return payloadsWithAccount.length > 0 ? payloadsWithAccount[0].account : '';
@@ -93,7 +91,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => clickHandler(`/payloads?account=${account}`) }
+                            onClick={() => push(`/payloads?account=${account}`)}
                         >
                             See more Requests for this Account
                         </Button>
@@ -109,7 +107,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => clickHandler(`/payloads?inventory_id=${inventory_id}`)}
+                            onClick={() => push(`/payloads?inventory_id=${inventory_id}`)}
                         >
                             See more Requests for this ID
                         </Button>

@@ -36,7 +36,6 @@ const TrackReducer = (state = initialState, action) => {
                 ...state,
                 sort_dir: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir,
                 sort_by: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by,
-                activeTabKey: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.activeTabKey,
                 request_id: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.request_id
             };
         default:
