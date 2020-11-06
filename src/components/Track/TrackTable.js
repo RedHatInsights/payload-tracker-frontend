@@ -2,18 +2,16 @@ import * as ActionTypes from '../../actions';
 
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableHeader, TableVariant } from '@patternfly/react-table';
+import { getLocalDate, truncateString } from '../../utilities/Common';
 
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getLocalDate } from '../../utilities/Common';
 
 const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrackSortDir }) => {
 
     const [rows, setRows] = useState([]);
     const [cols, setCols] = useState([]);
-
-    const truncate = (value) => value.length > 12 ? `${value.substring(0, 12)}...` : value;
 
     const generateCells = (cells) => cells.filter(cell => cell.isActive);
 
@@ -31,7 +29,7 @@ const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrack
                             )
                         };
                     } else {
-                        return { title: truncate(value) };
+                        return { title: truncateString(value, 12) };
                     }
                 } else {
                     return {};

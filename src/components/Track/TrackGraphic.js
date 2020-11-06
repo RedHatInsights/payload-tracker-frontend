@@ -16,18 +16,16 @@ import {
     TableVariant,
     compoundExpand
 } from '@patternfly/react-table';
+import { getLocalDate, truncateString } from '../../utilities/Common';
 
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
-import { getLocalDate } from '../../utilities/Common';
 
 const TrackGraphic = ({ service, source, statuses, messages }) => {
 
     const [isOpen, toggleOpen] = useState(false);
     const [rows, setRows] = useState([]);
     const [cells, setCells] = useState([]);
-
-    const truncateString = (string, chars) => string.length > chars ? string.substring(0, chars) + '...' : string;
 
     const generateRows = useCallback((messages) => {
         return messages.flatMap((message, index) => {

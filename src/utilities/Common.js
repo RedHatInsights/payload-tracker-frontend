@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 
 export const contains = (arr, n) => arr.filter(v => v === n).length > 0;
 
+export const truncateString = (string, chars) => string.length > chars ? string.substring(0, chars) + '...' : string;
+
 export const getObjFromSearch = (search) => {
     return Object.fromEntries(search.slice(1).split('&').map(item => item.split('=')));
 };

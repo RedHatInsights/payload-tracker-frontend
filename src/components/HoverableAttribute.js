@@ -7,6 +7,7 @@ import { PlusCircleIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { truncateString } from '../utilities/Common';
 
 const HoverableAttribute = ({ type, filter, value, push, setRequestID, stageFilters }) => {
 
@@ -29,7 +30,7 @@ const HoverableAttribute = ({ type, filter, value, push, setRequestID, stageFilt
                 onMouseOver={ () => setHover(true) }
                 onMouseOut={ () => setHover(false) }
             >
-                {`${value.substring(0, 12)}...`} {isHovered ? <PlusCircleIcon/> : null }
+                {truncateString(value, 12)} {isHovered ? <PlusCircleIcon/> : null }
             </Button>
         </Tooltip> : <Button
             onClick={clickHandler}
