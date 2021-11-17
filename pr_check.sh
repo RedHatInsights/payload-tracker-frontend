@@ -5,6 +5,7 @@ COMPONENT_NAME="payload-tracker-frontend"
 IMAGE="quay.io/cloudservices/payload-tracker-frontend"
 
 # lint the project. We need more but this is all we have for now
+npm install
 npm run lint
 
 if [ $? -eq 0 ]; then
