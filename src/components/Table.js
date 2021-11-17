@@ -58,8 +58,8 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
                     } else if (cell.isDate) {
                         return {
                             title: getLocalDate(
-                                DateTime.fromFormat(
-                                    value, 'yyyy-MM-dd H:mm:ss.uZZ'
+                                DateTime.fromISO(
+                                    value
                                 ).toJSDate()
                             )
                         };
