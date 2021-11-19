@@ -42,8 +42,8 @@ const TrackGraphic = ({ service, source, statuses, messages }) => {
                         },
                         {
                             title: getLocalDate(
-                                DateTime.fromISO(
-                                    message.date
+                                DateTime.fromFormat(
+                                    message.date, 'yyyy-mm-dd H:mm:ss.uZZ'
                                 ).toJSDate()
                             )
                         }
