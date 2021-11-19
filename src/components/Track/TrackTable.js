@@ -23,8 +23,8 @@ const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrack
                     if (cell.isDate) {
                         return {
                             title: getLocalDate(
-                                DateTime.fromFormat(
-                                    value, 'yyyy-MM-dd H:mm:ss.uZZ'
+                                DateTime.fromISO(
+                                    value
                                 ).toJSDate()
                             )
                         };
