@@ -4,12 +4,11 @@
   "private": true,
   "scripts": {
     "prebuild": "npm run clean",
-    "dr:surge": "node dr-surge.js",
-    "build": "ENV=production webpack --mode production --config webpack.common.js",
-    "start": "ENV=development webpack serve --mode development --config webpack.common.js",
+    "postbuild": "node dr-surge.js",
+    "build": "ENV=production webpack --mode production --config webpack.config.js",
+    "start": "ENV=development webpack serve --mode development --config webpack.config.js",
     "lint": "eslint --ext .js ./src/",
-    "build:bundle-profile": "webpack --config webpack.prod.js --profile --json > stats.json",
-    "bundle-profile:analyze": "npm run build:bundle-profile && webpack-bundle-analyzer ./stats.json",
+    "analyze": "ANALYZE=true npm run build",
     "clean": "rimraf dist"
   },
   "dependencies": {
