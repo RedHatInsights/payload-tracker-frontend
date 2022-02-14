@@ -3,12 +3,12 @@ import { PageHeader, PageHeaderTools } from '@patternfly/react-core';
 import DateRangeFilter from './DateFilter/DateRangeFilter';
 import PropTypes from 'prop-types';
 import React from 'react';
-import newlogo from '../static/images/rh-new-logo.svg';
+
+import '../static/images/rh-new-logo.svg';
 
 const MainHeader = ({ isNavOpen, toggleNav, pathname }) => {
-
     return <PageHeader
-        logo={<span dangerouslySetInnerHTML={{ __html: newlogo }} />}
+        logo={<img src="/public/rh-new-logo.svg" />}
         logoProps={{
             href: '/payloads',
             target: '_blank'
