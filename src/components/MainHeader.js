@@ -4,6 +4,8 @@ import DateRangeFilter from './DateFilter/DateRangeFilter';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import '../static/images/rh-new-logo.svg';
+
 const MainHeader = ({ isNavOpen, toggleNav, pathname }) => {
     return <PageHeader
         logo={<img src="/public/rh-new-logo.svg" />}
