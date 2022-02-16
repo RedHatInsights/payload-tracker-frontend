@@ -40,13 +40,21 @@ module.exports = {
         }
     },
     devServer: {
-        https: false,
+        https: Boolean(process.env.PROXY),
         allowedHosts: 'all',
         port: process.env.PORT || 3000,
         historyApiFallback: true,
         client: {
             overlay: false
-        }
+        },
+        ...(process.env.PROXY && { proxy: {
+            '/api': {
+                target: 'https://payload-tracker-frontend-payload-tracker-stage.apps.crcs02ue1.urby.p1.openshiftapps.com/',
+                changeOrigin: true,
+                autoRewrite: true,
+                secure: true
+            }
+        } })
     },
     module: {
         rules: [
@@ -72,7 +80,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({ template: './src/index.html' }),
-        new EnvironmentPlugin({ ENV: '' }),
+        new EnvironmentPlugin({ ENV: '', PROXY: '' }),
         ...(process.env.ANALYZE === 'true' ? [new BundleAnalyzerPlugin()] : [])
     ]
 };
