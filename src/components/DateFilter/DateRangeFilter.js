@@ -1,4 +1,3 @@
-import 'react-day-picker/lib/style.css';
 import './DateRangeFilter.scss';
 
 import * as AppActions from '../../actions';
@@ -15,14 +14,14 @@ import {
     Radio,
     Tab,
     Tabs,
-    Text
+    Text,
+    CalendarMonth
 } from '@patternfly/react-core';
 import { CaretLeftIcon, CaretRightIcon, ClockIcon } from '@patternfly/react-icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { quickFilters, useQuickFilters, useStacks } from './utils';
 
 import DateTextInput from './DateTextInput';
-import DayPicker from 'react-day-picker';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getLocalDate } from '../../utilities/Common';
@@ -73,10 +72,11 @@ const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMess
 
     return <React.Fragment>
         {isOpen && <Modal
+            className='pt-c-filters__date--modal'
             isOpen={isOpen}
             onClose={() => setOpen(!isOpen)}
             title='Set time range'
-            isFooterLeftAligned
+            variant='large'
             actions={[
                 <Button
                     key="confirm"
@@ -139,8 +139,9 @@ const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMess
                                                 />
                                             </FlexItem>
                                             <FlexItem>
-                                                <DayPicker onDayClick={(day) => fromRef.current.setValue(day)}/>
-                                            </FlexItem>
+                                                <CalendarMonth
+                                                    onChange={(day) => fromRef.current.setValue(day)}
+                                                />                                            </FlexItem>
                                         </Flex>
                                     </FormGroup>
                                     <FormGroup label='To'>
@@ -153,8 +154,8 @@ const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMess
                                                 />
                                             </FlexItem>
                                             <FlexItem>
-                                                <DayPicker
-                                                    onDayClick={(day) => toRef.current.setValue(day)}
+                                                <CalendarMonth
+                                                    onChange={(day) => toRef.current.setValue(day)}
                                                 />
                                             </FlexItem>
                                         </Flex>
