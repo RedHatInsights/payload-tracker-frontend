@@ -18,3 +18,15 @@
 .pt-c-filters__date--quick {
     width: 100%;
 }
+
+@media (min-width: 993px) {
+    .pt-c-filters__date--modal {
+        width: 800px !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .pt-c-filters__date--modal {
+        width: 450px !important;
+    }
+}
