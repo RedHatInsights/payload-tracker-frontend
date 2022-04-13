@@ -28,12 +28,12 @@ import { getLocalDate } from '../../utilities/Common';
 
 const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMessage, startDate, endDate, recentTimeType }) => {
     const defaultFilters = quickFilters();
-    const oneDayRange = defaultFilters.filter(({ start, end, title }) => title === '24 hours' && ({ start, end }))?.[0];
+    const defaultRange = defaultFilters.filter(({ start, end, title }) => title === '15 minutes' && ({ start, end }))?.[0];
     const [isOpen, setOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
     const [type, setType] = useState(recentTimeType);
     const [isValidated, setValidation] = useState(true);
-    const { active, leftStack, toggleLeft, rightStack, toggleRight, updateData } = useStacks(oneDayRange);
+    const { active, leftStack, toggleLeft, rightStack, toggleRight, updateData } = useStacks(defaultRange);
     const { filters, getFilterTitle, updateFilters } = useQuickFilters(defaultFilters, (filter) => {
         const res = filters.filter(({ title }) => title === filter)?.[0];
         if (res) {
