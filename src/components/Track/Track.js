@@ -33,7 +33,7 @@ const Track = ({ request_id, sort_by, sort_dir, addNotification }) => {
     const retryCounter = useRef();
 
     const getData = async (restartCounter = false) => {
-        const resp = await API.get(`${ConstantTypes.API_URL}/api/v1/payloads/${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
+        const resp = await API.get(`${ConstantTypes.API_URL}/app/payload-tracker/api/v1/payloads/${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
         if (resp.status === 200) {
             const { data, duration } = resp.data;
             if (!currPayloads?.current || JSON.stringify(data) !== JSON.stringify(currPayloads.current)) {

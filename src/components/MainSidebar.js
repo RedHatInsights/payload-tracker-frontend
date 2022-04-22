@@ -28,29 +28,29 @@ const MainSidebar = ({ activeItem, onClickFn, isNavOpen, setTrackRequestID, loca
         nav = {<Nav>
             <NavList>
                 <NavItem
-                    to='/payloads'
+                    to='/app/payload-tracker/payloads'
                     itemId={ PAYLOADS_ITEM }
                     preventDefault
                     isActive={ activeItem === PAYLOADS_ITEM }
-                    onClick={ () => clickHandler('/payloads', search) }
+                    onClick={ () => clickHandler('/app/payload-tracker/payloads', search) }
                 >
                     Payloads
                 </NavItem>
                 <NavItem
-                    to='/statuses'
+                    to='/app/payload-tracker/statuses'
                     itemId={ STATUSES_ITEM }
                     preventDefault
                     isActive={ activeItem === STATUSES_ITEM }
-                    onClick={ () => clickHandler('/statuses', search) }
+                    onClick={ () => clickHandler('/app/payload-tracker/statuses', search) }
                 >
                     Statuses
                 </NavItem>
                 <NavItem
-                    to='/track'
+                    to='/app/payload-trackers/track'
                     itemId={ TRACK_ITEM }
                     preventDefault
                     isActive={ activeItem === TRACK_ITEM }
-                    onClick={ () => clickHandler('/track', '') }
+                    onClick={ () => clickHandler('/app/payload-tracker/track', '') }
                 >
                     Track
                 </NavItem>

@@ -32,7 +32,7 @@ const TrackReducer = (state = initialState, action) => {
                 sort_dir: action.payload
             };
         case LOCATION_CHANGE:
-            return action.payload.location.pathname.indexOf('/track') >= 0 ? state : {
+            return action.payload.location.pathname.indexOf('/app/payload-tracker/track') >= 0 ? state : {
                 ...state,
                 sort_dir: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir,
                 sort_by: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by,
