@@ -49,7 +49,7 @@ module.exports = {
         },
         ...(process.env.PROXY && { proxy: {
             '/api': {
-                target: 'https://internal.console.stage.redhat.com/app/payload-tracker/',
+                target: 'https://internal.console.stage.redhat.com/',
                 changeOrigin: true,
                 autoRewrite: true,
                 secure: true
