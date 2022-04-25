@@ -8,7 +8,7 @@ module.exports = {
         path: path.join(__dirname, './dist'),
         filename: 'index.[chunkhash].js',
         chunkFilename: `js/[name].[chunkhash].js`,
-        publicPath: '/'
+        publicPath: './'
     },
     optimization: {
         splitChunks: {
