@@ -16,7 +16,7 @@ const HoverableAttribute = ({ type, filter, value, push, setRequestID, stageFilt
     const clickHandler = ()  => {
         if (type === 'track') {
             setRequestID(value);
-            push(`/track/${value}`);
+            push(`/app/payload-tracker/track/${value}`);
         } else if (type === 'filter') {
             stageFilters({ [filter]: value });
         } else { return null; }

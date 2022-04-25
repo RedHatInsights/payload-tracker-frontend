@@ -91,7 +91,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => push(`/payloads?account=${account}`)}
+                            onClick={() => push(`/app/payload-tracker/payloads?account=${account}`)}
                         >
                             See more Requests for this Account
                         </Button>
@@ -107,7 +107,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => push(`/payloads?inventory_id=${inventory_id}`)}
+                            onClick={() => push(`/app/payload-tracker/payloads?inventory_id=${inventory_id}`)}
                         >
                             See more Requests for this ID
                         </Button>

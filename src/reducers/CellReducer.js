@@ -6,7 +6,7 @@ import history from '../history';
 
 const { location } = history;
 
-const DEFAULT_CELL_STATE = location.pathname === '/payloads' ?
+const DEFAULT_CELL_STATE = location.pathname === '/app/payload-tracker/payloads' ?
     ConstantTypes.DEFAULT_PAYLOAD_CELL_STATE :
     ConstantTypes.DEFAULT_STATUSES_CELL_STATE;
 

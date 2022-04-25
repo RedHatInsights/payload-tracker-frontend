@@ -10,7 +10,7 @@ const MainHeader = ({ isNavOpen, toggleNav, pathname }) => {
     return <PageHeader
         logo={<img src="/public/rh-new-logo.svg" />}
         logoProps={{
-            href: '/payloads',
+            href: '/app/payload-tracker/payloads',
             target: '_blank'
         }}
         headerTools={ <PageHeaderTools>

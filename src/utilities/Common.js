@@ -20,9 +20,9 @@ export const getSearchFromObj = (obj) => {
 export const getFilterTypes = (pathname) => {
     if (pathname === '*') {
         return [...ConstantTypes.PAYLOAD_FILTER_TYPES, ...ConstantTypes.STATUS_FILTER_TYPES];
-    } else if (pathname === '/payloads') {
+    } else if (pathname === '/app/payload-tracker/payloads') {
         return ConstantTypes.PAYLOAD_FILTER_TYPES;
-    } else if (pathname === '/statuses') {
+    } else if (pathname === '/app/payload-tracker/statuses') {
         return ConstantTypes.STATUS_FILTER_TYPES;
     } else {
         return [];

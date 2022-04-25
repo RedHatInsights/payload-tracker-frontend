@@ -23,8 +23,8 @@ const App = ({ pathname, push }) => {
     const onClickFn = (url) => { push(url); toggleNav(false); };
 
     useEffect(() => {
-        pathname.indexOf('/track') >= 0 ? setActiveItem(TRACK_ITEM) : (
-            pathname === '/payloads' ? setActiveItem(PAYLOADS_ITEM) :
+        pathname.indexOf('/app/payload-tracker/track') >= 0 ? setActiveItem(TRACK_ITEM) : (
+            pathname === '/app/payload-tracker/payloads' ? setActiveItem(PAYLOADS_ITEM) :
                 setActiveItem(STATUSES_ITEM)
         );
     }, [pathname]);
@@ -34,11 +34,11 @@ const App = ({ pathname, push }) => {
         sidebar={<MainSidebar activeItem={activeItem} onClickFn={onClickFn} isNavOpen={isNavOpen}/>}
     >
         <Switch>
-            <Route path='/' exact render={() => <Redirect to='/payloads'/>}/>
-            <Route path='/payloads' component={Payloads}/>
-            <Route path='/statuses' component={Statuses}/>
-            <Route exact path='/track' component={Track}/>
-            <Route path='/track/:request_id' component={Track}/>
+            <Route path='/app/payload-tracker' exact render={() => <Redirect to='/app/payload-tracker/payloads'/>}/>
+            <Route path='/app/payload-tracker/payloads' component={Payloads}/>
+            <Route path='/app/payload-tracker/statuses' component={Statuses}/>
+            <Route exact path='/app/payload-tracker/track' component={Track}/>
+            <Route path='/app/payload-tracker/track/:request_id' component={Track}/>
         </Switch>
     </Page>;
 
