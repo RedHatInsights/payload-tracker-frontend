@@ -8,7 +8,7 @@ module.exports = {
         path: path.join(__dirname, './dist'),
         filename: 'index.[chunkhash].js',
         chunkFilename: `js/[name].[chunkhash].js`,
-        publicPath: './'
+        publicPath: '/'
     },
     optimization: {
         splitChunks: {
@@ -49,7 +49,7 @@ module.exports = {
         },
         ...(process.env.PROXY && { proxy: {
             '/api': {
-                target: 'https://payload-tracker-frontend-payload-tracker-stage.apps.crcs02ue1.urby.p1.openshiftapps.com/',
+                target: 'https://internal.console.stage.redhat.com/app/payload-tracker/',
                 changeOrigin: true,
                 autoRewrite: true,
                 secure: true
