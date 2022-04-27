@@ -29,8 +29,8 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
     const generateCells = (cells) => cells.filter(cell => cell.isActive);
 
     const generateRows = (payloads, cells) => {
-        return payloads.map(payload => {
-            return cells.map(cell => {
+        return payloads?.map(payload => {
+            return cells?.map(cell => {
                 const value = payload?.[cell.title];
                 if (value) {
                     if (cell.isFilterable) {
