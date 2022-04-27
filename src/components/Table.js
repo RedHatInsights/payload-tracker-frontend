@@ -100,7 +100,7 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
             <TableHeader/>
             <TableBody/>
         </Table>}
-        {!loading && formattedCells && formattedRows && payloads.length === 0 && <Bullseye>
+        {!loading && formattedCells && formattedRows && (!payloads || payloads.length) && <Bullseye>
             <EmptyState>
                 <EmptyStateIcon icon={SearchIcon}/>
                 <Title headingLevel="h4" size="lg">
