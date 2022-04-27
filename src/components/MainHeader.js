@@ -8,7 +8,7 @@ import '../static/images/rh-new-logo.svg';
 
 const MainHeader = ({ isNavOpen, toggleNav, pathname }) => {
     return <PageHeader
-        logo={<img src="/public/rh-new-logo.svg" />}
+        logo={<img src="public/rh-new-logo.svg" />}
         logoProps={{
             href: '/app/payload-tracker/payloads',
             target: '_blank'
