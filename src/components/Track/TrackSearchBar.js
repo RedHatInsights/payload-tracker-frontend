@@ -17,7 +17,7 @@ import {
     TextVariants,
     Title
 } from '@patternfly/react-core';
-import { PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
+import { DownloadIcon, PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
@@ -80,6 +80,16 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                 <div className='pt-c-track__header--item'>
                     <span className='pt-c-track__header--title'> request_id: </span>
                     <span> {request_id} </span>
+                    {
+                        <Button
+                            className='pt-c-track__header--button'
+                            variant='link'
+                            isInline
+                            icon={<DownloadIcon/>}
+                        >
+                            Download Archive
+                        </Button>
+                    }
                 </div>
                 {account && <div>
                     <hr/>
