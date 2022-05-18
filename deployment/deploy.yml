@@ -84,45 +84,6 @@ objects:
                 topologyKey: kubernetes.io/hostname
               weight: 99
         containers:
-        - args:
-          - --https-address=:8443
-          - --provider=openshift
-          - --openshift-service-account=payload-tracker-frontend
-          - --upstream=http://localhost:8080
-          - --tls-cert=/etc/tls/private/tls.crt
-          - --tls-key=/etc/tls/private/tls.key
-          - --cookie-secret-file=/etc/proxy/secrets/session_secret
-          image: ${OAUTH_IMAGE}:${OAUTH_IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            initialDelaySeconds: 15
-            tcpSocket:
-              port: 8443
-            timeoutSeconds: 1
-          name: payload-tracker-frontend-proxy
-          ports:
-          - containerPort: 8443
-            name: web
-            protocol: TCP
-          readinessProbe:
-            initialDelaySeconds: 15
-            tcpSocket:
-              port: 8443
-            timeoutSeconds: 1
-          resources:
-            limits:
-              cpu: ${CPU_LIMIT}
-              memory: ${MEMORY_LIMIT}
-            requests:
-              cpu: 200m
-              memory: 256Mi
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-          - mountPath: /etc/proxy/secrets
-            name: payload-tracker-frontend-cookie
-          - mountPath: /etc/tls/private
-            name: payload-tracker-frontend-proxy-tls
         - image: quay.io/cloudservices/payload-tracker-frontend:${IMAGE_TAG}
           imagePullPolicy: IfNotPresent
           livenessProbe:
@@ -190,10 +151,6 @@ objects:
     name: payload-tracker-frontend
   spec:
     ports:
-    - name: proxy-port
-      port: 443
-      protocol: TCP
-      targetPort: 8443
     - name: 8080-tcp
       port: 8080
       protocol: TCP
