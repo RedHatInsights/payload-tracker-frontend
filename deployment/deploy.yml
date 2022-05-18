@@ -4,16 +4,6 @@ metadata:
   name: payload-tracker-frontend
 objects:
 - apiVersion: v1
-  imagePullSecrets:
-  - name: quay-cloudservices-pull
-  kind: ServiceAccount
-  metadata:
-    annotations:
-      serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"payload-tracker-frontend"}}'
-    name: payload-tracker-frontend
-  secrets:
-  - name: quay-cloudservices-pull
-- apiVersion: v1
   data:
     nginx.conf: "worker_processes  2;\nerror_log  /var/log/nginx/error.log warn;\n\
       pid /tmp/nginx.pid;\nevents {\n    worker_connections  1024;\n}\nhttp {\n  \
@@ -84,45 +74,6 @@ objects:
                 topologyKey: kubernetes.io/hostname
               weight: 99
         containers:
-        - args:
-          - --https-address=:8443
-          - --provider=openshift
-          - --openshift-service-account=payload-tracker-frontend
-          - --upstream=http://localhost:8080
-          - --tls-cert=/etc/tls/private/tls.crt
-          - --tls-key=/etc/tls/private/tls.key
-          - --cookie-secret-file=/etc/proxy/secrets/session_secret
-          image: ${OAUTH_IMAGE}:${OAUTH_IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            initialDelaySeconds: 15
-            tcpSocket:
-              port: 8443
-            timeoutSeconds: 1
-          name: payload-tracker-frontend-proxy
-          ports:
-          - containerPort: 8443
-            name: web
-            protocol: TCP
-          readinessProbe:
-            initialDelaySeconds: 15
-            tcpSocket:
-              port: 8443
-            timeoutSeconds: 1
-          resources:
-            limits:
-              cpu: ${CPU_LIMIT}
-              memory: ${MEMORY_LIMIT}
-            requests:
-              cpu: 200m
-              memory: 256Mi
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-          - mountPath: /etc/proxy/secrets
-            name: payload-tracker-frontend-cookie
-          - mountPath: /etc/tls/private
-            name: payload-tracker-frontend-proxy-tls
         - image: quay.io/cloudservices/payload-tracker-frontend:${IMAGE_TAG}
           imagePullPolicy: IfNotPresent
           livenessProbe:
@@ -164,36 +115,21 @@ objects:
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
-        serviceAccount: payload-tracker-frontend
-        serviceAccountName: payload-tracker-frontend
         terminationGracePeriodSeconds: 30
         volumes:
         - configMap:
             name: payload-tracker-nginx-conf
           name: payload-tracker-nginx-conf
-        - name: payload-tracker-frontend-cookie
-          secret:
-            defaultMode: 420
-            secretName: payload-tracker-frontend-cookie
-        - name: payload-tracker-frontend-proxy-tls
-          secret:
-            defaultMode: 420
-            secretName: payload-tracker-frontend-auth
 - apiVersion: v1
   kind: Service
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftWebConsole
-      service.alpha.openshift.io/serving-cert-secret-name: payload-tracker-frontend-auth
     labels:
       app: payload-tracker-frontend
     name: payload-tracker-frontend
   spec:
     ports:
-    - name: proxy-port
-      port: 443
-      protocol: TCP
-      targetPort: 8443
     - name: 8080-tcp
       port: 8080
       protocol: TCP
@@ -202,23 +138,6 @@ objects:
       app: payload-tracker-frontend
     sessionAffinity: None
     type: ClusterIP
-- apiVersion: route.openshift.io/v1
-  kind: Route
-  metadata:
-    labels:
-      app: payload-tracker-frontend
-    name: payload-tracker-frontend
-  spec:
-    port:
-      targetPort: proxy-port
-    tls:
-      insecureEdgeTerminationPolicy: Redirect
-      termination: reencrypt
-    to:
-      kind: Service
-      name: payload-tracker-frontend
-      weight: 100
-    wildcardPolicy: None
 parameters:
 - description: Name of the Payload Tracker URL for the API
   name: PAYLOAD_TRACKER_URL
@@ -229,10 +148,6 @@ parameters:
 - description: memory limit of service
   name: MEMORY_LIMIT
   value: 512Mi
-- name: OAUTH_IMAGE
-  value: registry.reg-aws.openshift.com:443/openshift3/oauth-proxy
-- name: OAUTH_IMAGE_TAG
-  value: v3.11.43
 - description: The number of replicas to use for the prometheus deployment
   name: REPLICAS
   value: '1'
