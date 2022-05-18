@@ -13,7 +13,7 @@ import Table from '../Table';
 import { connect } from 'react-redux';
 import { getValueFromURL } from '../../utilities/Common';
 
-const queryBase = `${ConstantTypes.API_URL}/app/payload-tracker/api/v1/statuses?`;
+const queryBase = `${ConstantTypes.API_URL}/api/v1/statuses?`;
 
 const Statuses = ({
     getStatuses, setSortDir, setSortBy, location, page, page_size, filters, startDate, endDate, recentTimeType

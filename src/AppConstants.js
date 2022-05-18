@@ -1,6 +1,6 @@
 import { sortable } from '@patternfly/react-table';
 
-export const API_URL = process.env.ENV === 'development' && !process.env.PROXY ? 'http://localhost:8080' : '';
+export const API_URL = process.env.ENV === 'development' && !process.env.PROXY ? 'http://localhost:8080' : '/app/payload-tracker';
 
 export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
 export const TOGGLE_NAV = 'TOGGLE_NAV';
