@@ -6,9 +6,6 @@ import { API_URL, PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from './AppConstant
 import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import API from './utilities/Api';
-import * as ConstantTypes from './AppConstants';
-
 import MainHeader from './components/MainHeader';
 import MainSidebar from './components/MainSidebar';
 import { Page } from '@patternfly/react-core';
@@ -20,7 +17,7 @@ import Track from './components/Track/Track';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
-const App = ({ pathname, push, hasDownloadRole, setHasDownloadRole }) => {
+const App = ({ pathname, push, setHasDownloadRole }) => {
 
     const [isNavOpen, toggleNav] = useState(false);
     const [activeItem, setActiveItem] = useState(PAYLOADS_ITEM);
@@ -38,11 +35,11 @@ const App = ({ pathname, push, hasDownloadRole, setHasDownloadRole }) => {
     useEffect(() => {
         const getDownloadRole = async () => {
             const resp = await API.get(
-                `${ConstantTypes.API_URL}/api/v1/roles/archiveLink`);
+                `${API_URL}/api/v1/roles/archiveLink`);
             if (resp.status === 200) {
                 setHasDownloadRole(true);
             }
-        }
+        };
 
         getDownloadRole();
     }, []);
@@ -65,13 +62,11 @@ const App = ({ pathname, push, hasDownloadRole, setHasDownloadRole }) => {
 App.propTypes = {
     pathname: PropTypes.string,
     push: PropTypes.func,
-    hasDownloadRole: PropTypes.bool,
     setHasDownloadRole: PropTypes.func
 };
 
 export default connect((state) => ({
     pathname: state.router.location.pathname,
-    hasDownloadRole: state.track.has_download_role
 }), (dispatch) => ({
     push: url => dispatch(push(url)),
     setHasDownloadRole: (hasDownloadRole) => dispatch(AppActions.setHasDownloadRole(hasDownloadRole))

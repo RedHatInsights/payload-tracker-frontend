@@ -44,7 +44,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, 
     }, [payloads]);
 
     const handleArchiveDownload = async () => {
-        console.log("fetching archive download link for request_id: " + request_id);
+        console.log('fetching archive download link for request_id: ' + request_id);
         API.get(`${ConstantTypes.API_URL}/api/v1/payloads/${request_id}/archiveLink`)
         .then(
             resp => {
@@ -57,7 +57,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, 
                 window.open(archiveDownloadLink, '_blank');
             }
         );
-    }
+    };
 
     useEffect(() => {
         payloads && setAccount(getAccount());
