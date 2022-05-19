@@ -49,7 +49,6 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, 
             resp => {
                 let archiveDownloadLink = resp.data.url;
                 if (process.env.ENV) {
-                    // remove everything before :9000
                     archiveDownloadLink = 'http://localhost' + archiveDownloadLink.substring(archiveDownloadLink.indexOf(':9000'));
                 }
 
