@@ -115,3 +115,8 @@ export const setTrackSortDir = (sort_dir) => ({
     type: ActionTypes.SET_TRACK_SORT_DIR,
     payload: sort_dir
 });
+
+export const setHasDownloadRole = (has_download_role) => ({
+    type: ActionTypes.SET_HAS_DOWNLOAD_ROLE,
+    payload: has_download_role
+});

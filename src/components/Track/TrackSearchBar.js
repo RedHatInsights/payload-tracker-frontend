@@ -40,6 +40,10 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
         return payloadsWithID.length > 0 ? payloadsWithID[0].inventory_id : '';
     }, [payloads]);
 
+    const handleArchiveDownload = async () => {
+        console.log("fetching archive download link for request_id: " + request_id);
+    }
+
     useEffect(() => {
         payloads && setAccount(getAccount());
         payloads && setInventoryID(getInventoryID());
@@ -86,8 +90,9 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                             variant='link'
                             isInline
                             icon={<DownloadIcon/>}
+                            onClick={handleArchiveDownload}
                         >
-                            Download Archive
+                            Download Archive {request_id}
                         </Button>
                     }
                 </div>
