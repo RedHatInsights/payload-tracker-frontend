@@ -46,17 +46,17 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, 
     const handleArchiveDownload = async () => {
         console.log("fetching archive download link for request_id: " + request_id);
         API.get(`${ConstantTypes.API_URL}/api/v1/payloads/${request_id}/archiveLink`)
-            .then(
-                resp => {
-                    let archiveDownloadLink = resp.data.url;
-                    if (process.env.ENV) {
-                        // remove everything before :9000
-                        archiveDownloadLink = 'http://localhost'+archiveDownloadLink.substring(archiveDownloadLink.indexOf(':9000'));
-                    }
-                    window.open(archiveDownloadLink, '_blank');
+        .then(
+            resp => {
+                let archiveDownloadLink = resp.data.url;
+                if (process.env.ENV) {
+                    // remove everything before :9000
+                    archiveDownloadLink = 'http://localhost' + archiveDownloadLink.substring(archiveDownloadLink.indexOf(':9000'));
                 }
-            )
-            .catch((err)=>console.log(err));
+
+                window.open(archiveDownloadLink, '_blank');
+            }
+        );
     }
 
     useEffect(() => {
