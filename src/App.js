@@ -5,6 +5,7 @@ import * as AppActions from './actions';
 import { API_URL, PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from './AppConstants';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import API from './utilities/Api';
 
 import MainHeader from './components/MainHeader';
 import MainSidebar from './components/MainSidebar';
@@ -42,7 +43,7 @@ const App = ({ pathname, push, setHasDownloadRole }) => {
         };
 
         getDownloadRole();
-    }, []);
+    }, [setHasDownloadRole]);
 
     return <Page
         header={<MainHeader isNavOpen={isNavOpen} toggleNav={toggleNav} pathname={pathname}/>}
@@ -66,7 +67,7 @@ App.propTypes = {
 };
 
 export default connect((state) => ({
-    pathname: state.router.location.pathname,
+    pathname: state.router.location.pathname
 }), (dispatch) => ({
     push: url => dispatch(push(url)),
     setHasDownloadRole: (hasDownloadRole) => dispatch(AppActions.setHasDownloadRole(hasDownloadRole))
