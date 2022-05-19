@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
-const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) => {
+const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, setRequestID }) => {
 
     const [id, updateID] = useState();
     const [account, setAccount] = useState('');
@@ -85,6 +85,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                     <span className='pt-c-track__header--title'> request_id: </span>
                     <span> {request_id} </span>
                     {
+                        hasDownloadRole &&
                         <Button
                             className='pt-c-track__header--button'
                             variant='link'
@@ -92,7 +93,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                             icon={<DownloadIcon/>}
                             onClick={handleArchiveDownload}
                         >
-                            Download Archive {request_id}
+                            Download Archive
                         </Button>
                     }
                 </div>
@@ -151,11 +152,13 @@ TrackSearchBar.propTypes = {
     request_id: PropTypes.string,
     payloads: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
+    hasDownloadRole: PropTypes.bool,
     setRequestID: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-    request_id: state.track.request_id
+    request_id: state.track.request_id,
+    hasDownloadRole: state.track.has_download_role
 });
 
 const mapDispatchToProps = dispatch => ({
