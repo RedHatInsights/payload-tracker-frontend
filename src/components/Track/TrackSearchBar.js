@@ -20,6 +20,9 @@ import {
 import { DownloadIcon, PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import API from '../../utilities/Api';
+import * as ConstantTypes from '../../AppConstants';
+
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -42,6 +45,18 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, 
 
     const handleArchiveDownload = async () => {
         console.log("fetching archive download link for request_id: " + request_id);
+        API.get(`${ConstantTypes.API_URL}/api/v1/payloads/${request_id}/archiveLink`)
+            .then(
+                resp => {
+                    let archiveDownloadLink = resp.data.url;
+                    if (process.env.ENV) {
+                        // remove everything before :9000
+                        archiveDownloadLink = 'http://localhost'+archiveDownloadLink.substring(archiveDownloadLink.indexOf(':9000'));
+                    }
+                    window.open(archiveDownloadLink, '_blank');
+                }
+            )
+            .catch((err)=>console.log(err));
     }
 
     useEffect(() => {

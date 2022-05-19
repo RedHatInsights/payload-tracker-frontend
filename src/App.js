@@ -6,7 +6,7 @@ import { API_URL, PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from './AppConstant
 import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import API from './/utilities/Api';
+import API from './utilities/Api';
 import * as ConstantTypes from './AppConstants';
 
 import MainHeader from './components/MainHeader';
