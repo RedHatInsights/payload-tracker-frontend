@@ -17,14 +17,17 @@ import {
     TextVariants,
     Title
 } from '@patternfly/react-core';
-import { PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
+import { DownloadIcon, PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
 import React, { useCallback, useEffect, useState } from 'react';
+
+import API from '../../utilities/Api';
+import * as ConstantTypes from '../../AppConstants';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
-const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) => {
+const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, setRequestID }) => {
 
     const [id, updateID] = useState();
     const [account, setAccount] = useState('');
@@ -39,6 +42,20 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
         const payloadsWithID = payloads.filter(p => p.inventory_id);
         return payloadsWithID.length > 0 ? payloadsWithID[0].inventory_id : '';
     }, [payloads]);
+
+    const handleArchiveDownload = async () => {
+        API.get(`${ConstantTypes.API_URL}/api/v1/payloads/${request_id}/archiveLink`)
+        .then(
+            resp => {
+                let archiveDownloadLink = resp.data.url;
+                if (process.env.ENV) {
+                    archiveDownloadLink = 'http://localhost' + archiveDownloadLink.substring(archiveDownloadLink.indexOf(':9000'));
+                }
+
+                window.open(archiveDownloadLink, '_blank');
+            }
+        );
+    };
 
     useEffect(() => {
         payloads && setAccount(getAccount());
@@ -80,6 +97,18 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, setRequestID }) =
                 <div className='pt-c-track__header--item'>
                     <span className='pt-c-track__header--title'> request_id: </span>
                     <span> {request_id} </span>
+                    {
+                        hasDownloadRole &&
+                        <Button
+                            className='pt-c-track__header--button'
+                            variant='link'
+                            isInline
+                            icon={<DownloadIcon/>}
+                            onClick={handleArchiveDownload}
+                        >
+                            Download Archive
+                        </Button>
+                    }
                 </div>
                 {account && <div>
                     <hr/>
@@ -136,11 +165,13 @@ TrackSearchBar.propTypes = {
     request_id: PropTypes.string,
     payloads: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
+    hasDownloadRole: PropTypes.bool,
     setRequestID: PropTypes.func
 };
 
 const mapStateToProps = state => ({
-    request_id: state.track.request_id
+    request_id: state.track.request_id,
+    hasDownloadRole: state.track.has_download_role
 });
 
 const mapDispatchToProps = dispatch => ({

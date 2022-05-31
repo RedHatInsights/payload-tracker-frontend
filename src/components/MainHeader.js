@@ -4,11 +4,11 @@ import DateRangeFilter from './DateFilter/DateRangeFilter';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import '../static/images/rh-new-logo.svg';
+import rhLogo from '../static/images/rh-new-logo.svg';
 
 const MainHeader = ({ isNavOpen, toggleNav, pathname }) => {
     return <PageHeader
-        logo={<img src="public/rh-new-logo.svg" />}
+        logo={<img src={rhLogo} />}
         logoProps={{
             href: '/app/payload-tracker/payloads',
             target: '_blank'

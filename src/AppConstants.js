@@ -1,6 +1,6 @@
 import { sortable } from '@patternfly/react-table';
 
-export const API_URL = process.env.ENV === 'development' && !process.env.PROXY ? 'http://localhost:8080' : '';
+export const API_URL = process.env.ENV === 'development' && !process.env.PROXY ? 'http://localhost:8080' : '/app/payload-tracker';
 
 export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
 export const TOGGLE_NAV = 'TOGGLE_NAV';
@@ -18,6 +18,8 @@ export const SET_RECENT_TIME_TYPE = 'SET_RECENT_TIME_TYPE';
 export const SET_TRACK_REQUEST_ID = 'SET_TRACK_REQUEST_ID';
 export const SET_TRACK_SORT_DIR = 'SET_TRACK_SORT_DIR';
 export const SET_TRACK_SORT_BY = 'SET_TRACK_SORT_BY';
+
+export const SET_HAS_DOWNLOAD_ROLE = 'SET_HAS_DOWNLOAD_ROLE';
 
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 

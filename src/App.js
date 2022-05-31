@@ -1,8 +1,11 @@
 import './App.scss';
 
-import { PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from './AppConstants';
+import * as AppActions from './actions';
+
+import { API_URL, PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from './AppConstants';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import API from './utilities/Api';
 
 import MainHeader from './components/MainHeader';
 import MainSidebar from './components/MainSidebar';
@@ -15,7 +18,7 @@ import Track from './components/Track/Track';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
-const App = ({ pathname, push }) => {
+const App = ({ pathname, push, setHasDownloadRole }) => {
 
     const [isNavOpen, toggleNav] = useState(false);
     const [activeItem, setActiveItem] = useState(PAYLOADS_ITEM);
@@ -28,6 +31,19 @@ const App = ({ pathname, push }) => {
                 setActiveItem(STATUSES_ITEM)
         );
     }, [pathname]);
+
+    // Check if the user has the required LDAP role in their identity header to download archives
+    useEffect(() => {
+        const getDownloadRole = async () => {
+            const resp = await API.get(
+                `${API_URL}/api/v1/roles/archiveLink`);
+            if (resp.status === 200) {
+                setHasDownloadRole(true);
+            }
+        };
+
+        getDownloadRole();
+    }, [setHasDownloadRole]);
 
     return <Page
         header={<MainHeader isNavOpen={isNavOpen} toggleNav={toggleNav} pathname={pathname}/>}
@@ -46,11 +62,13 @@ const App = ({ pathname, push }) => {
 
 App.propTypes = {
     pathname: PropTypes.string,
-    push: PropTypes.func
+    push: PropTypes.func,
+    setHasDownloadRole: PropTypes.func
 };
 
 export default connect((state) => ({
     pathname: state.router.location.pathname
 }), (dispatch) => ({
-    push: url => dispatch(push(url))
+    push: url => dispatch(push(url)),
+    setHasDownloadRole: (hasDownloadRole) => dispatch(AppActions.setHasDownloadRole(hasDownloadRole))
 }))(App);

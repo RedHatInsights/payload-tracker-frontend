@@ -11,7 +11,8 @@ const initialState = {
     sort_by: getValueFromURL(location, 'sort_by') || ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by,
     request_id: history.location.pathname.split('/')[1] !== 'track' ?
         ConstantTypes.DEFAULT_TRACK_PAGE_STATE.request_id :
-        history.location.pathname.split('/')[2]
+        history.location.pathname.split('/')[2],
+    has_download_role: false
 };
 
 const TrackReducer = (state = initialState, action) => {
@@ -30,6 +31,11 @@ const TrackReducer = (state = initialState, action) => {
             return {
                 ...state,
                 sort_dir: action.payload
+            };
+        case ConstantTypes.SET_HAS_DOWNLOAD_ROLE:
+            return {
+                ...state,
+                has_download_role: action.payload
             };
         case LOCATION_CHANGE:
             return action.payload.location.pathname.indexOf('/app/payload-tracker/track') >= 0 ? state : {
