@@ -39,7 +39,7 @@ The Payload Tracker Frontend can be accessed at the following routes.
 <Route path='/' exact render={() => <Redirect to='/payloads'/>}/>
 <Route path='/payloads' component={Payloads}/>
 <Route exact path='/track' component={Track}/>
-<Route path='/track/:payload_id' component={Track}/>
+<Route path='/track/:request_id' component={Track}/>
 
 ```
 
@@ -47,7 +47,7 @@ The Payload Tracker Frontend can be accessed at the following routes.
 Basic Usage
 --------------------
 
-The frontend allows for developers to easily view and share payloads as they pass through the platform. The `/track:payload_id` allows for developers to understand where errors occur, what the errors are, and how quickly payloads are passing in between services and within individual services.
+The frontend allows for developers to easily view and share payloads as they pass through the platform. The `/track:request_id` allows for developers to understand where errors occur, what the errors are, and how quickly payloads are passing in between services and within individual services.
 
 
 Docker
