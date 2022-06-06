@@ -3,34 +3,6 @@ kind: Template
 metadata:
   name: payload-tracker-frontend
 objects:
-- apiVersion: v1
-  data:
-    nginx.conf: "worker_processes  2;\nerror_log  /var/log/nginx/error.log warn;\n\
-      pid /tmp/nginx.pid;\nevents {\n    worker_connections  1024;\n}\nhttp {\n  \
-      \  include       /etc/nginx/mime.types;\n    default_type  application/octet-stream;\n\
-      \    log_format main '[$time_local] \"$request\" $status $body_bytes_sent \"\
-      $http_referer\" \"$http_user_agent\" \"$http_x_forwarded_for\"';\n    access_log\
-      \ /var/log/nginx/access.log main;\n    sendfile        on;\n    keepalive_timeout\
-      \  65;\n    server {\n        gzip on;\n        gzip_http_version 1.1;\n   \
-      \     gzip_comp_level 5;\n        gzip_min_length 256;\n        gzip_proxied\
-      \ any;\n        gzip_types\n        application/atom+xml\n        application/javascript\n\
-      \        application/json\n        application/rss+xml\n        application/vnd.ms-fontobject\n\
-      \        application/x-font-ttf\n        application/x-web-app-manifest+json\n\
-      \        application/xhtml+xml\n        application/xml\n        font/opentype\n\
-      \        image/svg+xml\n        image/x-icon\n        text/css\n        text/plain\n\
-      \        text/x-component;\n        listen 8080;\n        disable_symlinks off;\n\
-      \        root /usr/share/nginx/html;\n        location /v1 {\n             proxy_pass\
-      \ ${PAYLOAD_TRACKER_URL};\n             #proxy_http_version 1.1;\n         \
-      \    #proxy_set_header Upgrade $http_upgrade;\n             #proxy_set_header\
-      \ Connection 'upgrade';\n             #proxy_set_header Host $host;\n      \
-      \       #proxy_cache_bypass $http_upgrade;\n        }\n        location /socket.io\
-      \ {\n            proxy_pass ${PAYLOAD_TRACKER_URL};\n            proxy_set_header\
-      \ Upgrade $http_upgrade;\n            proxy_set_header Connection \"Upgrade\"\
-      ;\n        }\n        location / {\n            try_files $uri /index.html;\n\
-      \        }\n    }\n}"
-  kind: ConfigMap
-  metadata:
-    name: payload-tracker-nginx-conf
 - apiVersion: apps/v1
   kind: Deployment
   metadata:

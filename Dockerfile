@@ -26,6 +26,8 @@ RUN npm run build && \
     chown 777 -R /var/log/nginx && \
     chmod 777 -R /var/cache/nginx
 
+# This file is not used in openshift, but is in the image
+# in the event it is used for local development
 COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN sed -i s/API_HOST/$API_HOST/g /etc/nginx/nginx.conf
