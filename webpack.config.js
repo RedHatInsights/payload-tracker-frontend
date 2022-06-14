@@ -8,7 +8,7 @@ module.exports = {
         path: path.join(__dirname, './dist'),
         filename: 'index.[chunkhash].js',
         chunkFilename: `js/[name].[chunkhash].js`,
-        publicPath: './'
+        publicPath: process.env.ENV === 'development' ? '/' : './'
     },
     optimization: {
         splitChunks: {
@@ -40,21 +40,13 @@ module.exports = {
         }
     },
     devServer: {
-        https: Boolean(process.env.PROXY),
+        https: false,
         allowedHosts: 'all',
         port: process.env.PORT || 3000,
         historyApiFallback: true,
         client: {
             overlay: false
-        },
-        ...(process.env.PROXY && { proxy: {
-            '/api': {
-                target: 'https://internal.console.stage.redhat.com/',
-                changeOrigin: true,
-                autoRewrite: true,
-                secure: true
-            }
-        } })
+        }
     },
     module: {
         rules: [
@@ -80,7 +72,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({ template: './src/index.html' }),
-        new EnvironmentPlugin({ ENV: '', PROXY: '' }),
+        new EnvironmentPlugin({ ENV: '' }),
         ...(process.env.ANALYZE === 'true' ? [new BundleAnalyzerPlugin()] : [])
     ]
 };

@@ -6,7 +6,6 @@
   - [Docker](#docker)
   - [Prequisites](#prequisites)
   - [Dev Setup](#dev-setup)
-  - [Dev Setup with proxy](#dev-setup-with-proxy)
   - [Dev Setup using Docker](#dev-setup-using-docker)
   - [Contributing](#contributing)
   - [Versioning](#versioning)
@@ -79,36 +78,9 @@ pipenv run server
 npm run start
 ```
 
+Your frontend is running on [http://localhost:3000/app/payload-tracker/](http://localhost:3000/app/payload-tracker/).
+
 **Note:** This will yield CORS errors. Consider installinig https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf to remove these errors.
-
-Dev Setup with proxy
---------------------
-
-This option will run the frontend application connected to stage backend, so there is no need to run the backend service locally.
-
-1. Install dependencies
-```
-npm i
-```
-
-2. Go to the stage frontend, login with your GitHub credentials, then open Developer tools (F12), go to application tab > cookies > domain and find `_ouath_proxy` cookie. Copy its value.
-
-3. Start Frontend with proxy enabled
-```
-npm run start:proxy
-```
-
-4. Open local frontend on: `https://localhost:3000`
-
-5. Open JavaScript console (F12)
-
-6. Insert your copied cookie from step #2 (replace `<COPIEDVALUE>`).
-
-```js
-document.cookie = "_oauth_proxy=<COPIEDVALUE>"
-```
-
-7. Refresh the page
 
 Dev Setup using Docker
 --------------------
