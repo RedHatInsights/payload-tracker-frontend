@@ -6,9 +6,13 @@ import { getLocalDate, truncateString } from '../../utilities/Common';
 
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
-const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrackSortDir }) => {
+const TrackTable = ({ payloads }) => {
+    const cells = useSelector(state => state.cell.cells, shallowEqual);
+    const sortBy = useSelector(state => state.track.sort_by);
+    const sortDir = useSelector(state => state.track.sort_dir);
+    const dispatch = useDispatch();
 
     const [rows, setRows] = useState([]);
     const [cols, setCols] = useState([]);
@@ -39,8 +43,8 @@ const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrack
     };
 
     const onSort = (_event, title, direction) => {
-        setTrackSortBy(title);
-        setTrackSortDir(direction);
+        dispatch(ActionTypes.setTrackSortBy(title));
+        dispatch(ActionTypes.setTrackSortDir(direction));
     };
 
     useEffect(() => {
@@ -66,19 +70,7 @@ const TrackTable = ({ payloads, cells, sortBy, sortDir, setTrackSortBy, setTrack
 };
 
 TrackTable.propTypes = {
-    payloads: PropTypes.array.isRequired,
-    cells: PropTypes.array,
-    sortBy: PropTypes.string,
-    sortDir: PropTypes.string,
-    setTrackSortBy: PropTypes.func,
-    setTrackSortDir: PropTypes.func
+    payloads: PropTypes.array.isRequired
 };
 
-export default connect((state) => ({
-    cells: state.cell.cells,
-    sortBy: state.track.sort_by,
-    sortDir: state.track.sort_dir
-}), (dispatch) => ({
-    setTrackSortBy: (title) => dispatch(ActionTypes.setTrackSortBy(title)),
-    setTrackSortDir: (dir) => dispatch(ActionTypes.setTrackSortDir(dir))
-}))(TrackTable);
+export default TrackTable;

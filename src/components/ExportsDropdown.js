@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 
 import { CSVLink } from 'react-csv';
 import { ExportIcon } from '@patternfly/react-icons';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 
-const ExportsDropdown = ({ payloads }) => {
+const ExportsDropdown = () => {
+    const payloads = useSelector((state) => state.data.payloads, shallowEqual);
 
     const [isOpen, setOpen] = useState(false);
 
@@ -33,12 +33,4 @@ const ExportsDropdown = ({ payloads }) => {
     />;
 };
 
-ExportsDropdown.propTypes = {
-    payloads: PropTypes.array
-};
-
-const mapStateToProps = state => ({
-    payloads: state.data.payloads
-});
-
-export default connect(mapStateToProps, null)(ExportsDropdown);
+export default ExportsDropdown;

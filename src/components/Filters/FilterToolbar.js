@@ -8,9 +8,13 @@ import Chips from './Chips';
 import FilterModal from './FilterModal';
 import PropTypes from 'prop-types';
 import { TYPES } from './Constants';
-import { connect } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
-const FilterToolbar = ({ options, filters, staged, stageFilters, unstageFilter, updateFilters }) => {
+const FilterToolbar = ({ options }) => {
+    const filters = useSelector(state => state.payloads.filters, shallowEqual);
+    const staged = useSelector(state => state.payloads.staged, shallowEqual);
+    const dispatch = useDispatch();
+
     const [currFilters, setFilters] = useState([]);
     const [toDelete, setDelete] = useState([]);
     const [selected, setSelected] = useState([]);
@@ -37,7 +41,7 @@ const FilterToolbar = ({ options, filters, staged, stageFilters, unstageFilter, 
 
     const onDeleteFn = (chip, type) => {
         type === TYPES.STAGE ?
-            unstageFilter(chip) : (
+            dispatch(unstageFilter(chip)) : (
                 setFilters(removeFilter(currFilters, chip)),
                 setDelete([...toDelete, chip])
             );
@@ -49,13 +53,13 @@ const FilterToolbar = ({ options, filters, staged, stageFilters, unstageFilter, 
     };
 
     const onStageFn = (filters) => {
-        stageFilters(filters);
+        dispatch(stageFilters(filters));
         setModalOpen(false);
         onToggleFn();
     };
 
     const onApplyFn = () => {
-        updateFilters([...currFilters, ...staged]);
+        dispatch(updateFilters([...currFilters, ...staged]));
         setDelete([]);
     };
 
@@ -95,23 +99,7 @@ const FilterToolbar = ({ options, filters, staged, stageFilters, unstageFilter, 
 };
 
 FilterToolbar.propTypes = {
-    options: PropTypes.array,
-    filters: PropTypes.array,
-    staged: PropTypes.array,
-    stageFilters: PropTypes.func,
-    unstageFilter: PropTypes.func,
-    updateFilters: PropTypes.func
+    options: PropTypes.array
 };
 
-const mapStateToProps = (state) => ({
-    filters: state.payloads.filters,
-    staged: state.payloads.staged
-});
-
-const mapDispatchToProps = (dispatch) => ({
-    stageFilters: (filters) => dispatch(stageFilters(filters)),
-    unstageFilter: (filter) => dispatch(unstageFilter(filter)),
-    updateFilters: (filters) => dispatch(updateFilters(filters))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilterToolbar);
+export default FilterToolbar;

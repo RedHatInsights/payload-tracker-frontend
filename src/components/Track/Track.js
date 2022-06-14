@@ -17,14 +17,18 @@ import API from '../../utilities/Api';
 import Durations from './Durations';
 import ExportsDropdown from '../ExportsDropdown';
 import OptionsContainer from '../OptionsContainer';
-import PropTypes from 'prop-types';
 import TrackGraphic from './TrackGraphicView';
 import TrackSearchBar from './TrackSearchBar';
 import TrackTable from './TrackTable';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { usePolling } from '../../utilities/Common';
 
-const Track = ({ request_id, sort_by, sort_dir, addNotification }) => {
+const Track = () => {
+    const request_id = useSelector(state => state.track.request_id);
+    const sort_by = useSelector(state => state.track.sort_by);
+    const sort_dir = useSelector(state => state.track.sort_dir);
+    const dispatch = useDispatch();
+
     const [activeTabKey, setActiveTabKey] = useState(0);
     const [payloads, setPayloads] = useState();
     const [durations, setDurations] = useState();
@@ -51,7 +55,7 @@ const Track = ({ request_id, sort_by, sort_dir, addNotification }) => {
         }
         catch (error) {
             if (error.response.data.status !== 404) {
-                addNotification('danger', 'Error fetching data', `Request failed with status code ${error.response.data.status}`);
+                dispatch(AppActions.addMessage(('danger', 'Error fetching data', `Request failed with status code ${error.response.data.status}`)));
             }
 
             setLoading('rejected');
@@ -113,17 +117,4 @@ const Track = ({ request_id, sort_by, sort_dir, addNotification }) => {
     </PageSection>;
 };
 
-Track.propTypes = {
-    request_id: PropTypes.any,
-    sort_by: PropTypes.string,
-    sort_dir: PropTypes.string,
-    addNotification: PropTypes.func
-};
-
-export default connect((state) => ({
-    request_id: state.track.request_id,
-    sort_by: state.track.sort_by,
-    sort_dir: state.track.sort_dir
-}), (dispatch) => ({
-    addNotification: (type, title, content) => dispatch(AppActions.addMessage(type, title, content))
-}))(Track);
+export default Track;

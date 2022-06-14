@@ -9,14 +9,16 @@ import {
 import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
-const OptionsContainer = ({ cells, setCellActivity, isDisabled }) => {
+const OptionsContainer = ({ isDisabled }) => {
+    const dispatch = useDispatch();
+    const cells = useSelector(state => state.cell.cells, shallowEqual);
 
     const [isOpen, setOpen] = useState(false);
 
     const clickHandler = cell => {
-        cell.isActive ? setCellActivity(cell.title, false) : setCellActivity(cell.title, true);
+        cell.isActive ?  dispatch(AppActions.setCellActivity(cell.title, false)) :  dispatch(AppActions.setCellActivity(cell.title, true));
     };
 
     const generateOptions = () => {
@@ -52,17 +54,7 @@ const OptionsContainer = ({ cells, setCellActivity, isDisabled }) => {
 };
 
 OptionsContainer.propTypes = {
-    cells: PropTypes.array,
-    setCellActivity: PropTypes.func,
     isDisabled: PropTypes.bool
 };
 
-const mapStateToProps = state => ({
-    cells: state.cell.cells
-});
-
-const mapDispatchToProps = dispatch => ({
-    setCellActivity: (title, bool) => dispatch(AppActions.setCellActivity(title, bool))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OptionsContainer);
+export default OptionsContainer;

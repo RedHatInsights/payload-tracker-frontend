@@ -18,10 +18,13 @@ import DateTime from 'luxon/src/datetime';
 import HoverableAttribute from './HoverableAttribute';
 import PropTypes from 'prop-types';
 import { SearchIcon } from '@patternfly/react-icons';
-import { connect } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 import { getLocalDate } from '../utilities/Common';
 
-const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, setSortBy }) => {
+const PayloadsTable = ({ sortDir, setSortDir, sortBy, setSortBy }) => {
+    const payloads = useSelector(state => state.data.payloads, shallowEqual);
+    const cells = useSelector(state => state.cell.cells, shallowEqual);
+    const loading = useSelector(state => state.data.loading);
 
     const [formattedRows, setFormattedRows] = useState();
     const [formattedCells, setFormattedCells] = useState();
@@ -115,19 +118,10 @@ const PayloadsTable = ({ payloads, cells, loading, sortDir, setSortDir, sortBy, 
 };
 
 PayloadsTable.propTypes = {
-    payloads: PropTypes.array,
-    cells: PropTypes.array,
     sortDir: PropTypes.string,
     setSortDir: PropTypes.func,
     sortBy: PropTypes.string,
-    setSortBy: PropTypes.func,
-    loading: PropTypes.bool
+    setSortBy: PropTypes.func
 };
 
-const mapStateToProps = state => ({
-    payloads: state.data.payloads,
-    cells: state.cell.cells,
-    loading: state.data.loading
-});
-
-export default connect(mapStateToProps, null)(PayloadsTable);
+export default PayloadsTable;
