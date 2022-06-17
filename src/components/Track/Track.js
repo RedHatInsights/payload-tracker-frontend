@@ -33,21 +33,27 @@ const Track = ({ request_id, sort_by, sort_dir, addNotification }) => {
     const retryCounter = useRef();
 
     const getData = async (restartCounter = false) => {
-        const resp = await API.get(
-            `${ConstantTypes.API_URL}/api/v1/payloads/${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
-        if (resp.status === 200) {
-            const { data, duration } = resp.data;
-            if (!currPayloads?.current || JSON.stringify(data) !== JSON.stringify(currPayloads.current)) {
-                setPayloads(data);
-                setDurations(duration);
-                setLoading(data?.length > 0 ? 'fulfilled' : 'rejected');
-                currPayloads.current = data;
-                retryCounter.current = restartCounter ? 0 : retryCounter.current;
-            } else {
-                retryCounter.current += 1;
+        try {
+            const resp = await API.get(
+                `${ConstantTypes.API_URL}/api/v1/payloads/${request_id}?sort_by=${sort_by}&sort_dir=${sort_dir}`);
+            if (resp.status === 200) {
+                const { data, duration } = resp.data;
+                if (!currPayloads?.current || JSON.stringify(data) !== JSON.stringify(currPayloads.current)) {
+                    setPayloads(data);
+                    setDurations(duration);
+                    setLoading(data?.length > 0 ? 'fulfilled' : 'rejected');
+                    currPayloads.current = data;
+                    retryCounter.current = restartCounter ? 0 : retryCounter.current;
+                } else {
+                    retryCounter.current += 1;
+                }
             }
-        } else {
-            addNotification('danger', 'Error fetching data', `Request failed with status code ${resp.status}`);
+        }
+        catch (error) {
+            if (error.response.data.status !== 404) {
+                addNotification('danger', 'Error fetching data', `Request failed with status code ${error.response.data.status}`);
+            }
+
             setLoading('rejected');
         }
     };
