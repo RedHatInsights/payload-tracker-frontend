@@ -5,20 +5,21 @@ import React, { useState } from 'react';
 
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { truncateString } from '../utilities/Common';
 
-const HoverableAttribute = ({ type, filter, value, push, setRequestID, stageFilters }) => {
+const HoverableAttribute = ({ type, filter, value }) => {
+    const dispatch = useDispatch();
 
     const [isHovered, setHover] = useState(false);
 
     const clickHandler = ()  => {
         if (type === 'track') {
-            setRequestID(value);
-            push(`/app/payload-tracker/track/${value}`);
+            dispatch(AppActions.setTrackRequestID(value));
+            dispatch(push(`/app/payload-tracker/track/${value}`));
         } else if (type === 'filter') {
-            stageFilters({ [filter]: value });
+            dispatch(AppActions.stageFilters({ [filter]: value }));
         } else { return null; }
     };
 
@@ -46,16 +47,7 @@ const HoverableAttribute = ({ type, filter, value, push, setRequestID, stageFilt
 HoverableAttribute.propTypes = {
     type: PropTypes.string.isRequired,
     filter: PropTypes.string,
-    value: PropTypes.string.isRequired,
-    push: PropTypes.func,
-    setRequestID: PropTypes.func,
-    stageFilters: PropTypes.func
+    value: PropTypes.string.isRequired
 };
 
-const mapDispatchToProps = dispatch => ({
-    push: (url) => dispatch(push(url)),
-    setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id)),
-    stageFilters: (filters) => dispatch(AppActions.stageFilters(filters))
-});
-
-export default connect(null, mapDispatchToProps)(HoverableAttribute);
+export default HoverableAttribute;

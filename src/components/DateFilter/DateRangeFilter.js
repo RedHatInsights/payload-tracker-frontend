@@ -22,11 +22,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { quickFilters, useQuickFilters, useStacks } from './utils';
 
 import DateTextInput from './DateTextInput';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getLocalDate } from '../../utilities/Common';
+import { useLocation } from 'react-router-dom';
 
-const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMessage, startDate, endDate, recentTimeType }) => {
+const DateRangeFilter = () => {
+    const { pathname } = useLocation();
+    const startDate = useSelector(state => state.payloads.startDate);
+    const endDate = useSelector(state => state.payloads.endDate);
+    const recentTimeType = useSelector(state => state.payloads.recentTimeType);
+    const dispatch = useDispatch();
+
     const defaultFilters = quickFilters();
     const defaultRange = defaultFilters.filter(({ start, end, title }) => title === '15 minutes' && ({ start, end }))?.[0];
     const [isOpen, setOpen] = useState(false);
@@ -52,19 +58,19 @@ const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMess
         if (end >= start) {
             updateData(start, end);
         } else {
-            addMessage('danger', 'Date range error', `${getLocalDate(start)} is not before ${getLocalDate(end)}`);
+            dispatch(AppActions.addMessage('danger', 'Date range error', `${getLocalDate(start)} is not before ${getLocalDate(end)}`));
         }
     };
 
     useEffect(() => {
-        type !== recentTimeType && setRecentTimeType(type);
-        type && updateDateRange(active?.start, active?.end);
+        type !== recentTimeType &&  dispatch(AppActions.setRecentTimeType((type)));
+        type && dispatch(AppActions.updateDateRange(active?.start, active?.end));
     //eslint-disable-next-line
     }, [active, type]);
 
     useEffect(() => {
         if (startDate && endDate && JSON.stringify(active) !== JSON.stringify({ start: new Date(startDate), end: new Date(endDate) })) {
-            updateDateRange(new Date(startDate), new Date(endDate));
+            dispatch(AppActions.updateDateRange(new Date(startDate), new Date(endDate)));
             updateData(new Date(startDate), new Date(endDate));
         }
     //eslint-disable-next-line
@@ -188,33 +194,4 @@ const DateRangeFilter = ({ updateDateRange, setRecentTimeType, pathname, addMess
     </React.Fragment>;
 };
 
-DateRangeFilter.propTypes = {
-    updateDateRange: PropTypes.func,
-    setRecentTimeType: PropTypes.func,
-    setStartDate: PropTypes.func,
-    setEndDate: PropTypes.func,
-    addMessage: PropTypes.func,
-    pathname: PropTypes.string,
-    startDate: PropTypes.any,
-    endDate: PropTypes.any,
-    recentTimeFilters: PropTypes.array,
-    recentTimeType: PropTypes.string
-};
-
-const mapStateToProps = state => ({
-    pathname: state.router.location.pathname,
-    startDate: state.payloads.startDate,
-    endDate: state.payloads.endDate,
-    recentTimeFilters: state.payloads.recentTimeFilters,
-    recentTimeType: state.payloads.recentTimeType
-});
-
-const mapDispatchToProps = dispatch => ({
-    updateDateRange: (start, end) => dispatch(AppActions.updateDateRange(start, end)),
-    setRecentTimeType: (type) => dispatch(AppActions.setRecentTimeType(type)),
-    setStartDate: (start) => dispatch(AppActions.setStartDate(start)),
-    setEndDate: (end) => dispatch(AppActions.setEndDate(end)),
-    addMessage: (type, title, content) => dispatch(AppActions.addMessage(type, title, content))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DateRangeFilter);
+export default DateRangeFilter;

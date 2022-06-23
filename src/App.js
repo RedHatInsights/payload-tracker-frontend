@@ -4,7 +4,7 @@ import * as AppActions from './actions';
 
 import { API_URL, PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from './AppConstants';
 import React, { useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import API from './utilities/Api';
 
 import MainHeader from './components/MainHeader';
@@ -15,15 +15,17 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 import Statuses from './components/Statuses/Statuses';
 import Track from './components/Track/Track';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 
-const App = ({ pathname, push, setHasDownloadRole }) => {
+const App = () => {
+    const { pathname } = useLocation();
+    const dispatch = useDispatch();
 
     const [isNavOpen, toggleNav] = useState(false);
     const [activeItem, setActiveItem] = useState(PAYLOADS_ITEM);
 
-    const onClickFn = (url) => { push(url); toggleNav(false); };
+    const onClickFn = (url) => { dispatch(push(url)); toggleNav(false); };
 
     useEffect(() => {
         pathname.indexOf('/app/payload-tracker/track') >= 0 ? setActiveItem(TRACK_ITEM) : (
@@ -38,12 +40,12 @@ const App = ({ pathname, push, setHasDownloadRole }) => {
             const resp = await API.get(
                 `${API_URL}/api/v1/roles/archiveLink`);
             if (resp.status === 200) {
-                setHasDownloadRole(true);
+                dispatch(AppActions.setHasDownloadRole(true));
             }
         };
 
         getDownloadRole();
-    }, [setHasDownloadRole]);
+    }, []);
 
     return <Page
         header={<MainHeader isNavOpen={isNavOpen} toggleNav={toggleNav} pathname={pathname}/>}
@@ -66,9 +68,4 @@ App.propTypes = {
     setHasDownloadRole: PropTypes.func
 };
 
-export default connect((state) => ({
-    pathname: state.router.location.pathname
-}), (dispatch) => ({
-    push: url => dispatch(push(url)),
-    setHasDownloadRole: (hasDownloadRole) => dispatch(AppActions.setHasDownloadRole(hasDownloadRole))
-}))(App);
+export default App;

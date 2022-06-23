@@ -24,10 +24,13 @@ import API from '../../utilities/Api';
 import * as ConstantTypes from '../../AppConstants';
 
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 
-const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, setRequestID }) => {
+const TrackSearchBar = ({ payloads, loading }) => {
+    const request_id = useSelector(state => state.track.request_id);
+    const hasDownloadRole = useSelector(state => state.track.has_download_role);
+    const dispatch = useDispatch();
 
     const [id, updateID] = useState();
     const [account, setAccount] = useState('');
@@ -72,12 +75,12 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, 
                 name="request_id"
                 value={id}
                 onChange={(id) => updateID(id)}
-                onKeyPress={(e) => e.key === 'Enter' && setRequestID(id)}
+                onKeyPress={(e) => e.key === 'Enter' && dispatch(AppActions.setTrackRequestID(id))}
                 placeholder='Enter a new Request ID...'
             />
             <Button
                 variant='primary'
-                onClick={() => setRequestID(id)}
+                onClick={() => dispatch(AppActions.setTrackRequestID(id))}
                 isDisabled={id === ''}>
                     Submit
             </Button>
@@ -120,7 +123,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, 
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => push(`/app/payload-tracker/payloads?account=${account}`)}
+                            onClick={() => dispatch(push(`/app/payload-tracker/payloads?account=${account}`))}
                         >
                             See more Requests for this Account
                         </Button>
@@ -136,7 +139,7 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, 
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => push(`/app/payload-tracker/payloads?inventory_id=${inventory_id}`)}
+                            onClick={() => dispatch(push(`/app/payload-tracker/payloads?inventory_id=${inventory_id}`))}
                         >
                             See more Requests for this ID
                         </Button>
@@ -161,22 +164,8 @@ const TrackSearchBar = ({ push, request_id, payloads, loading, hasDownloadRole, 
 };
 
 TrackSearchBar.propTypes = {
-    push: PropTypes.func,
-    request_id: PropTypes.string,
     payloads: PropTypes.array.isRequired,
-    loading: PropTypes.bool.isRequired,
-    hasDownloadRole: PropTypes.bool,
-    setRequestID: PropTypes.func
+    loading: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = state => ({
-    request_id: state.track.request_id,
-    hasDownloadRole: state.track.has_download_role
-});
-
-const mapDispatchToProps = dispatch => ({
-    push: (url) => dispatch(push(url)),
-    setRequestID: (id) => dispatch(AppActions.setTrackRequestID(id))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TrackSearchBar);
+export default TrackSearchBar;

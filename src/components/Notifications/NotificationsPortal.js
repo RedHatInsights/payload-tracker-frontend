@@ -1,10 +1,13 @@
 import Notification from './Notification';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connect } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 import { createPortal } from 'react-dom';
 
-const NotificationsPortal = ({ error, messages }) => {
+const NotificationsPortal = () => {
+    const error = useSelector(state => state.data.error, shallowEqual);
+    const messages = useSelector(state => state.data.messages, shallowEqual);
+
     return createPortal((
         <div aria-label='notifications-portal' style={{
             position: 'fixed',
@@ -27,9 +30,4 @@ NotificationsPortal.propTypes = {
     }))
 };
 
-const mapStateToProps = state => ({
-    error: state.data.error,
-    messages: state.data.messages
-});
-
-export default connect(mapStateToProps, null)(NotificationsPortal);
+export default NotificationsPortal;
