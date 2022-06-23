@@ -68,10 +68,7 @@ Dev Setup
 npm i
 ```
 
-2. Start Payload Tracker Service and API https://github.com/RedHatInsights/payload-tracker#dev-setup
-```
-pipenv run server
-```
+2. Setup Payload Tracker Service https://github.com/RedHatInsights/payload-tracker-go#development
 
 3. Start Frontend
 ```
@@ -94,10 +91,7 @@ npm i
 npm run build
 ```
 
-3. Setup Payload Tracker Service https://github.com/RedHatInsights/payload-tracker#dev-setup
-```
-API_PORT=8081 pipenv run server
-```
+3. Setup Payload Tracker Service https://github.com/RedHatInsights/payload-tracker-go#development
 
 4. Build Frontend
 ```
