@@ -51,7 +51,8 @@ const TrackSearchBar = ({ payloads, loading }) => {
         .then(
             resp => {
                 let archiveDownloadLink = resp.data.url;
-                if (process.env.ENV) {
+                if (process.env.ENV === 'development') {
+                    // In development, local minio provides the url to the archive in place of s3
                     archiveDownloadLink = 'http://localhost' + archiveDownloadLink.substring(archiveDownloadLink.indexOf(':9000'));
                 }
 
