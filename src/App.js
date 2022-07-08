@@ -56,7 +56,7 @@ const App = () => {
             <Route path='/app/payload-tracker/payloads' component={Payloads}/>
             <Route path='/app/payload-tracker/statuses' component={Statuses}/>
             <Route exact path='/app/payload-tracker/track' component={Track}/>
-            <Route path='/app/payload-tracker/track/:request_id' component={Track}/>
+            <Route path='/app/payload-tracker/track/:url_req_id' component={Track}/>
         </Switch>
     </Page>;
 
