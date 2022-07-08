@@ -12,6 +12,7 @@ import {
     Tabs
 } from '@patternfly/react-core';
 import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import API from '../../utilities/Api';
 import Durations from './Durations';
@@ -28,6 +29,8 @@ const Track = () => {
     const sort_by = useSelector(state => state.track.sort_by);
     const sort_dir = useSelector(state => state.track.sort_dir);
     const dispatch = useDispatch();
+
+    const { url_req_id } = useParams();
 
     const [activeTabKey, setActiveTabKey] = useState(0);
     const [payloads, setPayloads] = useState();
@@ -63,6 +66,8 @@ const Track = () => {
     };
 
     useEffect(() => {
+        url_req_id && dispatch(AppActions.setTrackRequestID(url_req_id));
+
         setLoading(request_id && 'pending');
         currPayloads.current = undefined;
         request_id && (async () => await getData(true))();
