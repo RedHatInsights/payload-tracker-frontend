@@ -81,7 +81,10 @@ const TrackSearchBar = ({ payloads, loading }) => {
             />
             <Button
                 variant='primary'
-                onClick={() => dispatch(AppActions.setTrackRequestID(id))}
+                onClick={() => {
+                    dispatch(AppActions.setTrackRequestID(id));
+                    dispatch(push(`/app/payload-tracker/track?request_id=${id}`));
+                }}
                 isDisabled={id === ''}>
                     Submit
             </Button>

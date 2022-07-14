@@ -49,3 +49,14 @@ export const usePolling = (callback, delay) => {
         }
     }, [callback, delay]);
 };
+
+export const validUUID = (str) => {
+    const uuidStr = '' + str;
+
+    const uuidMatch = uuidStr.match('^[0-9a-fA-F]{32}$');
+    if (uuidMatch === null) {
+        return false;
+    }
+
+    return true;
+};

@@ -12,11 +12,6 @@ export default store => next => action => {
 
     const updateSearch = (search) => {
         switch (type) {
-            case ConstantTypes.SET_TRACK_REQUEST_ID:
-                store.dispatch(replace({
-                    pathname: `/app/payload-tracker/track/${action.payload}`
-                }));
-                return;
             case ConstantTypes.SET_TRACK_SORT_DIR:
                 return {
                     ...search,

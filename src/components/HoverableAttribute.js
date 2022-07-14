@@ -17,7 +17,7 @@ const HoverableAttribute = ({ type, filter, value }) => {
     const clickHandler = ()  => {
         if (type === 'track') {
             dispatch(AppActions.setTrackRequestID(value));
-            dispatch(push(`/app/payload-tracker/track/${value}`));
+            dispatch(push(`/app/payload-tracker/track?request_id=${value}`));
         } else if (type === 'filter') {
             dispatch(AppActions.stageFilters({ [filter]: value }));
         } else { return null; }
