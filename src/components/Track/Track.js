@@ -12,7 +12,7 @@ import {
     Tabs
 } from '@patternfly/react-core';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import API from '../../utilities/Api';
 import Durations from './Durations';
@@ -22,15 +22,16 @@ import TrackGraphic from './TrackGraphicView';
 import TrackSearchBar from './TrackSearchBar';
 import TrackTable from './TrackTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { usePolling } from '../../utilities/Common';
+import { usePolling, getValueFromURL, validUUID } from '../../utilities/Common';
 
 const Track = () => {
+    const location = useLocation();
+    const queryReqId = getValueFromURL(location, 'request_id') || null;
+
     const request_id = useSelector(state => state.track.request_id);
     const sort_by = useSelector(state => state.track.sort_by);
     const sort_dir = useSelector(state => state.track.sort_dir);
     const dispatch = useDispatch();
-
-    const { url_req_id } = useParams();
 
     const [activeTabKey, setActiveTabKey] = useState(0);
     const [payloads, setPayloads] = useState();
@@ -66,7 +67,9 @@ const Track = () => {
     };
 
     useEffect(() => {
-        url_req_id && dispatch(AppActions.setTrackRequestID(url_req_id));
+        if (queryReqId !== null && validUUID(queryReqId)) {
+            queryReqId && dispatch(AppActions.setTrackRequestID(queryReqId));
+        }
 
         setLoading(request_id && 'pending');
         currPayloads.current = undefined;
