@@ -78,7 +78,7 @@ npm run start
 
 Your frontend is running on [http://localhost:3000/app/payload-tracker/](http://localhost:3000/app/payload-tracker/).
 
-**Note:** This will yield CORS errors. Consider installinig <https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf> to remove these errors.
+**Note:** This will yield CORS errors. Consider installing <https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf> to remove these errors.
 
 Dev Setup using Docker
 --------------------
