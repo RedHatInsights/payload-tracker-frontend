@@ -99,6 +99,7 @@ const PayloadsTable = ({ sortDir, setSortDir, sortBy, setSortBy }) => {
                 direction: sortDir
             }}
             onSort={(e, index, direction) => onSort(e, formattedCells[index].title, direction)}
+            aria-label='Payloads Table'
         >
             <TableHeader/>
             <TableBody/>

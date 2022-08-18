@@ -49,7 +49,7 @@ const OptionsContainer = ({ isDisabled }) => {
             toggleTemplate={<React.Fragment>Show Columns</React.Fragment>}
         />}
         isOpen={isOpen}
-        isDisabled={isDisabled}
+        isdisabled={isDisabled}
     />;
 };
 
