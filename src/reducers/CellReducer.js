@@ -29,7 +29,7 @@ const CellReducer = (state = initialState, action) => {
         case LOCATION_CHANGE:
             return action.payload.location.pathname === state.cellPath ? state : {
                 ...state,
-                cells: action.payload.location.pathname === '/payloads' ?
+                cells: action.payload.location.pathname === '/app/payload-tracker/payloads' ?
                     ConstantTypes.DEFAULT_PAYLOAD_CELL_STATE :
                     ConstantTypes.DEFAULT_STATUSES_CELL_STATE,
                 cellPath: action.payload.location.pathname
