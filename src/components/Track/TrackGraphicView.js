@@ -4,7 +4,7 @@ import { Accordion } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import TrackGraphic from './TrackGraphic';
 
-const TrackGraphicView = ({ payloads }) => {
+const TrackGraphicView = ({ payloads, requestId }) => {
 
     const [services, setServices] = useState();
     const [statuses, setStatuses] = useState();
@@ -56,6 +56,7 @@ const TrackGraphicView = ({ payloads }) => {
                     source={source}
                     statuses={statuses[key]}
                     messages={messages[key]}
+                    requestId={requestId || ''}
                 />
             </div>;
         })}
@@ -63,7 +64,8 @@ const TrackGraphicView = ({ payloads }) => {
 };
 
 TrackGraphicView.propTypes = {
-    payloads: PropTypes.array.isRequired
+    payloads: PropTypes.array.isRequired,
+    requestId: PropTypes.string
 };
 
 export default TrackGraphicView;

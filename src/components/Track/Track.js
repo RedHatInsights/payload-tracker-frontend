@@ -99,7 +99,7 @@ const Track = () => {
                         <CardHeader>
                         </CardHeader>
                         <CardBody>
-                            <TrackGraphic payloads={payloads}/>
+                            <TrackGraphic payloads={payloads} requestId={request_id} />
                         </CardBody>
                     </Card>
                 </Tab>
