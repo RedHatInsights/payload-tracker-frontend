@@ -20,8 +20,9 @@ import { getLocalDate, truncateString } from '../../utilities/Common';
 
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
+import KibanaLink from './KibanaLink';
 
-const TrackGraphic = ({ service, source, statuses, messages }) => {
+const TrackGraphic = ({ service, source, statuses, messages, requestId }) => {
 
     const [isOpen, toggleOpen] = useState(false);
     const [rows, setRows] = useState([]);
@@ -105,6 +106,7 @@ const TrackGraphic = ({ service, source, statuses, messages }) => {
                 />
             </AccordionToggle>
             <AccordionContent isHidden={!isOpen}>
+                <KibanaLink requestId={requestId || ''} serviceName={service}> Filter In Kibana </KibanaLink>
                 <Table
                     onExpand={onExpand}
                     cells={cells}
@@ -123,7 +125,8 @@ TrackGraphic.propTypes = {
     service: PropTypes.string.isRequired,
     source: PropTypes.string.isRequired,
     statuses: PropTypes.array.isRequired,
-    messages: PropTypes.array.isRequired
+    messages: PropTypes.array.isRequired,
+    requestId: PropTypes.string
 };
 
 export default TrackGraphic;

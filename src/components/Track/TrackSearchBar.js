@@ -26,6 +26,7 @@ import * as ConstantTypes from '../../AppConstants';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
+import KibanaLink from './KibanaLink';
 
 const TrackSearchBar = ({ payloads, loading }) => {
     const request_id = useSelector(state => state.track.request_id);
@@ -104,18 +105,20 @@ const TrackSearchBar = ({ payloads, loading }) => {
                 <div className='pt-c-track__header--item'>
                     <span className='pt-c-track__header--title'> request_id: </span>
                     <span> {request_id} </span>
-                    {
-                        hasDownloadRole &&
-                        <Button
-                            className='pt-c-track__header--button'
-                            variant='link'
-                            isInline
-                            icon={<DownloadIcon/>}
-                            onClick={handleArchiveDownload}
-                        >
-                            Download Archive
-                        </Button>
-                    }
+                    <div className='pt-c-track__header--button'>
+                        <KibanaLink requestId={request_id}>View In Kibana</KibanaLink>
+                        {
+                            hasDownloadRole &&
+                            <Button
+                                variant='link'
+                                isInline
+                                icon={<DownloadIcon/>}
+                                onClick={handleArchiveDownload}
+                            >
+                                Download Archive
+                            </Button>
+                        }
+                    </div>
                 </div>
                 {account && <div>
                     <hr/>

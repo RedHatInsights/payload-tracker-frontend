@@ -37,5 +37,9 @@
         .pt-c-track__header--button {
             margin-left: auto;
         }
+
+        .pt-c-track__header--button > * {
+            padding-left: 10px;
+        }
     }
 }
