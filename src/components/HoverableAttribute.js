@@ -31,7 +31,8 @@ const HoverableAttribute = ({ type, filter, value }) => {
                 onMouseOver={ () => setHover(true) }
                 onMouseOut={ () => setHover(false) }
             >
-                {truncateString(value, 12)} {isHovered ? <PlusCircleIcon/> : null }
+                {truncateString(value, 12)}
+                {<PlusCircleIcon visibility={isHovered ? 'visible' : 'hidden'} />}
             </Button>
         </Tooltip> : <Button
             onClick={clickHandler}
@@ -39,7 +40,8 @@ const HoverableAttribute = ({ type, filter, value }) => {
             onMouseOver={ () => setHover(true) }
             onMouseOut={ () => setHover(false) }
         >
-            {value} {isHovered ? <PlusCircleIcon/> : null }
+            {value}
+            {<PlusCircleIcon visibility={isHovered ? 'visible' : 'hidden'} />}
         </Button>}
     </React.Fragment>;
 };
