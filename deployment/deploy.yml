@@ -85,6 +85,7 @@ objects:
         - name: quay-cloudservices-pull
         - name: rh-registry-pull
         restartPolicy: Always
+        serviceAccountName: payload-tracker-frontend
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
