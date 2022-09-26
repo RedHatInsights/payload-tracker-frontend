@@ -54,6 +54,24 @@ const TrackSearchBar = ({ payloads, loading }) => {
                 let archiveDownloadLink = resp.data.url;
                 window.open(archiveDownloadLink, '_blank');
             }
+        )
+        .catch(
+            error => {
+                if (error.response && error.response.status === 404) {
+                    dispatch(AppActions.addMessage(
+                        'danger',
+                        'No archive found for this request',
+                        'Your payload was not stored by Ingress or it\'s 24-hour expiry has passed.'
+                    ));
+                    return;
+                }
+
+                dispatch(AppActions.addMessage(
+                    'danger',
+                    'Error retrieving archive link',
+                    error.message
+                ));
+            }
         );
     };
 
