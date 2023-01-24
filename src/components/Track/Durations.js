@@ -12,7 +12,7 @@ const Durations = ({ payloads, durations }) => {
     const [width, setWidth] = useState();
     const [totalTime, setTotalTime] = useState();
     const chartRef = useRef();
-    const humanizeDuration = require("humanize-duration"); //Dalia Testing
+    const humanizeDuration = require("humanize-duration");
     const contains = (value, arr) => arr.filter(item => item === value).length > 0;
     const checkStatus = (service, statuses) => payloads.filter(payload => {
         return payload.service === service && contains(payload.status, statuses);
