@@ -12,6 +12,7 @@ const Durations = ({ payloads, durations }) => {
     const [width, setWidth] = useState();
     const [totalTime, setTotalTime] = useState();
     const chartRef = useRef();
+    const humanizeDuration = require("humanize-duration"); //Dalia Testing
     const contains = (value, arr) => arr.filter(item => item === value).length > 0;
     const checkStatus = (service, statuses) => payloads.filter(payload => {
         return payload.service === service && contains(payload.status, statuses);
@@ -23,11 +24,17 @@ const Durations = ({ payloads, durations }) => {
 
     const reverse = (str) => str.split('').reverse().join('');
 
+
     const getSeconds = (str) => {
         const time = reverse(str);
         const arr = time.split(':');
         const timeArr = arr.map(timePart => parseFloat(reverse(timePart))).reverse();
         return (timeArr[0] * 3600) + (timeArr[1] * 60) + timeArr[2];
+    };
+
+    //Using the humanizeDuration package to label seconds in a more readable format
+    const getReadableTime = (time) => {
+        return humanizeDuration(getSeconds(time), { units: ["d", "h", "m", "s", "ms"], round: false })
     };
 
     const isReadyToRender = () => Boolean(width && totalTime && getSeconds(durations?.total_time_in_services) !== 0);
@@ -48,20 +55,22 @@ const Durations = ({ payloads, durations }) => {
         //eslint-disable-next-line
     }, [durations, width]);
 
+
     return <Card className='pt-c-durations'>
         <CardHeader>
             <div className='pt-c-durations__header'>
                 <span>
-                    {durations?.total_time && `Total Time: ${durations.total_time}`}
+                    {durations?.total_time && `Total Time: ${getReadableTime(durations.total_time)}`}
                 </span>
                 <span>
                     {durations?.total_time_in_services &&
-                        `Total Time in Services: ${durations.total_time_in_services}`}
+                        `Total Time in Services: ${getReadableTime(durations.total_time_in_services)}`}
                 </span>
             </div>
         </CardHeader>
         <CardBody>
             <div ref={chartRef} className={`pt-c-durations__chart ${!isReadyToRender() && 'hide'}`}>
+                
                 {isReadyToRender() && Object.entries(durations).map(([key, duration]) => {
                     const [service, source] = key.split(':');
                     if (!contains(service, ['total_time', 'total_time_in_services'])) {
@@ -81,8 +90,8 @@ const Durations = ({ payloads, durations }) => {
                             <div className={`pt-c-durations__legend--circle ${getStatus(service)}`}/>
                             <div className='pt-c-durations__legend--label'>
                                 {source !== 'undefined' ?
-                                    `${service} from ${source} | ${duration}` :
-                                    `${service} | ${duration}`}
+                                    `${service} from ${source} | ${getReadableTime(duration)}` :
+                                    `${service} | ${getReadableTime(duration)}`}
                             </div>
                         </div>;
                     }
