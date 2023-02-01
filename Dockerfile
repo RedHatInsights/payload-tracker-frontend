@@ -11,7 +11,7 @@ USER 0
 RUN microdnf install nodejs nginx
 
 COPY package.json package-lock.json ./
-RUN npm ci && npm i --only=dev && npm install yarn
+RUN npm ci && npm i
 
 
 COPY src ./src
