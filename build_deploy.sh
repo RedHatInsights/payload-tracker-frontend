@@ -18,13 +18,13 @@ _local_build() {
 
 _set_container_engine_cmd() {
 
-    if _command_is_present 'podman'; then
-        CONTAINER_ENGINE_CMD='podman'
-    elif _command_is_present 'docker'; then
+    if _command_is_present 'docker'; then
         mkdir -p "$DOCKER_CONF"
         CONTAINER_ENGINE_CMD='docker'
+    elif _command_is_present 'podman'; then
+        CONTAINER_ENGINE_CMD='podman'
     else
-        echo "Can't find either podman or docker"
+        echo "Can't find either docker or podman"
         exit 1
     fi
 }
