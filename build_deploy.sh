@@ -7,6 +7,7 @@ IMAGE_TAG=$(git rev-parse --short=7 HEAD)
 LOCAL_BUILD="${LOCAL_BUILD:-false}"
 CONTAINER_ENGINE_CMD=''
 DOCKER_CONF="$PWD/.docker"
+SECURITY_COMPLIANCE_TAG="sc-$(date +%Y%m%d)-$(git rev-parse --short=7 HEAD)"
 
 _command_is_present() {
     command -v "$1" > /dev/null 2>&1
@@ -67,8 +68,15 @@ main() {
 
     if ! _local_build; then
         container_engine_cmd push "${IMAGE}:${IMAGE_TAG}"
-        container_engine_cmd push "${IMAGE}:qa"
+
+        if [[ "$GIT_BRANCH" == "origin/security-compliance" ]]; then
+            container_engine_cmd tag "${IMAGE}:${IMAGE_TAG}" "${IMAGE}:${SECURITY_COMPLIANCE_TAG}"
+            container_engine_cmd push "${IMAGE}:${SECURITY_COMPLIANCE_TAG}"
+        else
+            container_engine_cmd push "${IMAGE}:qa"
+        fi
     fi
+
 }
 
 main
