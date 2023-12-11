@@ -8,7 +8,7 @@ ENV API_HOST=${SERVICE_HOST:-localhost}
 
 USER 0
 
-RUN microdnf install nodejs nginx
+RUN microdnf update && microdnf module enable nginx:1.22 && microdnf install nodejs nginx
 
 COPY package.json package-lock.json ./
 RUN npm ci && npm i --only=dev && npm install yarn
