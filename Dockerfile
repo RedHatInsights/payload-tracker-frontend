@@ -23,7 +23,7 @@ RUN npm run build && \
     cp -rfv /usr/src/app/dist /usr/share/nginx/html && \
     chown nginx:nginx -R /usr/share/nginx/html && \
     mkdir -p /var/cache/nginx && \
-    chown 777 -R /var/log/nginx && \
+    chmod 777 -R /var/log/nginx && \
     chmod 777 -R /var/cache/nginx
 
 # This file is not used in openshift, but is in the image
