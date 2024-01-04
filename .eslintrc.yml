@@ -8,6 +8,7 @@ env:
   node: true
 plugins:
   - 'react-hooks'
+  - 'jsx'
 extends:
   - 'eslint:recommended'
   - 'prettier'
