@@ -129,3 +129,32 @@ Versioning
 Anytime an endpoint is modified, the version should be incremented by `0.1`. New
 functionality introduced that may effect the client should increment by `1`. Minor
 features and bug fixes can increment by `0.0.1`
+
+CVE Remediation
+-------------------- 
+Steps to remediate Common Vulnerablitiles and Exposures (CVE)
+
+Prequisites: 
+- Check if the latest merged commit is in quay as a tag. 
+- Check if the tag/commit has any vulnerabilities under the Security Scan Section.
+
+If Security Scan has vulnerabilites: 
+1. Fork project, and create a new branch in your fork. 
+2. Usually, to remediate the majority of the CVE's is to update the UBI8 image. Since it is already pulling from 'latest', all we need is to trigger the pipeline and merge it in. 
+     ```
+    git commit --allow-empty -m "Empty-Commit"
+    ```
+**Note:**  If it is not an image update, update packages in package-lock.json or package.json with the recommended version. 
+3. Push that commit and create a MR for the team to review. 
+4. Check prerequisites again. Follow below section after all vulnerabilites have passed. 
+
+If Security Scan states "Passed":
+1.  Go to App Interface
+2.  Create an MR to update the ref hash in prod namespace
+    To get the full hash, go on the master branch on RedHatInsights/payload-tracker-frontend 
+    ```
+    git log -1 --pretty=format:"%H"
+    ```
+3. Ask the team to review and update Jira with the link to the MR
+
+
