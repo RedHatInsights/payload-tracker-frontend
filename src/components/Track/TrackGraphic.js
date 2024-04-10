@@ -55,7 +55,7 @@ const TrackGraphic = ({ service, source, statuses, messages, requestId }) => {
                     compoundParent: 1,
                     cells: [
                         {
-                            title: <ClipboardCopy isCode isReadOnly isExpanded variant={ClipboardCopyVariant.expansion}>
+                            title: <ClipboardCopy isReadOnly isExpanded variant={ClipboardCopyVariant.expansion}>
                                 {message.message}
                             </ClipboardCopy>,
                             props: { colSpan: 6, className: 'pf-m-no-padding' }
