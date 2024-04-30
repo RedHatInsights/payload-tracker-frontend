@@ -67,12 +67,12 @@ main() {
     container_engine_cmd tag "${IMAGE}:${IMAGE_TAG}" "${IMAGE}:qa"
 
     if ! _local_build; then
-        container_engine_cmd push "${IMAGE}:${IMAGE_TAG}"
 
         if [[ "$GIT_BRANCH" == "origin/security-compliance" ]]; then
             container_engine_cmd tag "${IMAGE}:${IMAGE_TAG}" "${IMAGE}:${SECURITY_COMPLIANCE_TAG}"
             container_engine_cmd push "${IMAGE}:${SECURITY_COMPLIANCE_TAG}"
         else
+            container_engine_cmd push "${IMAGE}:${IMAGE_TAG}"
             container_engine_cmd push "${IMAGE}:qa"
         fi
     fi
