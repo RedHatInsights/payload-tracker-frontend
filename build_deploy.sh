@@ -6,7 +6,19 @@ IMAGE="quay.io/cloudservices/payload-tracker-frontend"
 IMAGE_TAG=$(git rev-parse --short=7 HEAD)
 LOCAL_BUILD="${LOCAL_BUILD:-false}"
 CONTAINER_ENGINE_CMD=''
-DOCKER_CONF="$PWD/.docker"
+
+# Create tmp dir to store data in during job run (do NOT store in $WORKSPACE)
+export TMP_JOB_DIR=$(mktemp -d -p "$HOME" -t "jenkins-${JOB_NAME}-${BUILD_NUMBER}-XXXXXX")
+echo "job tmp dir location: $TMP_JOB_DIR"
+
+function job_cleanup() {
+    echo "cleaning up job tmp dir: $TMP_JOB_DIR"
+    rm -fr $TMP_JOB_DIR
+}
+
+trap job_cleanup EXIT ERR SIGINT SIGTERM
+
+DOCKER_CONF="$TMP_JOB_DIR/.docker"
 SECURITY_COMPLIANCE_TAG="sc-$(date +%Y%m%d)-$(git rev-parse --short=7 HEAD)"
 
 _command_is_present() {
