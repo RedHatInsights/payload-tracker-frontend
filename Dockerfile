@@ -5,10 +5,19 @@ WORKDIR /usr/src/app
 ARG SERVICE_HOST
 ENV API_HOST=${SERVICE_HOST:+$SERVICE_HOST}
 ENV API_HOST=${SERVICE_HOST:-localhost}
+ENV NODEJS_VERSION=20
 
 USER 0
 
-RUN microdnf update && microdnf module enable nginx:1.22 && microdnf install nodejs nginx
+RUN microdnf update && microdnf module enable nginx:1.22 && microdnf install nginx
+
+RUN INSTALL_PKGS="nodejs nodejs-nodemon nodejs-full-i18n npm findutils tar which" && \
+    microdnf -y module disable nodejs && \
+    microdnf -y module enable nodejs:$NODEJS_VERSION && \
+    microdnf --nodocs --setopt=install_weak_deps=0 install $INSTALL_PKGS && \
+    node -v | grep -qe "^v$NODEJS_VERSION\." && echo "Found VERSION $NODEJS_VERSION" && \
+    microdnf clean all && \
+    rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
 
 COPY package.json package-lock.json ./
 RUN npm ci && npm i --only=dev && npm install yarn
