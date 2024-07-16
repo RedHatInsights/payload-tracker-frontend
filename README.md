@@ -157,4 +157,3 @@ If Security Scan states "Passed":
     ```
 3. Ask the team to review and update Jira with the link to the MR
 
-
