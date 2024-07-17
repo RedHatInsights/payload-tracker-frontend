@@ -28,7 +28,7 @@ Architecture
 
 Payload Tracker Frontend lives in `platform-<env>`. We are using nginx to coordinate connections between the Payload Tracker Service and the frontend component views. These views are stored within the `build` directory of the nginx container.
 
-The frontend itself manages state using a Redux store. We are using react-router to manage our routing using history and the store. Urls are managed using a custom middleware which can be found in the `middlewares` directory.
+The frontend itself manages the state using a Redux store. We are using react-router to manage our routing using history and the store. Urls are managed using a custom middleware which can be found in the `middlewares` directory.
 
 
 Routes
