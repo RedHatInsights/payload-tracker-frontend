@@ -47,7 +47,7 @@ objects:
                 topologyKey: kubernetes.io/hostname
               weight: 99
         containers:
-        - image: quay.io/cloudservices/payload-tracker-frontend:${IMAGE_TAG}
+        - image: quay.io/redhat-services-prod/hcc-pipeline-tenant/payload-tracker-frontend:${IMAGE_TAG}
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 10
