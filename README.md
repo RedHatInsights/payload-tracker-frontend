@@ -106,7 +106,7 @@ docker build . -f Dockerfile-dev -t frontend:latest
 docker run -p 8080:8080 frontend:latest
 ```
 
-**Note:** There is a draw back to using this method to do frontend development, which is inherent in the use of nginx to provide files from the `build` directory. In order to apply changes occuring in the frontend, we need to do the following:
+**Note:** There is a draw back to using this method to do frontend development, which is inherent in the use of nginx to provide files from the `build` directory. In order to apply changes occurring in the frontend, we need to do the following:
 
 1. Rebuild frontend
 ```
