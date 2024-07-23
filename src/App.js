@@ -27,6 +27,9 @@ const App = () => {
 
     const onClickFn = (url) => { dispatch(push(url)); toggleNav(false); };
 
+    // eslint-disable-next-line no-console
+    console.log('Konflux test');
+
     useEffect(() => {
         pathname.indexOf('/app/payload-tracker/track') >= 0 ? setActiveItem(TRACK_ITEM) : (
             pathname === '/app/payload-tracker/payloads' ? setActiveItem(PAYLOADS_ITEM) :
