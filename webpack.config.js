@@ -40,7 +40,6 @@ module.exports = {
         }
     },
     devServer: {
-        https: false,
         allowedHosts: 'all',
         port: process.env.PORT || 3000,
         historyApiFallback: true,
