@@ -71,7 +71,7 @@ const Durations = ({ payloads, durations }) => {
                 {isReadyToRender() && Object.entries(durations).map(([key, duration]) => {
                     const [service, source] = key.split(':');
                     if (!contains(service, ['total_time', 'total_time_in_services'])) {
-                        return <Tooltip content={source !== 'undefined' ? `${service} from ${source}` : service}>
+                        return <Tooltip key={key} content={source !== 'undefined' ? `${service} from ${source}` : service}>
                             <div style={{ width: `${computeServiceWidth(duration, width)}px` }}
                                 className={`pt-c-durations__service ${getStatus(service)}`}
                             />
@@ -82,7 +82,7 @@ const Durations = ({ payloads, durations }) => {
                 {Object.entries(durations).map(([key, duration]) => {
                     const [service, source] = key.split(':');
                     if (!contains(service, ['total_time', 'total_time_in_services'])) {
-                        return <div className='pt-c-durations__legend--item'>
+                        return <div key={key} className='pt-c-durations__legend--item'>
                             <div className={`pt-c-durations__legend--circle ${getStatus(service)}`}/>
                             <div className='pt-c-durations__legend--label'>
                                 {source !== 'undefined' ?
