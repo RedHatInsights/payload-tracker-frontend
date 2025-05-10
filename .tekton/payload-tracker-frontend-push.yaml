@@ -31,7 +31,8 @@ spec:
     value: .
   pipelineRef:
     name: docker-build-oci-ta
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-payload-tracker-frontend
   workspaces:
   - name: git-auth
     secret:
