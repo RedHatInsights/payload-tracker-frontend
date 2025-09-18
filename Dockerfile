@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 WORKDIR /usr/src/app
 
@@ -9,12 +9,12 @@ ENV NODEJS_VERSION=22
 
 USER 0
 
-RUN microdnf update && microdnf module enable nginx:1.22 && microdnf install nginx
+RUN microdnf update -y && microdnf -y module enable nginx:1.22 && microdnf install nginx -y
 
 RUN INSTALL_PKGS="nodejs nodejs-nodemon nodejs-full-i18n npm findutils tar which" && \
     microdnf -y module disable nodejs && \
     microdnf -y module enable nodejs:$NODEJS_VERSION && \
-    microdnf --nodocs --setopt=install_weak_deps=0 install $INSTALL_PKGS && \
+    microdnf -y --nodocs --setopt=install_weak_deps=0 install $INSTALL_PKGS && \
     node -v | grep -qe "^v$NODEJS_VERSION\." && echo "Found VERSION $NODEJS_VERSION" && \
     microdnf clean all && \
     rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
