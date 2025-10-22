@@ -50,7 +50,7 @@
     "prop-types": "15.8.1",
     "rimraf": "^6.0.1",
     "sass-loader": "12.6.0",
-    "style-loader": "3.3.1",
+    "style-loader": "3.3.4",
     "webpack": "^5.99.7",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^6.0.1",
