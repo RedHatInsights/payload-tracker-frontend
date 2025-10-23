@@ -18,7 +18,7 @@
     "@patternfly/react-styles": "4.48.19",
     "@patternfly/react-table": "4.67.19",
     "axios": "^1.8.3",
-    "connected-react-router": "6.9.2",
+    "connected-react-router": "6.9.3",
     "history": "4.7.2",
     "humanize-duration": "3.28.0",
     "luxon": "1.28.1",
