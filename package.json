@@ -49,7 +49,7 @@
     "html-webpack-plugin": "5.5.0",
     "prop-types": "15.8.1",
     "rimraf": "^6.0.1",
-    "sass-loader": "12.6.0",
+    "sass-loader": "16.0.6",
     "style-loader": "3.3.4",
     "webpack": "^5.99.7",
     "webpack-bundle-analyzer": "^4.10.2",
