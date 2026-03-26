@@ -19,6 +19,8 @@ RUN INSTALL_PKGS="nodejs nodejs-nodemon nodejs-full-i18n npm findutils tar which
     microdnf clean all && \
     rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.*
 
+RUN npm install -g npm@latest
+
 COPY package.json package-lock.json ./
 RUN npm ci && npm i --only=dev && npm install yarn
 
