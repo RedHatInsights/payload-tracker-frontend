@@ -16,7 +16,7 @@
     "@patternfly/react-core": "4.198.19",
     "@patternfly/react-icons": "4.49.19",
     "@patternfly/react-styles": "6.4.0",
-    "@patternfly/react-table": "4.67.19",
+    "@patternfly/react-table": "4.113.7",
     "axios": "^1.8.3",
     "connected-react-router": "6.9.3",
     "history": "4.7.2",
