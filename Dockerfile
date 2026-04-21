@@ -62,11 +62,17 @@ RUN npm run build && \
     rm -rf /usr/src/app/node_modules
 
 # Runtime is nginx + static files only; drop Node so SBOM scanners do not flag npm's bundled deps.
-# Only remove packages that are actually installed to avoid errors
+# Remove Node packages, npm files, and all build artifacts
 RUN rpm -qa | grep -E '^(nodejs|npm)' | xargs -r microdnf remove -y && \
     microdnf remove -y findutils tar which 2>/dev/null || true && \
     microdnf clean all && \
-    rm -rf /root/.npm
+    rm -rf /root/.npm && \
+    rm -rf /usr/src/app/package*.json && \
+    rm -rf /usr/src/app/.npm* && \
+    rm -rf /usr/src/app/node_modules && \
+    rm -rf /usr/src/app/src && \
+    rm -rf /usr/src/app/.babelrc && \
+    rm -rf /usr/src/app/*.js
 
 # This file is not used in openshift, but is in the image
 # in the event it is used for local development
