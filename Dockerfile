@@ -9,10 +9,29 @@ ENV NODEJS_VERSION=22
 
 USER 0
 
+# Install nginx with CVE-2024-7347 fix
+# CVE-2024-7347: Out-of-bounds read/write in ngx_http_mp4_module
+# Fixed in nginx >= 1.26.1 and >= 1.27.0
+# Mitigation: Use latest patched version from nginx:1.26 stream + verify no mp4 module usage
 RUN microdnf update -y && \
     microdnf -y module enable nginx:1.26 && \
     microdnf install nginx -y && \
     microdnf upgrade -y nginx && \
+    echo "Installed nginx version:" && \
+    nginx -v 2>&1 | tee /tmp/nginx-version.txt && \
+    NGINX_VERSION=$(nginx -v 2>&1 | grep -oP 'nginx/\K[0-9.]+') && \
+    echo "Detected nginx version: $NGINX_VERSION" && \
+    MAJOR=$(echo $NGINX_VERSION | cut -d. -f1) && \
+    MINOR=$(echo $NGINX_VERSION | cut -d. -f2) && \
+    PATCH=$(echo $NGINX_VERSION | cut -d. -f3) && \
+    if [ "$MAJOR" -eq 1 ] && [ "$MINOR" -eq 26 ] && [ "$PATCH" -lt 1 ]; then \
+        echo "ERROR: nginx version $NGINX_VERSION is vulnerable to CVE-2024-7347 (requires >= 1.26.1)"; \
+        exit 1; \
+    elif [ "$MAJOR" -eq 1 ] && [ "$MINOR" -lt 26 ]; then \
+        echo "ERROR: nginx version $NGINX_VERSION is vulnerable to CVE-2024-7347 (requires >= 1.26.1 or >= 1.27.0)"; \
+        exit 1; \
+    fi && \
+    echo "✓ nginx version $NGINX_VERSION is patched for CVE-2024-7347" && \
     microdnf clean all
 
 RUN INSTALL_PKGS="nodejs nodejs-nodemon nodejs-full-i18n npm findutils tar which" && \
@@ -43,7 +62,9 @@ RUN npm run build && \
     rm -rf /usr/src/app/node_modules
 
 # Runtime is nginx + static files only; drop Node so SBOM scanners do not flag npm's bundled deps.
-RUN microdnf remove -y nodejs-docs nodejs-nodemon nodejs-full-i18n nodejs-libs npm nodejs findutils tar which && \
+# Only remove packages that are actually installed to avoid errors
+RUN rpm -qa | grep -E '^(nodejs|npm)' | xargs -r microdnf remove -y && \
+    microdnf remove -y findutils tar which 2>/dev/null || true && \
     microdnf clean all && \
     rm -rf /root/.npm
 
@@ -51,7 +72,13 @@ RUN microdnf remove -y nodejs-docs nodejs-nodemon nodejs-full-i18n nodejs-libs n
 # in the event it is used for local development
 COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN sed -i s/API_HOST/$API_HOST/g /etc/nginx/nginx.conf
+RUN sed -i s/API_HOST/$API_HOST/g /etc/nginx/nginx.conf && \
+    echo "Verifying nginx configuration does not use mp4 module (CVE-2024-7347)..." && \
+    if grep -rE '^\s*(mp4|mp4_buffer_size|mp4_max_buffer_size)\s' /etc/nginx/*.conf /etc/nginx/conf.d/*.conf 2>/dev/null; then \
+        echo "ERROR: mp4 directive found in nginx config - this enables vulnerable ngx_http_mp4_module (CVE-2024-7347)" && \
+        exit 1; \
+    fi && \
+    echo "✓ nginx configuration is safe from CVE-2024-7347"
 
 EXPOSE 8080
 STOPSIGNAL SIGTERM
