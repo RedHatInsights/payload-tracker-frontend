@@ -42,6 +42,11 @@ RUN npm run build && \
     chmod 777 -R /var/cache/nginx && \
     rm -rf /usr/src/app/node_modules
 
+# Runtime is nginx + static files only; drop Node so SBOM scanners do not flag npm's bundled deps.
+RUN microdnf remove -y nodejs-docs nodejs-nodemon nodejs-full-i18n nodejs-libs npm nodejs findutils tar which && \
+    microdnf clean all && \
+    rm -rf /root/.npm
+
 # This file is not used in openshift, but is in the image
 # in the event it is used for local development
 COPY nginx.conf /etc/nginx/nginx.conf
