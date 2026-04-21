@@ -9,7 +9,11 @@ ENV NODEJS_VERSION=22
 
 USER 0
 
-RUN microdnf update -y && microdnf -y module enable nginx:1.26 && microdnf install nginx -y
+RUN microdnf update -y && \
+    microdnf -y module enable nginx:1.26 && \
+    microdnf install nginx -y && \
+    microdnf upgrade -y nginx && \
+    microdnf clean all
 
 RUN INSTALL_PKGS="nodejs nodejs-nodemon nodejs-full-i18n npm findutils tar which" && \
     microdnf -y module disable nodejs && \
@@ -35,7 +39,8 @@ RUN npm run build && \
     chown nginx:nginx -R /usr/share/nginx/html && \
     mkdir -p /var/cache/nginx && \
     chmod 777 -R /var/log/nginx && \
-    chmod 777 -R /var/cache/nginx
+    chmod 777 -R /var/cache/nginx && \
+    rm -rf /usr/src/app/node_modules
 
 # This file is not used in openshift, but is in the image
 # in the event it is used for local development

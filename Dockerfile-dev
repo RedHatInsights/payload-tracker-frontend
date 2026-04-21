@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi8/ubi-minimal:latest
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 WORKDIR /usr/src/app
 ARG SERVICE_HOST
 ENV API_HOST=${SERVICE_HOST:+$SERVICE_HOST}
@@ -6,7 +6,11 @@ ENV API_HOST=${SERVICE_HOST:-localhost}
 
 USER 0
 
-RUN microdnf install nginx
+RUN microdnf update -y && \
+    microdnf -y module enable nginx:1.26 && \
+    microdnf install nginx -y && \
+    microdnf upgrade -y nginx && \
+    microdnf clean all
 
 ADD dist ./dist
 RUN ["rm", "-rfv", "/usr/share/nginx/html"]

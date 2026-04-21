@@ -78,6 +78,7 @@ objects:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
+          # Cluster ConfigMap must stay in sync with repo nginx.conf; never enable the mp4 directive (ngx_http_mp4_module; see https://nvd.nist.gov/vuln/detail/CVE-2024-7347).
           - mountPath: /etc/nginx/nginx.conf
             name: payload-tracker-nginx-conf
             subPath: nginx.conf
