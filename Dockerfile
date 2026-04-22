@@ -9,7 +9,11 @@ ENV NODEJS_VERSION=22
 
 USER 0
 
-RUN microdnf update -y && microdnf -y module enable nginx:1.26 && microdnf install nginx -y
+# nginx 1.26 with latest security patches
+RUN microdnf update -y && \
+    microdnf -y module enable nginx:1.26 && \
+    microdnf install -y nginx && \
+    microdnf clean all
 
 RUN INSTALL_PKGS="nodejs nodejs-nodemon nodejs-full-i18n npm findutils tar which" && \
     microdnf -y module disable nodejs && \
