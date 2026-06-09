@@ -35,6 +35,7 @@ RUN npm run build && \
     mkdir -p /var/cache/nginx && \
     chmod 777 -R /var/log/nginx && \
     chmod 777 -R /var/cache/nginx && \
+    # Remove build-time Node.js artifacts to eliminate transitive dependency vulnerabilities
     rm -rf /usr/src/app/node_modules /usr/lib/node_modules /usr/local/lib/node_modules
 
 # This file is not used in openshift, but is in the image
