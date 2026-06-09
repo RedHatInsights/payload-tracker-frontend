@@ -22,8 +22,7 @@ RUN INSTALL_PKGS="nodejs nodejs-nodemon nodejs-full-i18n npm findutils tar which
 RUN npm install -g npm@latest
 
 COPY package.json package-lock.json ./
-RUN npm ci && npm i --only=dev && npm install yarn
-
+RUN npm ci
 
 COPY src ./src
 COPY .babelrc ./.babelrc
@@ -35,7 +34,8 @@ RUN npm run build && \
     chown nginx:nginx -R /usr/share/nginx/html && \
     mkdir -p /var/cache/nginx && \
     chmod 777 -R /var/log/nginx && \
-    chmod 777 -R /var/cache/nginx
+    chmod 777 -R /var/cache/nginx && \
+    rm -rf /usr/src/app/node_modules /usr/lib/node_modules /usr/local/lib/node_modules
 
 # This file is not used in openshift, but is in the image
 # in the event it is used for local development
