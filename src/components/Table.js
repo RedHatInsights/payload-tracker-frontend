@@ -2,16 +2,17 @@ import {
     Bullseye,
     EmptyState,
     EmptyStateBody,
-    EmptyStateIcon,
     Spinner,
     Title
 } from '@patternfly/react-core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
     Table,
-    TableBody,
-    TableHeader,
-    TableVariant
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tr
 } from '@patternfly/react-table';
 
 import DateTime from 'luxon/src/datetime';
@@ -80,33 +81,34 @@ const PayloadsTable = ({ sortDir, setSortDir, sortBy, setSortBy }) => {
         const cols = generateCells(cells);
         setFormattedCells(cols);
         setFormattedRows(generateRows(payloads, cols));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cells, payloads]);
 
-    const onSort = (_event, index, direction) => {
-        setSortDir(direction);
-        setSortBy(index);
-    };
+    const activeSortIndex = useMemo(() => {
+        if (sortBy && formattedCells) {
+            return formattedCells.findIndex(col => col.title === sortBy);
+        }
+
+        return null;
+    }, [sortBy, formattedCells]);
+
+    const getSortParams = (columnIndex) => ({
+        sortBy: {
+            index: activeSortIndex,
+            direction: sortDir || 'asc'
+        },
+        onSort: (_event, index, direction) => {
+            if (formattedCells && formattedCells[index]) {
+                setSortBy(formattedCells[index].title);
+                setSortDir(direction);
+            }
+        },
+        columnIndex
+    });
 
     return <div>
         {loading && <Bullseye><Spinner size='xl'/></Bullseye>}
-        {!loading && formattedCells && formattedRows && <Table
-            cells={formattedCells}
-            rows={formattedRows}
-            variant={TableVariant.compact}
-            sortBy={{
-                index: formattedCells.findIndex(x => x.title === sortBy),
-                direction: sortDir
-            }}
-            onSort={(e, index, direction) => onSort(e, formattedCells[index].title, direction)}
-            aria-label='Payloads Table'
-        >
-            <TableHeader/>
-            <TableBody/>
-        </Table>}
         {!loading && formattedCells && formattedRows && (!payloads || payloads.length === 0) && <Bullseye>
-            <EmptyState>
-                <EmptyStateIcon icon={SearchIcon}/>
+            <EmptyState icon={SearchIcon}>
                 <Title headingLevel="h4" size="lg">
                     No results found
                 </Title>
@@ -115,6 +117,37 @@ const PayloadsTable = ({ sortDir, setSortDir, sortBy, setSortBy }) => {
                 </EmptyStateBody>
             </EmptyState>
         </Bullseye>}
+        {!loading && formattedCells && formattedRows && payloads && payloads.length > 0 && (
+            <Table variant='compact'>
+                <Thead>
+                    <Tr>
+                        {formattedCells.map((cell, index) => (
+                            <Th
+                                key={index}
+                                sort={getSortParams(index)}
+                            >
+                                {cell.title}
+                            </Th>
+                        ))}
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    {formattedRows.map((row, rowIndex) => (
+                        <Tr key={rowIndex}>
+                            {row.map((cell, cellIndex) => {
+                                const isHeaderCell = cell.props?.component === 'th';
+                                const CellComponent = isHeaderCell ? Th : Td;
+                                return (
+                                    <CellComponent key={cellIndex}>
+                                        {cell.title || ''}
+                                    </CellComponent>
+                                );
+                            })}
+                        </Tr>
+                    ))}
+                </Tbody>
+            </Table>
+        )}
     </div>;
 };
 

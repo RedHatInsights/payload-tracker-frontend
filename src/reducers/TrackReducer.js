@@ -1,6 +1,5 @@
 import * as ConstantTypes from '../AppConstants';
 
-import { LOCATION_CHANGE } from 'connected-react-router';
 import { getValueFromURL } from '../utilities/Common';
 import history from '../history';
 
@@ -36,13 +35,6 @@ const TrackReducer = (state = initialState, action) => {
             return {
                 ...state,
                 has_download_role: action.payload
-            };
-        case LOCATION_CHANGE:
-            return action.payload.location.pathname.indexOf('/app/payload-tracker/track') >= 0 ? state : {
-                ...state,
-                sort_dir: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_dir,
-                sort_by: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.sort_by,
-                request_id: ConstantTypes.DEFAULT_TRACK_PAGE_STATE.request_id
             };
         default:
             return state;

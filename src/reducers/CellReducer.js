@@ -1,6 +1,5 @@
 import * as ConstantTypes from '../AppConstants';
 
-import { LOCATION_CHANGE } from 'connected-react-router';
 import { getValueFromURL } from '../utilities/Common';
 import history from '../history';
 
@@ -26,13 +25,12 @@ const CellReducer = (state = initialState, action) => {
                     return cell.title === action.title ? { ...cell, isActive: action.payload } : cell;
                 })
             };
-        case LOCATION_CHANGE:
-            return action.payload.location.pathname === state.cellPath ? state : {
+        case ConstantTypes.INITIALIZE_CELLS:
+            return {
                 ...state,
-                cells: action.payload.location.pathname === '/app/payload-tracker/payloads' ?
+                cells: action.payload === 'payloads' ?
                     ConstantTypes.DEFAULT_PAYLOAD_CELL_STATE :
-                    ConstantTypes.DEFAULT_STATUSES_CELL_STATE,
-                cellPath: action.payload.location.pathname
+                    ConstantTypes.DEFAULT_STATUSES_CELL_STATE
             };
         default:
             return state;

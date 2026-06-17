@@ -29,8 +29,6 @@
 .pt-c-durations__service {
     background-color: var(--pt-c-durations--processing);
     height: inherit;
-    border: 1px solid black;
-    color: white;
 
     &.success {
         background-color: var(--pt-c-durations--success);
@@ -67,7 +65,6 @@
     }
 
     .pt-c-durations__legend--label {
-        color: black;
         font-size: 8pt;
         font-weight: bold;
     }

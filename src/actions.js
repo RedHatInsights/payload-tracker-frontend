@@ -39,6 +39,11 @@ export const setCellActivity = (title, bool = false) => ({
     payload: bool
 });
 
+export const initializeCells = (cellType) => ({
+    type: ActionTypes.INITIALIZE_CELLS,
+    payload: cellType
+});
+
 export const setRecentTimeType = (type) => ({
     type: ActionTypes.SET_RECENT_TIME_TYPE,
     payload: type
@@ -119,4 +124,12 @@ export const setTrackSortDir = (sort_dir) => ({
 export const setHasDownloadRole = (has_download_role) => ({
     type: ActionTypes.SET_HAS_DOWNLOAD_ROLE,
     payload: has_download_role
+});
+
+export const resetDataState = () => ({
+    type: ActionTypes.RESET_DATA_STATE
+});
+
+export const resetPageState = () => ({
+    type: ActionTypes.RESET_PAGE_STATE
 });

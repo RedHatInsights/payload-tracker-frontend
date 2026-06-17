@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState, useCallback } from 'react';
 
 import DateTime from 'luxon/src/datetime';
 import PropTypes from 'prop-types';
@@ -8,40 +8,63 @@ const DateTextInput = forwardRef(({ val, setValidation }, ref) => {
 
     const [isValid, setTextValidation] = useState(false);
     const [currentValue, setCurrentValue] = useState();
+    const [displayValue, setDisplayValue] = useState('');
 
-    const updateState = (validation) => {
+    const updateState = useCallback((validation) => {
         setTextValidation(validation);
         setValidation(validation);
-    };
+    }, [setValidation]);
 
-    const checkVal = (newVal) => {
-        if (newVal) {
-            newVal = newVal instanceof Object ? newVal.toLocaleString('en-US') : newVal;
-            const res = DateTime.fromFormat(newVal, 'm/d/y, h:mm:ss a');
-            res.invalid ? updateState(false) : updateState(true);
-            setCurrentValue(newVal);
+    const validateAndSetValue = useCallback((newVal) => {
+        if (!newVal) {
+            return;
         }
-    };
+
+        if (newVal instanceof Date) {
+            setCurrentValue(newVal);
+            setDisplayValue(newVal.toLocaleString('en-US'));
+            updateState(true);
+            return;
+        }
+
+        const res = DateTime.fromFormat(newVal, 'm/d/y, h:mm:ss a');
+        if (!res.invalid) {
+            setCurrentValue(res.toJSDate());
+            setDisplayValue(newVal);
+            updateState(true);
+        } else {
+            setDisplayValue(newVal);
+            updateState(false);
+        }
+    }, [updateState]);
 
     useEffect(() => {
-        checkVal(val);
-        setCurrentValue(val);
-    //eslint-disable-next-line
-    }, [val, setCurrentValue]);
+        if (val) {
+            validateAndSetValue(val);
+        } else {
+            setCurrentValue(undefined);
+            setDisplayValue('');
+            updateState(false);
+        }
+    }, [val, validateAndSetValue, updateState]);
 
     useImperativeHandle(ref, () => ({
         setValue: (value) => {
-            checkVal(value);
-            setCurrentValue(value);
+            validateAndSetValue(value);
         },
         getValue: () => {
-            return new Date(currentValue);
+            if (currentValue instanceof Date) {
+                return currentValue;
+            }
+
+            const parsed = DateTime.fromFormat(displayValue, 'm/d/y, h:mm:ss a');
+            return !parsed.invalid ? parsed.toJSDate() : null;
         }
-    }));
+    }), [validateAndSetValue, currentValue, displayValue]);
 
     return <TextInput
-        value={currentValue && currentValue.toLocaleString('en-US')}
-        onChange={(val) => checkVal(val)}
+        value={displayValue}
+        onChange={(_event, val) => validateAndSetValue(val)}
         validated={isValid ? 'success' : 'error'}
     />;
 });

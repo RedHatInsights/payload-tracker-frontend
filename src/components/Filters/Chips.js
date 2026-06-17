@@ -1,6 +1,6 @@
 import './Chips.scss';
 
-import { Chip, ChipGroup } from '@patternfly/react-core';
+import { Label, LabelGroup } from '@patternfly/react-core';
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
@@ -19,20 +19,22 @@ const Chips = ({ toDelete, staged, currFilters, onRevoke, onDelete, displayChip 
 
     return <div className='pt-c-toolbar--chips'>
         {Object.entries(chips).map(([type, chipArr], group) => {
-            return chipArr.length > 0 && <ChipGroup key={group} categoryName={type}>
+            return chipArr.length > 0 && <LabelGroup key={group} categoryName={type}>
                 {type === TYPES.DELETE ?
                     chipArr.map((chip, index) => {
-                        return <Chip
+                        const chipText = displayChip(chip);
+                        return <Label variant="outline"
                             key={`${group}.${index}`}
-                            onClick={() => onRevoke(chip)}
-                        >{displayChip(chip)}</Chip>;
+                            onClose={() => onRevoke(chip)}
+                        >{String(chipText)}</Label>;
                     }) : chipArr.map((chip, index) => {
-                        return <Chip
+                        const chipText = displayChip(chip);
+                        return <Label variant="outline"
                             key={`${group}.${index}`}
-                            onClick={() => onDelete(chip, type)}
-                        >{displayChip(chip)}</Chip>;
+                            onClose={() => onDelete(chip, type)}
+                        >{String(chipText)}</Label>;
                     })}
-            </ChipGroup>;})}
+            </LabelGroup>;})}
     </div>;
 };
 

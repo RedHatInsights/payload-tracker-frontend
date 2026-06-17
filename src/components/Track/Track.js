@@ -12,7 +12,7 @@ import {
     Tabs
 } from '@patternfly/react-core';
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 
 import API from '../../utilities/Api';
 import Durations from './Durations';
@@ -22,11 +22,12 @@ import TrackGraphic from './TrackGraphicView';
 import TrackSearchBar from './TrackSearchBar';
 import TrackTable from './TrackTable';
 import { useDispatch, useSelector } from 'react-redux';
-import { usePolling, getValueFromURL, validUUID } from '../../utilities/Common';
+import { usePolling, validUUID } from '../../utilities/Common';
 
 const Track = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
-    const queryReqId = getValueFromURL(location, 'request_id') || null;
+    const queryReqId = searchParams.get('request_id') || null;
 
     const request_id = useSelector(state => state.track.request_id);
     const sort_by = useSelector(state => state.track.sort_by);
@@ -39,6 +40,7 @@ const Track = () => {
     const [loading, setLoading] = useState();
     const currPayloads = useRef();
     const retryCounter = useRef();
+    const isMounted = useRef(true);
 
     const getData = async (restartCounter = false) => {
         try {
@@ -67,6 +69,25 @@ const Track = () => {
     };
 
     useEffect(() => {
+        if (!location.pathname.includes('/track')) {
+            return;
+        }
+
+        if (!request_id || !isMounted.current) {
+            return;
+        }
+
+        const params = {};
+        if (request_id) {params.request_id = request_id;}
+
+        if (sort_by) {params.sort_by = sort_by;}
+
+        if (sort_dir) {params.sort_dir = sort_dir;}
+
+        setSearchParams(params, { replace: true });
+    }, [request_id, sort_by, sort_dir, setSearchParams, location.pathname]);
+
+    useEffect(() => {
         if (queryReqId !== null && validUUID(queryReqId)) {
             queryReqId && dispatch(AppActions.setTrackRequestID(queryReqId));
         }
@@ -74,6 +95,11 @@ const Track = () => {
         setLoading(request_id && 'pending');
         currPayloads.current = undefined;
         request_id && (async () => await getData(true))();
+
+        return () => {
+            isMounted.current = false;
+            dispatch(AppActions.resetDataState());
+        };
     //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currPayloads, request_id]);
 
@@ -89,7 +115,7 @@ const Track = () => {
         }
     }, 2000);
 
-    return <PageSection>
+    return <PageSection hasBodyWrapper={false}>
         <TrackSearchBar loading={loading} payloads={payloads}/>
         {loading === 'fulfilled' && <React.Fragment>
             {durations && <Durations durations={durations} payloads={payloads}/>}

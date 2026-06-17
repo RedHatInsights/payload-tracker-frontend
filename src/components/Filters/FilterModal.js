@@ -1,6 +1,14 @@
 import './FilterModal.scss';
 
-import { Button, Form, FormGroup, Modal, TextInput } from '@patternfly/react-core';
+import {
+    Button,
+    Form,
+    FormGroup,
+    TextInput
+} from '@patternfly/react-core';
+import {
+    Modal
+} from '@patternfly/react-core/deprecated';
 import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
@@ -45,9 +53,9 @@ const FilterModal = ({ isOpen, options, onStageFn, onCancelFn }) => {
         {toStage.length === options.length && <Form isHorizontal>
             {options.map((option, index) => <FormGroup key={index} label={option} isRequired>
                 <TextInput
-                    value={toStage[index].option}
+                    value={toStage[index][option]}
                     type='text'
-                    onChange={(value) => updateValue(value, option)}
+                    onChange={(_event, value) => updateValue(value, option)}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             e.preventDefault();

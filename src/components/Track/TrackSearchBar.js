@@ -8,13 +8,11 @@ import {
     Card,
     EmptyState,
     EmptyStateBody,
-    EmptyStateIcon,
     EmptyStateVariant,
     Spinner,
-    Text,
-    TextContent,
+    Content,
     TextInput,
-    TextVariants,
+    ContentVariants,
     Title
 } from '@patternfly/react-core';
 import { DownloadIcon, PlusCircleIcon, TimesCircleIcon } from '@patternfly/react-icons';
@@ -25,13 +23,14 @@ import * as ConstantTypes from '../../AppConstants';
 
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { push } from 'connected-react-router';
+import { useNavigate } from 'react-router-dom';
 import KibanaLink from './KibanaLink';
 
 const TrackSearchBar = ({ payloads, loading }) => {
     const request_id = useSelector(state => state.track.request_id);
     const hasDownloadRole = useSelector(state => state.track.has_download_role);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [id, updateID] = useState();
     const [account, setAccount] = useState('');
@@ -89,7 +88,7 @@ const TrackSearchBar = ({ payloads, loading }) => {
                 type="text"
                 name="request_id"
                 value={id}
-                onChange={(id) => updateID(id)}
+                onChange={(_event, id) => updateID(id)}
                 onKeyPress={(e) => e.key === 'Enter' && dispatch(AppActions.setTrackRequestID(id))}
                 placeholder='Enter a new Request ID...'
             />
@@ -97,17 +96,17 @@ const TrackSearchBar = ({ payloads, loading }) => {
                 variant='primary'
                 onClick={() => {
                     dispatch(AppActions.setTrackRequestID(id));
-                    dispatch(push(`/app/payload-tracker/track?request_id=${id}`));
+                    navigate(`/app/payload-tracker/track?request_id=${id}`);
                 }}
                 isDisabled={id === ''}>
                     Submit
             </Button>
         </div>
-        <TextContent className='pt-c-header'>
-            <Text component={TextVariants.h1}>
+        <Content className='pt-c-header'>
+            <Content component={ContentVariants.h1}>
                 Request Information
-            </Text>
-        </TextContent>
+            </Content>
+        </Content>
         <Card className='pt-c-track__header'>
             {loading === 'pending' && <div className='pt-c-track__header--content'>
                 <Bullseye>
@@ -143,7 +142,7 @@ const TrackSearchBar = ({ payloads, loading }) => {
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => dispatch(push(`/app/payload-tracker/payloads?account=${account}`))}
+                            onClick={() => navigate(`/app/payload-tracker/payloads?account=${account}`)}
                         >
                             See more Requests for this Account
                         </Button>
@@ -159,7 +158,7 @@ const TrackSearchBar = ({ payloads, loading }) => {
                             variant="link"
                             isInline
                             icon={<PlusCircleIcon/>}
-                            onClick={() => dispatch(push(`/app/payload-tracker/payloads?inventory_id=${inventory_id}`))}
+                            onClick={() => navigate(`/app/payload-tracker/payloads?inventory_id=${inventory_id}`)}
                         >
                             See more Requests for this ID
                         </Button>
@@ -167,8 +166,7 @@ const TrackSearchBar = ({ payloads, loading }) => {
                 </div>}
             </div>}
             {(!loading || loading === 'rejected') && <Bullseye>
-                <EmptyState variant={EmptyStateVariant.lg}>
-                    <EmptyStateIcon icon={TimesCircleIcon} color='#c9190b'/>
+                <EmptyState icon={TimesCircleIcon} variant={EmptyStateVariant.lg}>
                     {request_id ? <Title headingLevel='h1'>
                         Invalid request_id
                     </Title> : <Title headingLevel='h1'>

@@ -8,13 +8,14 @@ import {
     ProgressMeasureLocation,
     ProgressVariant
 } from '@patternfly/react-core';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Table,
-    TableBody,
-    TableHeader,
-    TableVariant,
-    compoundExpand
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tr
 } from '@patternfly/react-table';
 import { getLocalDate, truncateString } from '../../utilities/Common';
 
@@ -25,67 +26,32 @@ import KibanaLink from './KibanaLink';
 const TrackGraphic = ({ service, source, statuses, messages, requestId }) => {
 
     const [isOpen, toggleOpen] = useState(false);
-    const [rows, setRows] = useState([]);
-    const [cells, setCells] = useState([]);
+    const [expandedMessages, setExpandedMessages] = useState(new Set());
 
-    const generateRows = useCallback((messages) => {
-        return messages.flatMap((message, index) => {
-            message.status === 'error' && toggleOpen(true);
-            return [
-                {
-                    cells: [
-                        {
-                            title: message.status
-                        },
-                        {
-                            title: message.message ? truncateString(message.message, 80) : '',
-                            props: { isOpen: message.status === 'error', ariaControls: 'compound-expansion-table-1' }
-                        },
-                        {
-                            title: getLocalDate(
-                                DateTime.fromISO(
-                                    message.date
-                                ).toJSDate()
-                            )
-                        }
-                    ]
-                },
-                {
-                    parent: index * 2,
-                    compoundParent: 1,
-                    cells: [
-                        {
-                            title: <ClipboardCopy isReadOnly isExpanded variant={ClipboardCopyVariant.expansion}>
-                                {message.message}
-                            </ClipboardCopy>,
-                            props: { colSpan: 6, className: 'pf-m-no-padding' }
-                        }
-                    ]
-                }
-            ];
+    const toggleMessageExpansion = (messageIndex) => {
+        setExpandedMessages(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(messageIndex)) {
+                newSet.delete(messageIndex);
+            } else {
+                newSet.add(messageIndex);
+            }
+
+            return newSet;
         });
-    }, []);
-
-    const onExpand = (e, rowIndex, colIndex) => {
-        if (rows[rowIndex].cells[colIndex].title !== '') {
-            rows[rowIndex].cells[colIndex].props.isOpen ?
-                rows[rowIndex].cells[colIndex].props.isOpen = false :
-                rows[rowIndex].cells[colIndex].props.isOpen = true;
-            setRows([...rows]);
-        }
     };
 
     useEffect(() => {
-        messages && setRows(generateRows(messages));
-        setCells([
-            'status',
-            {
-                title: 'message',
-                cellTransforms: [compoundExpand]
-            },
-            'date'
-        ]);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (messages) {
+            const errorIndices = new Set();
+            messages.forEach((message, index) => {
+                if (message.status === 'error') {
+                    errorIndices.add(index);
+                    toggleOpen(true);
+                }
+            });
+            setExpandedMessages(errorIndices);
+        }
     }, [messages]);
 
     return <React.Fragment>
@@ -107,14 +73,45 @@ const TrackGraphic = ({ service, source, statuses, messages, requestId }) => {
             </AccordionToggle>
             <AccordionContent isHidden={!isOpen}>
                 <KibanaLink requestId={requestId || ''} serviceName={service}> Filter In Kibana </KibanaLink>
-                <Table
-                    onExpand={onExpand}
-                    cells={cells}
-                    rows={rows}
-                    variant={TableVariant.compact}
-                >
-                    <TableHeader/>
-                    <TableBody/>
+                <Table variant='compact'>
+                    <Thead>
+                        <Tr>
+                            <Th>status</Th>
+                            <Th>message</Th>
+                            <Th>date</Th>
+                        </Tr>
+                    </Thead>
+                    {messages && messages.map((message, messageIndex) => {
+                        const isExpanded = expandedMessages.has(messageIndex);
+                        return (
+                            <Tbody key={messageIndex} isExpanded={isExpanded}>
+                                <Tr>
+                                    <Td>{message.status}</Td>
+                                    <Td
+                                        compoundExpand={{
+                                            isExpanded,
+                                            onToggle: () => toggleMessageExpansion(messageIndex),
+                                            expandId: `expandable-message-${messageIndex}`
+                                        }}
+                                    >
+                                        {message.message ? truncateString(message.message, 80) : ''}
+                                    </Td>
+                                    <Td>
+                                        {getLocalDate(
+                                            DateTime.fromISO(message.date).toJSDate()
+                                        )}
+                                    </Td>
+                                </Tr>
+                                <Tr isExpanded={isExpanded}>
+                                    <Td colSpan={3} className='pf-v6-m-no-padding'>
+                                        <ClipboardCopy isReadOnly isExpanded variant={ClipboardCopyVariant.expansion}>
+                                            {message.message}
+                                        </ClipboardCopy>
+                                    </Td>
+                                </Tr>
+                            </Tbody>
+                        );
+                    })}
                 </Table>
             </AccordionContent>
         </AccordionItem>}

@@ -45,7 +45,7 @@ const Durations = ({ payloads, durations }) => {
     useEffect(() => {
         handleResize();
         window.addEventListener('resize', handleResize);
-        //eslint-disable-next-line
+
     }, []);
 
     useEffect(() => {
