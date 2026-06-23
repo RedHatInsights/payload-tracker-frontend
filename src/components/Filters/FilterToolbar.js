@@ -1,6 +1,9 @@
 import './FilterToolbar.scss';
 
-import { Button, Divider, Select, SelectOption } from '@patternfly/react-core';
+import {
+    Button, Divider, MenuToggle, Select, SelectOption, SelectList,
+    Toolbar, ToolbarContent, ToolbarItem, ToolbarGroup
+} from '@patternfly/react-core';
 import React, { useEffect, useState } from 'react';
 import { stageFilters, unstageFilter, updateFilters } from '../../actions';
 
@@ -29,9 +32,14 @@ const FilterToolbar = ({ options }) => {
         return arr.filter(item => stringify(item) !== stringify(toRemove));
     };
 
-    const onToggleFn = (isOpen) => { setIsOpen(isOpen); !isModalOpen && setSelected([]); };
+    const onToggleFn = () => {
+        setIsOpen(!isOpen);
+        !isModalOpen && !isOpen && setSelected([]);
+    };
 
     const onSelectFn = (e, selection) => {
+        if (selection === undefined) {return;} // Ignore clicks on divider/button
+
         selected.filter(item => item === selection).length > 0 ?
             setSelected(selected.filter(item => item !== selection)) :
             setSelected([...selected, selection]);
@@ -67,34 +75,63 @@ const FilterToolbar = ({ options }) => {
         setFilters(filters);
     }, [filters]);
 
-    return <div className='pt-c-toolbar'>
+    return <>
         {isModalOpen && <FilterModal
             isOpen={isModalOpen}
             options={selected}
             onStageFn={onStageFn}
             onCancelFn={onCancelFn}
         />}
-        <Select
-            className='pt-c-toolbar__selector'
-            variant='checkbox'
-            selections={selected}
-            isPlain
-            onToggle={onToggleFn}
-            onSelect={onSelectFn}
-            isOpen={isOpen}
-            placeholderText='Add Filters'
-            isCheckboxSelectionBadgeHidden
-        >
-            {options.map((option, key) => <SelectOption key={key} value={option}/>)}
-            <Divider/>
-            <Button variant='link' isDisabled={selected.length === 0} onClick={() => setModalOpen(true)}>
-                Enter Filter Values
-            </Button>
-        </Select>
-        <Chips toDelete={toDelete} staged={staged} currFilters={currFilters}
-            onRevoke={onRevokeFn} onDelete={onDeleteFn} displayChip={stringify}/>
-        <Button className='pt-c-toolbar__apply' variant='link' onClick={onApplyFn}> Apply </Button>
-    </div>;
+        <Toolbar className="pt-c-filter-toolbar">
+            <ToolbarContent>
+                <ToolbarItem>
+                    <Select
+                        role="menu"
+                        isOpen={isOpen}
+                        onOpenChange={onToggleFn}
+                        onSelect={onSelectFn}
+                        selected={selected}
+                        toggle={(toggleRef) => (
+                            <MenuToggle
+                                ref={toggleRef}
+                                onClick={onToggleFn}
+                                isExpanded={isOpen}
+                                variant="plainText"
+                            >
+                                Add Filters
+                            </MenuToggle>
+                        )}
+                    >
+                        <SelectList>
+                            {options.map((option, key) => (
+                                <SelectOption
+                                    key={key}
+                                    value={option}
+                                    hasCheckbox
+                                    isSelected={selected.includes(option)}
+                                >
+                                    {option}
+                                </SelectOption>
+                            ))}
+                        </SelectList>
+                        <Divider/>
+                        <Button variant='link' isDisabled={selected.length === 0} onClick={() => setModalOpen(true)}>
+                            Enter Filter Values
+                        </Button>
+                    </Select>
+                </ToolbarItem>
+                <ToolbarGroup>
+                    <ToolbarItem>
+                        <Chips toDelete={toDelete} staged={staged} currFilters={currFilters}
+                            onRevoke={onRevokeFn} onDelete={onDeleteFn} displayChip={stringify}/>
+                    </ToolbarItem>
+                </ToolbarGroup>
+                <ToolbarItem align={{ default: 'alignEnd' }}>
+                    <Button variant='link' onClick={onApplyFn}>Apply</Button>
+                </ToolbarItem>
+            </ToolbarContent>
+        </Toolbar>
+    </>;
 
 };
 

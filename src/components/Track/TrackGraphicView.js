@@ -44,7 +44,7 @@ const TrackGraphicView = ({ payloads, requestId }) => {
 
     useEffect(() => {
         setServices(generateUniqueServices(payloads));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [payloads]);
 
     return <Accordion>

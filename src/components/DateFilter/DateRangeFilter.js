@@ -10,13 +10,15 @@ import {
     FlexItem,
     Form,
     FormGroup,
-    Modal,
     Radio,
     Tab,
     Tabs,
-    Text,
+    Content,
     CalendarMonth
 } from '@patternfly/react-core';
+import {
+    Modal
+} from '@patternfly/react-core/deprecated';
 import { CaretLeftIcon, CaretRightIcon, ClockIcon } from '@patternfly/react-icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { quickFilters, useQuickFilters, useStacks } from './utils';
@@ -116,7 +118,7 @@ const DateRangeFilter = () => {
             </Form>
             <Tabs activeKey={activeTab} onSelect={(e, index) => setActiveTab(index)}>
                 <Tab eventKey={0} title='Quick'>
-                    <Flex className='pf-c-filters__date--tab' direction={{ default: 'column' }}>
+                    <Flex className='pf-v6-c-filters__date--tab' direction={{ default: 'column' }}>
                         {filters.map(({ title }, index) =>
                             <FlexItem className='pt-c-filters__date--quick' key={ index }>
                                 <Button
@@ -124,14 +126,14 @@ const DateRangeFilter = () => {
                                     isDisabled={!type}
                                     onClick={() => updateFilters(title)}
                                 >
-                                    <Text>{title}</Text>
+                                    <Content component="p">{title}</Content>
                                 </Button>
                                 <Divider/>
                             </FlexItem>)}
                     </Flex>
                 </Tab>
                 <Tab eventKey={1} title='Absolute'>
-                    <div className='pf-c-filters__date--tab'>
+                    <div className='pf-v6-c-filters__date--tab'>
                         <Bullseye>
                             <Form>
                                 <Flex direction={{ default: 'row' }}>
@@ -146,7 +148,7 @@ const DateRangeFilter = () => {
                                             </FlexItem>
                                             <FlexItem>
                                                 <CalendarMonth
-                                                    onChange={(day) => fromRef.current.setValue(day)}
+                                                    onChange={(_event, day) => fromRef.current?.setValue(day)}
                                                 />                                            </FlexItem>
                                         </Flex>
                                     </FormGroup>
@@ -161,7 +163,7 @@ const DateRangeFilter = () => {
                                             </FlexItem>
                                             <FlexItem>
                                                 <CalendarMonth
-                                                    onChange={(day) => toRef.current.setValue(day)}
+                                                    onChange={(_event, day) => toRef.current?.setValue(day)}
                                                 />
                                             </FlexItem>
                                         </Flex>
@@ -173,10 +175,10 @@ const DateRangeFilter = () => {
                 </Tab>
             </Tabs>
         </Modal>}
-        {leftStack && leftStack.length !== 0 && <Button
+        {leftStack && leftStack.length !== 0 && <Button icon={<CaretLeftIcon/>}
             variant='inline'
             onClick={ toggleLeft }
-        > <CaretLeftIcon/> </Button>}
+        >  </Button>}
         <Button variant='inline' onClick={() => setOpen(!isOpen)}>
             <Flex direction={{ default: 'row' }} >
                 <FlexItem>
@@ -187,10 +189,10 @@ const DateRangeFilter = () => {
                 </FlexItem>
             </Flex>
         </Button>
-        {rightStack && rightStack.length !== 0 && <Button
+        {rightStack && rightStack.length !== 0 && <Button icon={<CaretRightIcon/>}
             variant='inline'
             onClick={ toggleRight }
-        > <CaretRightIcon/> </Button>}
+        >  </Button>}
     </React.Fragment>;
 };
 

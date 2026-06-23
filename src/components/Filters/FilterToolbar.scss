@@ -1,25 +1,3 @@
-.pt-c-toolbar {
-    display: inline-flex;
-    justify-content: space-between;
-    height: 50px;
-    width: 100%;
-    border-bottom: 1px solid black;
-    background-color: white;
-    margin: 0px;
-    padding-top: 10px;
-
-    > * {
-        outline: none;
-    }
-
-    .pt-c-toolbar__selector {
-        padding-left: 10px;
-        top: -3px;
-        width: 160px;
-    }
-
-    .pt-c-toolbar__apply {
-        top: -5px;
-    }
-
+.pt-c-filter-toolbar {
+    padding-bottom: 0;
 }

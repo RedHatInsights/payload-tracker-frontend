@@ -99,7 +99,7 @@ export const useStacks = (defaultValue = null) => {
         setLeftStack([]);
         setRightStack(more);
         setActive(recent);
-    //eslint-disable-next-line
+
     }, [data]);
 
     useEffect(() => {

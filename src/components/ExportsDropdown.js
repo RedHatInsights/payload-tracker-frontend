@@ -1,4 +1,4 @@
-import { Dropdown, DropdownItem, DropdownToggle } from '@patternfly/react-core';
+import { Dropdown, DropdownItem, DropdownList, MenuToggle } from '@patternfly/react-core';
 import React, { useState } from 'react';
 
 import { CSVLink } from 'react-csv';
@@ -12,25 +12,27 @@ const ExportsDropdown = () => {
 
     return <Dropdown
         onSelect={() => setOpen(false)}
-        toggle={
-            <DropdownToggle
-                toggleIndicator={null}
-                onToggle={() => setOpen(!isOpen)}
+        toggle={(toggleRef) => (
+            <MenuToggle
+                ref={toggleRef}
+                onClick={() => setOpen(!isOpen)}
+                isExpanded={isOpen}
+                variant="plain"
             >
                 <ExportIcon/>
-            </DropdownToggle>
-        }
+            </MenuToggle>
+        )}
         isOpen={isOpen}
-        position='left'
-        isPlain
-        dropdownItems={[
+        onOpenChange={setOpen}
+    >
+        <DropdownList>
             <DropdownItem key={0}>
                 <CSVLink data={payloads}>
                     Export CSV
                 </CSVLink>
             </DropdownItem>
-        ]}
-    />;
+        </DropdownList>
+    </Dropdown>;
 };
 
 export default ExportsDropdown;

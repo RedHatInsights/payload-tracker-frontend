@@ -3,20 +3,19 @@ import './Statuses.scss';
 import * as AppActions from '../../actions';
 import * as ConstantTypes from '../../AppConstants';
 
-import { PageSection, Text, TextContent, TextVariants } from '@patternfly/react-core';
-import React, { useEffect, useState } from 'react';
+import { PageSection, Content, ContentVariants } from '@patternfly/react-core';
+import { useEffect, useRef, useState } from 'react';
 
 import FilterToolbar from '../Filters/FilterToolbar';
 import Pagination from '../Pagination';
 import Table from '../Table';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { getValueFromURL } from '../../utilities/Common';
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 const queryBase = `${ConstantTypes.API_URL}/api/v1/statuses?`;
 
 const Statuses = () => {
-    const location = useLocation();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const page = useSelector(state => state.payloads.page);
     const page_size = useSelector(state => state.payloads.page_size);
@@ -26,8 +25,87 @@ const Statuses = () => {
     const recentTimeType = useSelector(state => state.payloads.recentTimeType);
     const dispatch = useDispatch();
 
-    const [sortDir, updateDir] = useState(getValueFromURL(location, 'sort_dir') || 'desc');
-    const [sortBy, updateBy] = useState(getValueFromURL(location, 'sort_by') || 'date');
+    const [sortDir, updateDir] = useState(searchParams.get('sort_dir') || 'desc');
+    const [sortBy, updateBy] = useState(searchParams.get('sort_by') || 'date');
+    const debounceTimer = useRef(null);
+
+    useEffect(() => {
+        dispatch(AppActions.initializeCells('statuses'));
+
+        const urlPage = searchParams.get('page');
+        const urlPageSize = searchParams.get('page_size');
+        const urlStartDate = searchParams.get(`${recentTimeType}_gte`) || searchParams.get('date_gte');
+        const urlEndDate = searchParams.get(`${recentTimeType}_lte`) || searchParams.get('date_lte');
+
+        if (urlPage && parseInt(urlPage) !== page) {
+            dispatch(AppActions.setPage(parseInt(urlPage)));
+        }
+
+        if (urlPageSize && parseInt(urlPageSize) !== page_size) {
+            dispatch(AppActions.setPageSize(parseInt(urlPageSize)));
+        }
+
+        if (urlStartDate || urlEndDate) {
+            dispatch(AppActions.updateDateRange(
+                urlStartDate ? new Date(urlStartDate) : null,
+                urlEndDate ? new Date(urlEndDate) : null
+            ));
+        }
+
+        const urlFilters = [];
+        ConstantTypes.STATUS_FILTER_TYPES.forEach(filterType => {
+            const value = searchParams.get(filterType);
+            if (value) {
+                urlFilters.push({ [filterType]: value });
+            }
+        });
+        if (urlFilters.length > 0) {
+            dispatch(AppActions.updateFilters(urlFilters));
+        } else if (filters.length > 0) {
+            dispatch(AppActions.updateFilters([]));
+        }
+
+        return () => {
+            dispatch(AppActions.updateFilters([]));
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current);
+        }
+
+        debounceTimer.current = setTimeout(() => {
+            const params = {};
+
+            if (sortBy) {params.sort_by = sortBy;}
+
+            if (sortDir) {params.sort_dir = sortDir;}
+
+            if (page) {params.page = String(page);}
+
+            if (page_size) {params.page_size = String(page_size);}
+
+            if (startDate) {params[`${recentTimeType}_gte`] = startDate;}
+
+            if (endDate) {params[`${recentTimeType}_lte`] = endDate;}
+
+            filters.forEach(filter => {
+                Object.entries(filter).forEach(([key, value]) => {
+                    params[key] = value;
+                });
+            });
+
+            setSearchParams(params, { replace: true });
+        }, 300);
+
+        return () => {
+            if (debounceTimer.current) {
+                clearTimeout(debounceTimer.current);
+            }
+        };
+    }, [sortDir, sortBy, page, page_size, filters, startDate, endDate, recentTimeType, setSearchParams]);
 
     useEffect(() => {
         let query = queryBase;
@@ -39,14 +117,14 @@ const Statuses = () => {
         query += startDate ? `&${recentTimeType}_gte=${startDate}` : '';
         query += endDate ? `&${recentTimeType}_lte=${endDate}` : '';
         dispatch(AppActions.getData(query));
-    }, [sortDir, sortBy, page, page_size, filters, startDate, endDate, recentTimeType]);
+    }, [sortDir, sortBy, page, page_size, filters, startDate, endDate, recentTimeType, dispatch]);
 
     return <div className='pt-c-statuses__content'>
         <FilterToolbar options={ConstantTypes.STATUS_FILTER_TYPES}/>
-        <PageSection>
-            <TextContent className='pt-c-header'>
-                <Text component={TextVariants.h1}> Recorded Statuses </Text>
-            </TextContent>
+        <PageSection hasBodyWrapper={false} variant="secondary">
+            <Content className='pt-c-header'>
+                <Content component={ContentVariants.h1}> Recorded Statuses </Content>
+            </Content>
             <Pagination>
                 <Table
                     sortDir={sortDir}

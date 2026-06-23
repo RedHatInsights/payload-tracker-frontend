@@ -1,16 +1,13 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 
-import createRootReducer from '../AppReducer';
-import history from '../history';
-import { routerMiddleware } from 'connected-react-router';
+import rootReducer from '../AppReducer';
 import thunk from 'redux-thunk';
-import urlSyncMiddleware from '../middlewares/urlSync';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const middlewares = [thunk, routerMiddleware(history), urlSyncMiddleware];
+const middlewares = [thunk];
 
 export default createStore(
-    createRootReducer(history),
+    rootReducer,
     composeEnhancers(applyMiddleware(...middlewares))
 );

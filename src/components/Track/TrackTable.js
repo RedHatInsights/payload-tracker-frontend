@@ -1,7 +1,14 @@
 import * as ActionTypes from '../../actions';
 
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableHeader, TableVariant } from '@patternfly/react-table';
+import {
+    Table,
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tr
+} from '@patternfly/react-table';
 import { getLocalDate, truncateString } from '../../utilities/Common';
 
 import DateTime from 'luxon/src/datetime';
@@ -16,6 +23,8 @@ const TrackTable = ({ payloads }) => {
 
     const [rows, setRows] = useState([]);
     const [cols, setCols] = useState([]);
+    const [activeSortIndex, setActiveSortIndex] = useState(null);
+    const [activeSortDirection, setActiveSortDirection] = useState('asc');
 
     const generateCells = (cells) => cells.filter(cell => cell.isActive);
 
@@ -42,31 +51,56 @@ const TrackTable = ({ payloads }) => {
         });
     };
 
-    const onSort = (_event, title, direction) => {
-        dispatch(ActionTypes.setTrackSortBy(title));
-        dispatch(ActionTypes.setTrackSortDir(direction));
-    };
-
     useEffect(() => {
         const cols = generateCells(cells);
         setCols(cols);
         setRows(generateRows(payloads, cols));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [payloads, cells]);
 
-    return <Table
-        cells={cols}
-        rows={rows}
-        variant={TableVariant.compact}
-        sortBy={{
-            index: cols.findIndex(x => x.title === sortBy),
-            direction: sortDir
-        }}
-        onSort={(e, index, direction) => onSort(e, cols[index].title, direction)}
-    >
-        <TableHeader/>
-        <TableBody/>
-    </Table>;
+        if (sortBy && cols) {
+            const index = cols.findIndex(col => col.title === sortBy);
+            setActiveSortIndex(index);
+            setActiveSortDirection(sortDir || 'asc');
+        }
+    }, [payloads, cells, sortBy, sortDir]);
+
+    const getSortParams = (columnIndex) => ({
+        sortBy: {
+            index: activeSortIndex,
+            direction: activeSortDirection
+        },
+        onSort: (_event, index, direction) => {
+            setActiveSortIndex(index);
+            setActiveSortDirection(direction);
+            if (cols && cols[index]) {
+                dispatch(ActionTypes.setTrackSortBy(cols[index].title));
+                dispatch(ActionTypes.setTrackSortDir(direction));
+            }
+        },
+        columnIndex
+    });
+
+    return (
+        <Table variant='compact'>
+            <Thead>
+                <Tr>
+                    {cols.map((col, index) => (
+                        <Th key={index} sort={getSortParams(index)}>
+                            {col.title}
+                        </Th>
+                    ))}
+                </Tr>
+            </Thead>
+            <Tbody>
+                {rows.map((row, rowIndex) => (
+                    <Tr key={rowIndex}>
+                        {row.map((cell, cellIndex) => (
+                            <Td key={cellIndex}>{cell.title || ''}</Td>
+                        ))}
+                    </Tr>
+                ))}
+            </Tbody>
+        </Table>
+    );
 };
 
 TrackTable.propTypes = {

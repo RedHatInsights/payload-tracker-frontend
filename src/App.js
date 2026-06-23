@@ -1,31 +1,28 @@
-import './App.scss';
-
 import * as AppActions from './actions';
 
 import { API_URL, PAYLOADS_ITEM, STATUSES_ITEM, TRACK_ITEM } from './AppConstants';
-import React, { useEffect, useState } from 'react';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import API from './utilities/Api';
 
+import ErrorBoundary from './components/ErrorBoundary';
 import MainHeader from './components/MainHeader';
 import MainSidebar from './components/MainSidebar';
-import { Page } from '@patternfly/react-core';
+import { Page, PageSidebar, PageSidebarBody } from '@patternfly/react-core';
 import Payloads from './components/Payloads/Payloads';
-import PropTypes from 'prop-types';
-import { Redirect } from 'react-router';
 import Statuses from './components/Statuses/Statuses';
 import Track from './components/Track/Track';
 import { useDispatch } from 'react-redux';
-import { push } from 'connected-react-router';
 
 const App = () => {
     const { pathname } = useLocation();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [isNavOpen, toggleNav] = useState(false);
     const [activeItem, setActiveItem] = useState(PAYLOADS_ITEM);
 
-    const onClickFn = (url) => { dispatch(push(url)); toggleNav(false); };
+    const onClickFn = (url) => { navigate(url); toggleNav(false); };
 
     useEffect(() => {
         pathname.indexOf('/app/payload-tracker/track') >= 0 ? setActiveItem(TRACK_ITEM) : (
@@ -45,26 +42,33 @@ const App = () => {
         };
 
         getDownloadRole();
-    }, []);
+    }, [dispatch]);
+
+    const masthead = <MainHeader isNavOpen={isNavOpen} toggleNav={toggleNav} pathname={pathname}/>;
+
+    const sidebar = (
+        <PageSidebar isSidebarOpen={isNavOpen}>
+            <PageSidebarBody>
+                <MainSidebar activeItem={activeItem} onClickFn={onClickFn}/>
+            </PageSidebarBody>
+        </PageSidebar>
+    );
 
     return <Page
-        header={<MainHeader isNavOpen={isNavOpen} toggleNav={toggleNav} pathname={pathname}/>}
-        sidebar={<MainSidebar activeItem={activeItem} onClickFn={onClickFn} isNavOpen={isNavOpen}/>}
+        masthead={masthead}
+        sidebar={sidebar}
+        onPageResize={() => {}}
     >
-        <Switch>
-            <Route path='/app/payload-tracker' exact render={() => <Redirect to='/app/payload-tracker/payloads'/>}/>
-            <Route path='/app/payload-tracker/payloads' component={Payloads}/>
-            <Route path='/app/payload-tracker/statuses' component={Statuses}/>
-            <Route exact path='/app/payload-tracker/track' component={Track}/>
-        </Switch>
+        <ErrorBoundary>
+            <Routes>
+                <Route path='/app/payload-tracker' element={<Navigate to='/app/payload-tracker/payloads' replace />}/>
+                <Route path='/app/payload-tracker/payloads' element={<Payloads />}/>
+                <Route path='/app/payload-tracker/statuses' element={<Statuses />}/>
+                <Route path='/app/payload-tracker/track' element={<Track />}/>
+            </Routes>
+        </ErrorBoundary>
     </Page>;
 
-};
-
-App.propTypes = {
-    pathname: PropTypes.string,
-    push: PropTypes.func,
-    setHasDownloadRole: PropTypes.func
 };
 
 export default App;

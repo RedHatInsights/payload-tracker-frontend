@@ -1,12 +1,14 @@
 import * as AppActions from '../actions';
 
 import {
-    OptionsMenu,
-    OptionsMenuItem,
-    OptionsMenuPosition,
-    OptionsMenuToggle
+    Menu,
+    MenuContent,
+    MenuList,
+    MenuItem,
+    MenuToggle,
+    Popper
 } from '@patternfly/react-core';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -16,6 +18,8 @@ const OptionsContainer = ({ isDisabled }) => {
     const cells = useSelector(state => state.cell.cells, shallowEqual);
 
     const [isOpen, setOpen] = useState(false);
+    const toggleRef = useRef(null);
+    const menuRef = useRef(null);
 
     const clickHandler = cell => {
         cell.isActive ?  dispatch(AppActions.setCellActivity(cell.title, false)) :  dispatch(AppActions.setCellActivity(cell.title, true));
@@ -26,30 +30,46 @@ const OptionsContainer = ({ isDisabled }) => {
         Object.entries(cells).forEach(([key, cell]) => {
             if (cell.title !== 'id') {
                 options.push(
-                    <OptionsMenuItem
-                        onSelect={() => clickHandler(cell)}
+                    <MenuItem
+                        itemId={cell.title}
+                        onClick={() => clickHandler(cell)}
                         isSelected={cell.isActive}
-                        id={cell.title}
                         key={key}
                     >
                         {cell.title}
-                    </OptionsMenuItem>
+                    </MenuItem>
                 );
             }
         });
         return (options);
     };
 
-    return <OptionsMenu
-        id="options-menu-align-right-example"
-        position={OptionsMenuPosition.right}
-        menuItems={generateOptions()}
-        toggle={<OptionsMenuToggle
-            onToggle={() => setOpen(!isOpen)}
-            toggleTemplate={<React.Fragment>Show Columns</React.Fragment>}
-        />}
-        isOpen={isOpen}
-        isdisabled={isDisabled}
+    const toggle = (
+        <MenuToggle
+            ref={toggleRef}
+            onClick={() => setOpen(!isOpen)}
+            isExpanded={isOpen}
+            isDisabled={isDisabled}
+        >
+            Show Columns
+        </MenuToggle>
+    );
+
+    const menu = (
+        <Menu ref={menuRef} onSelect={() => setOpen(false)}>
+            <MenuContent>
+                <MenuList>
+                    {generateOptions()}
+                </MenuList>
+            </MenuContent>
+        </Menu>
+    );
+
+    return <Popper
+        trigger={toggle}
+        popper={menu}
+        isVisible={isOpen}
+        popperMatchesTriggerWidth={false}
     />;
 };
 

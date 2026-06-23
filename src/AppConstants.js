@@ -3,6 +3,7 @@ import { sortable } from '@patternfly/react-table';
 export const API_URL = process.env.ENV === 'development' ? 'http://localhost:8080/app/payload-tracker' : '/app/payload-tracker';
 
 export const SET_CELL_ACTIVITY = 'SET_CELL_ACTIVITY';
+export const INITIALIZE_CELLS = 'INITIALIZE_CELLS';
 export const TOGGLE_NAV = 'TOGGLE_NAV';
 export const GET_DATA = 'GET_DATA';
 export const GET_PAYLOAD_TRACK = 'GET_PAYLOAD_TRACK';
@@ -27,6 +28,9 @@ export const STAGE_FILTERS = 'STAGE_FILTERS';
 export const UNSTAGE_FILTER = 'UNSTAGE_FILTER';
 
 export const UPDATE_FILTERS = 'UPDATE_FILTERS';
+
+export const RESET_DATA_STATE = 'RESET_DATA_STATE';
+export const RESET_PAGE_STATE = 'RESET_PAGE_STATE';
 
 export const PAYLOAD_FILTER_TYPES = [
     'account', 'inventory_id', 'system_id'

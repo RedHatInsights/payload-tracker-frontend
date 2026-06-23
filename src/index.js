@@ -1,20 +1,19 @@
 import '@patternfly/react-core/dist/styles/base.css';
 
+import React from 'react';
 import App from './App';
-import { ConnectedRouter } from 'connected-react-router';
+import { BrowserRouter } from 'react-router-dom';
 import NotificationsPortal from './components/Notifications/NotificationsPortal';
 import { Provider } from 'react-redux';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import history from './history';
+import { createRoot } from 'react-dom/client';
 import store from './store';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+root.render(
     <Provider store={store}>
-        <ConnectedRouter history={history}>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <NotificationsPortal/>
             <App/>
-        </ConnectedRouter>
+        </BrowserRouter>
     </Provider>
-    , document.getElementById('root')
 );

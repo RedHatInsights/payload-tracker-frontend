@@ -2,7 +2,6 @@ import * as ConstantTypes from '../AppConstants';
 
 import { getFilterTypes, getValueFromURL } from '../utilities/Common';
 
-import { LOCATION_CHANGE } from 'connected-react-router';
 import history from '../history';
 
 const { location } = history;
@@ -68,16 +67,15 @@ const PayloadsReducer = (state = initialState, action) => {
                 filters: action.payload,
                 staged: []
             };
-        case LOCATION_CHANGE:
-            return action.payload.location.pathname === state.location.pathname ? state : {
+        case ConstantTypes.RESET_PAGE_STATE:
+            return {
                 ...state,
-                filters: determineFilters(action.payload.location),
+                filters: ConstantTypes.DEFAULT_PAGE_STATE.filters,
                 page: ConstantTypes.DEFAULT_PAGE_STATE.page,
                 page_size: ConstantTypes.DEFAULT_PAGE_STATE.page_size,
-                location: action.payload.location,
-                startDate: action.payload.location.pathname.includes('track') ? ConstantTypes.DEFAULT_PAGE_STATE.startDate : state.startDate,
-                endDate: action.payload.location.pathname.includes('track') ? ConstantTypes.DEFAULT_PAGE_STATE.endDate : state.endDate,
-                recentTimeType: initialState.recentTimeType
+                startDate: ConstantTypes.DEFAULT_PAGE_STATE.startDate,
+                endDate: ConstantTypes.DEFAULT_PAGE_STATE.endDate,
+                staged: []
             };
         default:
             return state;
