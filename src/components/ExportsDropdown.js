@@ -1,12 +1,14 @@
 import { Dropdown, DropdownItem, DropdownList, MenuToggle } from '@patternfly/react-core';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { CSVLink } from 'react-csv';
 import { ExportIcon } from '@patternfly/react-icons';
+import { sanitizeCsvData } from '../utilities/Common';
 import { shallowEqual, useSelector } from 'react-redux';
 
 const ExportsDropdown = () => {
     const payloads = useSelector((state) => state.data.payloads, shallowEqual);
+    const sanitizedPayloads = useMemo(() => sanitizeCsvData(payloads), [payloads]);
 
     const [isOpen, setOpen] = useState(false);
 
@@ -27,7 +29,7 @@ const ExportsDropdown = () => {
     >
         <DropdownList>
             <DropdownItem key={0}>
-                <CSVLink data={payloads}>
+                <CSVLink data={sanitizedPayloads}>
                     Export CSV
                 </CSVLink>
             </DropdownItem>
