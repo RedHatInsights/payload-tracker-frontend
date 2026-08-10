@@ -60,3 +60,38 @@ export const validUUID = (str) => {
 
     return true;
 };
+
+/**
+ * Sanitize a string value for safe CSV export by neutralizing
+ * spreadsheet formula injection. Values starting with formula
+ * trigger characters (=, +, -, @, TAB, CR) are prefixed with
+ * a single quote so spreadsheets treat them as literal text.
+ */
+const FORMULA_TRIGGER_RE = /^[=+\-@\t\r]/;
+
+export const sanitizeCsvValue = (value) => {
+    if (typeof value !== 'string') {
+        return value;
+    }
+
+    return FORMULA_TRIGGER_RE.test(value) ? `'${value}` : value;
+};
+
+/**
+ * Sanitize an array of objects for safe CSV export.
+ * Each string property value is checked for formula triggers.
+ */
+export const sanitizeCsvData = (data) => {
+    if (!Array.isArray(data)) {
+        return data;
+    }
+
+    return data.map((row) => {
+        const sanitized = {};
+        for (const [key, value] of Object.entries(row)) {
+            sanitized[key] = sanitizeCsvValue(value);
+        }
+
+        return sanitized;
+    });
+};
