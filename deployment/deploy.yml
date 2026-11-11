@@ -82,9 +82,6 @@ objects:
             name: payload-tracker-nginx-conf
             subPath: nginx.conf
         dnsPolicy: ClusterFirst
-        imagePullSecrets:
-        - name: quay-cloudservices-pull
-        - name: rh-registry-pull
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
